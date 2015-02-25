@@ -9,16 +9,13 @@ using namespace std;
 
 class FloatingTask{
 private:
-	int _year;
-	int _month;
-	int _day;
 	string _taskDescription;
 	string _taskStatus;
 	int _taskSerialID;
 
 public:
 	FloatingTask();
-	FloatingTask(int, int, int, string);
+	FloatingTask(string);
 	string toStringTaskDetail();
 	int getTaskSerialID();
 	~FloatingTask();

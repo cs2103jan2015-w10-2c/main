@@ -20,8 +20,8 @@ void printTaskSerialID(vector <FloatingTask> taskVector){
 int main(){
 	vector <FloatingTask> taskVector;
 	
-	FloatingTask task1(16, 2, 2015, "CCA outing");
-	FloatingTask task2(25, 2, 2015, "CS2103 meeting");
+	FloatingTask task1("CCA outing");
+	FloatingTask task2("CS2103 meeting");
 	taskVector.push_back(task1);
 	taskVector.push_back(task2);
 	
