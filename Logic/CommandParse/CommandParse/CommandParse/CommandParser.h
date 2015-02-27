@@ -10,7 +10,7 @@ class CommandParser
 {
 public:
 	CommandParser(void);
-	Task getUserInput(string);
+	Task createTask(string);
 	~CommandParser(void);
 };
 

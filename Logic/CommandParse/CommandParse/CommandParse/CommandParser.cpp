@@ -4,15 +4,16 @@ int main(){
 	//floating task
 	string userInput = "add cs2103 meeting";
 	CommandParser cd;
-	Task t1 = cd.getUserInput(userInput);
+	Task t1 = cd.createTask(userInput);
 
 	return 0;
 }
 
-Task CommandParser::getUserInput(string input){
+Task CommandParser::createTask(string input){
 	string command;
 	string commandType;
 	string taskType;
+	Date date;
 	
 	//get the first word before the first white space
 	size_t pos1 = input.find_first_of(' ');
@@ -22,14 +23,42 @@ Task CommandParser::getUserInput(string input){
 	//no devider -> floating: description
 	//one devider -> deadline: endTime//description
 	//two devider -> timed: startTime//endTime//description
+
+
 	string devider = "//";
-	size_t pos2 = input.find_first_of(devider);
-	if(pos2 == string::npos){
+	size_t posD1 = input.find(devider);
+	if(posD1 == string::npos){
 		taskType = "FloatingTask";
 		string description = input.substr(pos1+1);
 		Task t1(commandType, description);
 		return t1;
-	}else if(){
+	}else{
+		//add 2015//01//02//8//meeting
+		//add 2015//01//02//8//11//meeting
+		//construct structure Date
+		date.year = stoi(input.substr(pos1+1, 4));
+		date.month =  stoi(input.substr(posD1+1, 2));
+		size_t posD2 = input.find(devider, posD1+1);
+		date.month =  stoi(input.substr(posD2+1, 2));
+
+		size_t posD3 = input.find(devider, posD2+1);
+		size_t posD4 = input.find(devider, posD3+1);
+		size_t posD5 = input.find(devider, posD4+1);
+
+		if(posD5 == string::npos){
+			taskType = "DeadlineTask";
+			double endTime = stod(input.substr(posD3+1, (posD4-posD3)));
+			string description = input.substr(posD4+1);
+			Task t2(commandType, description, date, endTime);
+			return t2;
+		}else{
+			taskType = "TimedTask";
+			double startTime = stod(input.substr(posD3+1, (posD4-posD3)));
+			double endTime = stod(input.substr(posD4+1, (posD5-posD4)));
+			string description = input.substr(posD5+1);
+			Task t3(commandType, description, date, startTime,endTime);
+			return t3;
+		}	
 	}
 
 	
