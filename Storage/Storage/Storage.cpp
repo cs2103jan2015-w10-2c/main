@@ -8,13 +8,10 @@ bool Storage::_isDuplicate;
 
 Storage::Storage() {}
 
-bool Storage::storeFloat(string name) {
-	if (isFloatDuplicate(name)) {
-		return false;
-	} else {
+void Storage::storeFloat(string name) {
+	if (!isFloatDuplicate(name)) {
 		FloatTask task(name);
 		_FloatList.push_back(task);
-		return true;
 	}
 }
 
@@ -29,23 +26,4 @@ bool Storage::isFloatDuplicate(string name) {
 	return _isDuplicate;
 }
 
-//i use this main function for testing my code o.o
-//unitTesting too mafan T T
-//Please delete away when integrating
-int main() {
-	string name;
-	cout << "Enter float to store: ";
-	cin >> name;
-	bool isSuccess;
-	while (name!="exit") {
-	isSuccess = Storage::storeFloat(name);
-	if (isSuccess) {
-		cout << "Yes" << endl;
-	} else {
-		cout << "Duplicate" << endl;
-	}
-	cout << "Enter float to store: ";
-	cin >> name;
-	}
-	return 0;
-}
+

@@ -21,13 +21,14 @@ private:
 	static string _fileName;
 	static list<FloatTask>_FloatList;
 	static list<FloatTask>::iterator _FloatIt;
-	static bool _isDuplicate;
 
 public:
 
 	Storage();
 
-	static bool storeFloat(string name);
+	static bool _isDuplicate;
+
+	static void storeFloat(string name);
 	static bool isFloatDuplicate(string name);
 
 };
