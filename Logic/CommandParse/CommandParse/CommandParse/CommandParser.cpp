@@ -1,11 +1,21 @@
 #include "CommandParser.h"
 
+using namespace std;
+
 int main(){
 	//floating task
 	string userInput = "add cs2103 meeting";
 	CommandParser cd;
 	Task t1 = cd.createTask(userInput);
 
+	string commandType = t1.getCommandType();
+	cout << "Command Type: "<< commandType<< endl;
+	string taskType = t1.getTaskType();
+	cout << "Task Type: "<< taskType<< endl;
+	string description = t1.getName();
+	cout << "Description: "<< description<< endl;
+
+	getchar();
 	return 0;
 }
 
