@@ -1,0 +1,76 @@
+#include "Task.h"
+
+Task::Task(){};
+
+Task::Task(double serialID, string commandType, string name, Date date, double startTime, double endTime, bool isDone, bool isFloat, bool isDeadline):
+	_serialID(serialID), _commandType(commandType), _name(name), _date(date), _startTime(startTime), _endTime(endTime), _isDone(isDone), _isFloat(isFloat), _isDeadline(isDeadline){
+}
+
+Task::Task(string commandType, string name, Date date, double startTime, double endTime):
+_commandType(commandType), _name(name), _date(date), _startTime(startTime), _endTime(endTime){
+	_isDone = false;
+	_isFloat = false;
+	_isDeadline = false;
+}
+
+Task::Task(string commandType, string name, Date date, double endTime):
+_commandType(commandType), _name(name), _date(date), _endTime(endTime){
+	_isDone = false;
+	_isFloat = false;
+	_isDeadline = true;
+}
+
+Task::Task(string commandType, string name):
+_commandType(commandType), _name(name){
+	_serialID = 0;
+	_startTime = 0;
+	_endTime = 0;
+	_isDone = false;
+	_isFloat = true;
+	_isDeadline = false;
+}
+
+void Task::markDone(){
+	_isDone = true;
+}
+
+string Task::getCommandType(){
+	return _commandType;
+}
+
+Date Task::getDate(){
+	return _date;
+}
+
+string Task::getName(){
+	return _name;
+}
+
+double Task::getEndTime(){
+	return _endTime;
+}
+
+double Task::getStartTime(){
+	return _startTime;
+}
+
+bool Task::getDone(){
+	return _isDone;
+}
+
+bool Task::getFloat(){
+	return _isFloat;
+}
+
+bool Task::getDeadline(){
+	return _isDeadline;
+}
+
+double Task::getSerialID(){
+	return _serialID;
+}
+
+
+
+
+

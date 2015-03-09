@@ -11,7 +11,7 @@
 #include <iterator>
 #include <list>
 
-#include "FloatTask.h"
+#include "Task.h"
 
 using namespace std;
 
@@ -19,18 +19,28 @@ class Storage {
 
 private:
 	static string _fileName;
-	static list<FloatTask>_FloatList;
-	static list<FloatTask>::iterator _FloatIt;
+	static list<Task>_TaskList;
+	static list<Task>::iterator _TaskIt;
+
+	static const string LINE_BUFFER;
 
 public:
 
 	Storage();
 
+	static ofstream _fWrite;
+	static ifstream _fRead;
 	static bool _isDuplicate;
+	static char buffer[255];
 
-	static void storeFloat(string name);
-	static bool isFloatDuplicate(string name);
-
+	static void storeTask(Task task);
+	static bool isTaskDuplicate(Task task);
+	static void showDirectory();
+	static bool isExistingFile();
+	static void openFile();
+	static void setFileName(string name);
+	static void writeToFile();
+	static void readFile();
 };
 
 
