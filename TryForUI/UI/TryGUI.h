@@ -1,9 +1,9 @@
 #pragma once
 #include <string>
 #include "CommandParser.h"
-#include "Logic.h"
+#include "Logic.cpp"
 #include <iostream>
-#include<cliext/vector>
+#include <cliext/vector>
 
 namespace UI {
 
