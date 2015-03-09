@@ -26,9 +26,9 @@ private:
 
 public:
 	Task();
-	Task(string commandType, string name, Date date, double startTime, double endTime);
-	Task(string commandType, string name, Date date, double endTime);
-	Task(string commandType, string name);
+	Task(string commandType, string name, Date date, double startTime, double endTime, double serialID);
+	Task(string commandType, string name, Date date, double endTime, double serialID);
+	Task(string commandType, string name, double serialID);
 
 	void markDone();
 	string getCommandType();
