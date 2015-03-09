@@ -5,41 +5,38 @@
 
 using namespace std;
 
-struct Date{
-	int year;
-	int month;
-	int day;
-};
-
 class Task{
 private:
 	string _commandType;
 	string _taskType;
 	string _name;
-	Date _date;
+	int _year;
+	int _month;
+	int _day;
 	double _startTime;
 	double _endTime;
 	bool _isDone;
 	bool _isFloat;
 	bool _isDeadline;
-	double _serialID;
 
 public:
 	Task();
-	Task(string commandType, string name, Date date, double startTime, double endTime, double serialID);
-	Task(string commandType, string name, Date date, double endTime, double serialID);
-	Task(string commandType, string name, double serialID);
+	Task(string commandType, string name, int year, int month, int day, double startTime, double endTime);
+	Task(string commandType, string name, int year, int month, int day, double endTime);
+	Task(string commandType, string name);
 
 	void markDone();
 	string getCommandType();
 	string getName();
-	Date getDate();
+	int getYear();
+	int getMonth();
+	int getDay();
+	string getDate();
 	double getStartTime();
 	double getEndTime();
 	bool getDone();
 	bool getFloat();
 	bool getDeadline();
-	double getSerialID();
 };
 
 #endif
