@@ -1,11 +1,21 @@
 #include "CommandParser.h"
 
+using namespace std;
+
 int main(){
 	//floating task
 	string userInput = "add cs2103 meeting";
 	CommandParser cd;
 	Task t1 = cd.createTask(userInput);
 
+	string commandType = t1.getCommandType();
+	cout << "Command Type: "<< commandType<< endl;
+	string taskType = t1.getTaskType();
+	cout << "Task Type: "<< taskType<< endl;
+	string description = t1.getName();
+	cout << "Description: "<< description<< endl;
+
+	getchar();
 	return 0;
 }
 
@@ -35,15 +45,16 @@ Task CommandParser::createTask(string input){
 	}else{
 		//add 2015//01//02//8//meeting
 		//add 2015//01//02//8//11//meeting
-		//construct structure Date
-		date.year = stoi(input.substr(pos1+1, 4));
-		date.month =  stoi(input.substr(posD1+1, 2));
+		
 		size_t posD2 = input.find(devider, posD1+1);
-		date.month =  stoi(input.substr(posD2+1, 2));
-
 		size_t posD3 = input.find(devider, posD2+1);
 		size_t posD4 = input.find(devider, posD3+1);
 		size_t posD5 = input.find(devider, posD4+1);
+
+		//construct structure Date
+		date.year = stoi(input.substr(pos1+1, (posD1-pos1)));
+		date.month =  stoi(input.substr(posD1+1, (posD2-posD1)));
+		date.month =  stoi(input.substr(posD2+1, (posD3-posD2)));
 
 		if(posD5 == string::npos){
 			taskType = "DeadlineTask";
