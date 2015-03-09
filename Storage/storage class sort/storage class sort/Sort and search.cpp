@@ -7,13 +7,39 @@
 
 using namespace std;
 
+bool cmpTime(Task a, Task b){
+	if(a.getYear() < b.getYear()){
+		return true;
+	}else if (a.getYear() == b.getYear()){
+		if(a.getMonth() < b.getMonth()){
+			return true;
+		}else if(a.getMonth() == b.getMonth()){
+			if(a.getDay() < b.getDay()){
+				return true;
+			}else if (a.getDay() == b.getDay()){
+				if(a.getStartTime < b. getStartTime){
+					return true;
+				}else{
+					return false;
+				}
+			}else {
+				return false;
+			}
+		}else{
+			return false;
+		}
+	}else{
+		return false;
+	}
+}
 
-bool sortSerialID(Task a, Task b){
-	return a.getSerialID() < b.getSerialID();
+
+bool sortTime(Task a, Task b){
+	return (cmpTime(a,b));
 }
 
 void sortList(list <Task> list){
-	sort(list.begin(), list.end(), sortSerialID);
+	sort(list.begin(), list.end(), sortTime);
 	return;
 }
 
