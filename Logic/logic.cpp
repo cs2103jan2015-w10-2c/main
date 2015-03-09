@@ -1,6 +1,7 @@
 #include "Task.h"
 #include "CommandParser.h"
 #include "Storage.h"
+#include "Sort and search.cpp"
 
 
 //call ParseCommand and receive task from ParseCommand
@@ -9,27 +10,35 @@ Storage s;
 
 //identify commandType and required parameters and call storeFloat(string taskName)
 void callTask(){
-	if (t.getTaskType() == "FloatingTask"){
+	/*if (t.getTaskType() == "FloatingTask"){
 		s.storeFloat(t.getName());
 	}	else if(t.getTaskType() == "TimedTask"){
 		s.storeTimed(t.getName(), t.getDate(), t.getStartTime(), t.getEndTime());
 	}	else if (t.getTaskType() == "DeadlineTask"){
 		s.storeDeadline(t.getName(), t.getDate(), t.getEndTime());
-	}
-}
+	}*/
 
-bool isDuplicate(){
-	if (s.isFloatDuplicate(t.getName()) || s.isTimedDuplicate() || s.isDeadlineDuplicate()){
-		return true;
+	if (t.getCommandType() == "add"){
+		s.storeTask(t);
 	}
-		else return false;
 
+	if (t.getCommandType() == "delete"){
+		// call storage's delete function
+	}
+
+	if (t.getCommandType() == "search"){
+		
+	}
+
+	if (t.getCommandType() == "sort"){
+
+	}
 }
 
 //receive bool from storeFloat and create output message
 void tellUI(){
 	ostringstream os;
-	if (!isDuplicate(t.getName())){
+	if (!s.isTaskDuplicate(t)){
 		os << t.getName() << "has been stored successfully";
 	}
 		else {
