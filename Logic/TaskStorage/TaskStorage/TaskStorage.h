@@ -8,8 +8,7 @@
 #include "FloatingTask.h"
 using namespace std;
 
-class TaskStorage
-{
+class TaskStorage {
 private:
 	FloatingTask _fTask;
 	string _taskType;

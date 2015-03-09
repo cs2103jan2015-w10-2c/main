@@ -1,4 +1,9 @@
 #pragma once
+#include <string>
+#include "CommandParser.h"
+#include "Logic.h"
+#include <iostream>
+#include<cliext/vector>
 
 namespace UI {
 
@@ -12,11 +17,17 @@ namespace UI {
 	/// <summary>
 	/// Summary for TryGUI
 	/// </summary>
-	public ref class TryGUI : public System::Windows::Forms::Form
-	{
+	public ref class TryGUI : public System::Windows::Forms::Form {
+
+	private: 
+		String^ userInput;
+		
 	public:
-		TryGUI(void)
-		{
+		cliext::vector<String^> allUserInputs; //a vector to store all user inputs
+		CommandParser cp;
+		Logic logic;
+
+		TryGUI(void) {
 			InitializeComponent();
 			//
 			//TODO: Add the constructor code here
@@ -102,15 +113,25 @@ namespace UI {
 #pragma endregion
 	private: System::Void textBox1_TextChanged(System::Object^  sender, System::EventArgs^  e) {
 				 //enter code here
+				 if(this->button1->Click) {
+					 this->textBox2->Text = logic.tellUI;
+				 }
 			 }
 
 	private: System::Void textBox2_TextChanged(System::Object^  sender, System::EventArgs^  e) {
+				 
 				 //enter code here
 			 }
 
 	private: System::Void button1_Click(System::Object^  sender, System::EventArgs^  e) {
-				 this->textBox2->Text = "Welcome to TextBuddy.\n";
+				 
+				 if(this->textBox2->Text!="") //in case user accidentally click on the button without any content in the text box
+				 {
+					 allUserInputs.push_back(this->textBox2->Text);
+					 userInput = this->textBox2->Text;
+					 cp.userInput = userInput;
 				 //enter code here
+				 }
 			 }
 	};
 }
