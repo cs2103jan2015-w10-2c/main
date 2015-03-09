@@ -20,6 +20,9 @@ private:
 	double _startTime;
 	double _endTime;
 	bool _isDone;
+	bool _isFloat;
+	bool _isDeadline;
+	double _serialID;
 
 public:
 	Task();
@@ -29,11 +32,14 @@ public:
 
 	void markDone();
 	string getCommandType();
-	string getTaskType();
 	string getName();
 	Date getDate();
 	double getStartTime();
 	double getEndTime();
+	bool getDone();
+	bool getFloat();
+	bool getDeadline();
+	double getSerialID();
 };
 
 #endif

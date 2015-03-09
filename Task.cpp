@@ -4,20 +4,23 @@ Task::Task(){};
 
 Task::Task(string commandType, string name, Date date, double startTime, double endTime):
 _commandType(commandType), _name(name), _date(date), _startTime(startTime), _endTime(endTime){
-	_taskType = "TimedTask";
 	_isDone = false;
+	_isFloat = false;
+	_isDeadline = false;
 }
 
 Task::Task(string commandType, string name, Date date, double endTime):
 _commandType(commandType), _name(name), _date(date), _endTime(endTime){
-	_taskType = "DeadLineTask";
 	_isDone = false;
+	_isFloat = false;
+	_isDeadline = true;
 }
 
 Task::Task(string commandType, string name):
 _commandType(commandType), _name(name){
-	_taskType = "FloatingTask";
 	_isDone = false;
+	_isFloat = true;
+	_isDeadline = false;
 }
 
 void Task::markDone(){
@@ -44,8 +47,20 @@ double Task::getStartTime(){
 	return _startTime;
 }
 
-string Task::getTaskType(){
-	return _taskType;
+bool Task::getDone(){
+	return _isDone;
+}
+
+bool Task::getFloat(){
+	return _isFloat;
+}
+
+bool Task::getDeadline(){
+	return _isDeadline;
+}
+
+double Task::getSerialID(){
+	return _serialID;
 }
 
 
