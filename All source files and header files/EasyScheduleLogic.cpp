@@ -114,8 +114,8 @@ void EasyScheduleLogic::searchingTask(){
 	storage.searchByName(name);
 }
 
-void EasyScheduleLogic::displayingTask(){
-
+string EasyScheduleLogic::displayingTask(){
+	return storage.toStringTaskDetail();
 }
 
 void EasyScheduleLogic::sortingTask(){

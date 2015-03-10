@@ -47,6 +47,7 @@ public:
 	static void sortList();
 	static list <Task> searchByName(string searchKeyWord);
 	static void deleteByName(string searchKeyWord);
+	static string toStringTaskDetail();
 };
 
 
