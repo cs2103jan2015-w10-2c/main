@@ -78,3 +78,41 @@ CommandParser::CommandParser(void) { }
 
 
 CommandParser::~CommandParser(void) { }
+
+
+string CommandParser::getCommandType() {
+	return commandType;
+}
+
+string CommandParser::getTaskType() {
+	return taskType;
+}
+
+
+
+string CommandParser::getDate() {
+	stringstream s;
+	s << year << "/" << month << "/" << day;
+	return s.str();
+}
+
+string CommandParser::getName() {
+	return  name;
+}
+
+int CommandParser::getEndTimeHour() {
+	return endTimeHour;
+}
+
+int CommandParser::getEndTimeMin() {
+	return endTimeMin;
+}
+
+int CommandParser::getStartTimeHour() {
+	return startTimeHour;
+}
+
+int CommandParser::getStartTimeMin() {
+	return startTimeMin;
+}
+

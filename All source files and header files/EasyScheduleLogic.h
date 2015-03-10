@@ -11,14 +11,30 @@
 #include "CommandParser.h"
 #include "Task.h"
 #include "Storage.h"
-#include <sstream>
+//#include <sstream>
 #include <string>
 
 using namespace std;
 
 class EasyScheduleLogic {
-public:
-	static CommandParser cp;
+
+private:
+	static const string MESSAGE_WELCOME;
+	static const string MESSAGE_ADD;
+	static const string MESSAGE_ADD_FAIL;
+	static const string MESSAGE_DELETE;
+	static const string MESSAGE_DELETE_FAIL;
+	static const string MESSAGE_CLEAR;
+	static const string MESSAGE_SEARCH_FAIL;
+	static const string MESSAGE_SORT;
+	static const string MESSAGE_EMPTY;
+	static const string MESSAGE_INVALID_INPUT_COMMAND;
+	static const string MESSAGE_INVALID_INPUT_NAME;
+
+private:
+	static char buffer[1000];
+private:
+	static CommandParser parser;
 	static Storage storage;
 	static Task task;
 	static string commandType;

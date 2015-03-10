@@ -3,7 +3,8 @@
 #define COMMANDPARSER_H
 #include <string>
 #include <iostream>
-#include "EasyScheduleLogic.h"
+#include <sstream>
+//#include "EasyScheduleLogic.h"
 //#include "Task.h"
 
 using namespace std;
@@ -23,8 +24,19 @@ public:
 
 public:
 	CommandParser(void);
-	void identifyTask(string userInput);
 	~CommandParser(void);
+	void identifyTask(string userInput);
+	string getCommandType();
+	string getTaskType();
+	string getName();
+	int getYear();
+	int getMonth();
+	int getDay();
+	string getDate();
+	int getStartTimeHour();
+	int getStartTimeMin();
+	int getEndTimeHour();
+	int getEndTimeMin();
 };
 
 #endif

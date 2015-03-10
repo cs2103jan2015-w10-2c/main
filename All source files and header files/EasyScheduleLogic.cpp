@@ -1,7 +1,20 @@
 #include "EasyScheduleLogic.h"
 
+const string EasyScheduleLogic::MESSAGE_WELCOME = "Welcome to EasySchedule!";
+const string EasyScheduleLogic::MESSAGE_ADD = "%s has been stored successfully.";
+const string EasyScheduleLogic::MESSAGE_ADD_FAIL = "Sorry, the task is already in the schedule.";
+const string EasyScheduleLogic::MESSAGE_DELETE = "";
+const string EasyScheduleLogic::MESSAGE_DELETE_FAIL = "";
+const string EasyScheduleLogic::MESSAGE_CLEAR = "";
+const string EasyScheduleLogic::MESSAGE_SEARCH_FAIL = "";
+const string EasyScheduleLogic::MESSAGE_SORT = "";
+const string EasyScheduleLogic::MESSAGE_EMPTY = "";
+const string EasyScheduleLogic::MESSAGE_INVALID_INPUT_COMMAND = "";
+const string EasyScheduleLogic::MESSAGE_INVALID_INPUT_NAME = "";
 
-CommandParser EasyScheduleLogic::cp;
+char EasyScheduleLogic::buffer[1000];
+
+CommandParser EasyScheduleLogic::parser;
 Storage EasyScheduleLogic::storage;
 Task EasyScheduleLogic::task;
 string EasyScheduleLogic::commandType;
@@ -17,16 +30,16 @@ int EasyScheduleLogic::endTimeMin;
 
 void EasyScheduleLogic::main(string userInput) {
 	parsingCommand(userInput);
-	if(cp.commandType == "add") {
+	if(parser.commandType == "add") {
 		creatingTask(); 
 		storingTask(); 
-	} else if (cp.commandType == "delete") {
+	} else if (parser.commandType == "delete") {
 		deletingTask();
-	} else if (cp.commandType == "display") {
+	} else if (parser.commandType == "display") {
 		displayingTask();
-	} else if (cp.commandType == "search") {
+	} else if (parser.commandType == "search") {
 		searchingTask();
-	} else if (cp.commandType == "sort") {
+	} else if (parser.commandType == "sort") {
 		sortingTask();
 	}
 
@@ -35,28 +48,28 @@ void EasyScheduleLogic::main(string userInput) {
 
 void EasyScheduleLogic::parsingCommand(string userInput) {
 	
-	cp.identifyTask(userInput);
-	commandType = cp.commandType;
-	taskType = cp.taskType;
-	name = cp.name;
-	year = cp.year;
-	month = cp.month;
-	day = cp.day;
+	parser.identifyTask(userInput);
+	commandType = parser.commandType;
+	taskType = parser.taskType;
+	name = parser.name;
+	year = parser.year;
+	month = parser.month;
+	day = parser.day;
 }
 
 void EasyScheduleLogic::creatingTask() {
 	if(taskType=="FloatingTask") {
-		task = Task(commandType,  name);
+		task = Task(commandType, name);
 	} else {
 		
-		endTimeHour = cp.endTimeHour;
-		endTimeMin = cp.endTimeMin;
+		endTimeHour = parser.endTimeHour;
+		endTimeMin = parser.endTimeMin;
 
 		if (taskType=="DeadlineTask") {
 			task = Task(commandType,  name, year, month, day, endTimeHour, endTimeMin);
 		} else {
-			startTimeHour = cp.startTimeHour;
-			startTimeMin = cp.startTimeMin;
+			startTimeHour = parser.startTimeHour;
+			startTimeMin = parser.startTimeMin;
 			task = Task(commandType,  name, year, month, day, startTimeHour, startTimeMin, endTimeHour, endTimeMin);
 		}
 	}
@@ -68,12 +81,12 @@ void EasyScheduleLogic::storingTask() {
 }
 
 void EasyScheduleLogic::deletingTask(){
-	name = cp.name;
+	name = parser.name;
 
 }
 
 void EasyScheduleLogic::searchingTask(){
-	name = cp.name;
+	name = parser.name;
 }
 
 void EasyScheduleLogic::displayingTask(){
@@ -81,26 +94,34 @@ void EasyScheduleLogic::displayingTask(){
 }
 
 void EasyScheduleLogic::sortingTask(){
-	year = cp.year;
-	month = cp.month;
-	day = cp.day;
-	startTimeHour = cp.startTimeHour;
-	startTimeMin = cp.startTimeMin;
-	endTimeHour = cp.endTimeHour;
-	endTimeMin = cp.endTimeMin;
+	year = parser.year;
+	month = parser.month;
+	day = parser.day;
+	startTimeHour = parser.startTimeHour;
+	startTimeMin = parser.startTimeMin;
+	endTimeHour = parser.endTimeHour;
+	endTimeMin = parser.endTimeMin;
 }
 
 //receive bool from storeFloat and create output message
 string EasyScheduleLogic::tellUI() {
-	ostringstream os;
-	if (!isDuplicate()) {
-		os << "\"" << task.getName() << "\" has been stored successfully.";
-	} else {
-		os << "Sorry, the task is already in the schedule.";
+	if(commandType=="add") {
+		if (!isDuplicate()) {
+			sprintf_s(buffer, MESSAGE_ADD.c_str(), task.getName().c_str());
+			return buffer;
+		} else {
+			sprintf_s(buffer, MESSAGE_ADD_FAIL.c_str());
+			return buffer;
+		}
+	} else if(commandType == "delete") {
+
+	} else if(commandType == "display") {
+
+	} else if(commandType == "sort") {
+
+	} else if (commandType == "search") {
+
 	}
-	
-	return os.str();
-	// this should call a function in the UI to show output message
 }
 
 
