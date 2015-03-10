@@ -16,10 +16,6 @@ int EasyScheduleLogic::endTimeHour;
 int EasyScheduleLogic::endTimeMin;
 
 void EasyScheduleLogic::main(string userInput) {
-//	floating task
-//	string userInput = "add cs2103 meeting";
-
-
 	parsingCommand(userInput);
 	if(cp.commandType == "add") {
 		creatingTask(); 
@@ -37,15 +33,11 @@ void EasyScheduleLogic::parsingCommand(string userInput) {
 	
 	cp.identifyTask(userInput);
 	commandType = cp.commandType;
-//	cout << "Command Type: "<< commandType<< endl;
 	taskType = cp.taskType;
-//	cout << "Task Type: "<< taskType<< endl;
 	name = cp.name;
-//	cout << "name: "<< name<< endl;
 	year = cp.year;
 	month = cp.month;
 	day = cp.day;
-
 }
 
 void EasyScheduleLogic::creatingTask() {
