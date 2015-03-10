@@ -211,10 +211,10 @@ bool cmpTime(Task a, Task b){
 			if(a.getDay() < b.getDay()){
 				return true;
 			}else if (a.getDay() == b.getDay()){
-				if(a.getStartTimeHour < b. getStartTimeHour){
+				if(a.getStartTimeHour() < b.getStartTimeHour()){
 					return true;
-				}else if (a.getStartTimeHour == b.getStartTimeHour){
-					if(a.getStartTimeMin < b.getStartTimeMin){
+				}else if (a.getStartTimeHour() == b.getStartTimeHour()){
+					if(a.getStartTimeMin() < b.getStartTimeMin()){
 						return true;
 					}else{
 						return false;
