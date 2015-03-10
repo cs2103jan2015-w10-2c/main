@@ -35,6 +35,7 @@ Task::Task(string commandType, string name, int year, int month, int day, double
 Task::Task(string commandType, string name, int year, int month, int day, double endTimeHour, double endTimeMin) {
 	_isDone = false;
 	_taskType = "DeadlineTask";
+	_name = name;
 	_year = year;
 	_month = month;
 	_day = day;
