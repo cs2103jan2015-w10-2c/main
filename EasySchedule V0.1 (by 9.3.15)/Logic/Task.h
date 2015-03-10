@@ -10,14 +10,15 @@ private:
 	string _commandType;
 	string _taskType;
 	string _name;
+	string _taskType;
 	int _year;
 	int _month;
 	int _day;
 	double _startTime;
 	double _endTime;
 	bool _isDone;
-	bool _isFloat;
-	bool _isDeadline;
+//	bool _isFloat;
+//	bool _isDeadline;
 
 public:
 	Task();
@@ -35,8 +36,8 @@ public:
 	double getStartTime();
 	double getEndTime();
 	bool isDone();
-	bool isFloat();
-	bool isDeadline();
+//	bool isFloat();
+//	bool isDeadline();
 };
 
 #endif
