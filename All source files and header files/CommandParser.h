@@ -20,8 +20,10 @@ public:
 	static int year;
 	static int month;
 	static int day;
-	static double startTime;
-	static double endTime;
+	static int startTimeMin;
+	static int endTimeMin;
+	static int startTimeHr;
+	static int endTimeHr;
 
 public:
 	CommandParser(void);
