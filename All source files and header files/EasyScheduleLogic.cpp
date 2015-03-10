@@ -1,4 +1,5 @@
 #include "EasyScheduleLogic.h"
+#include "Storage.h"
 
 const string EasyScheduleLogic::MESSAGE_WELCOME = "Welcome to EasySchedule!";
 const string EasyScheduleLogic::MESSAGE_ADD = "%s has been stored successfully.";
@@ -82,11 +83,12 @@ void EasyScheduleLogic::storingTask() {
 
 void EasyScheduleLogic::deletingTask(){
 	name = parser.name;
-
+	storage.deleteByName(name);
 }
 
 void EasyScheduleLogic::searchingTask(){
 	name = parser.name;
+	storage.searchByName(name);
 }
 
 void EasyScheduleLogic::displayingTask(){
