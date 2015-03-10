@@ -111,8 +111,8 @@ void EasyScheduleLogic::deletingTask(){
 
 string EasyScheduleLogic::searchingTask(){
 	name = parser.name;
-	storage.searchByName(name);
-	return displayingTask();
+	return storage.searchByName(name);
+	
 }
 
 string EasyScheduleLogic::displayingTask(){

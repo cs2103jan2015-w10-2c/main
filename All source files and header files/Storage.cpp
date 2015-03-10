@@ -246,16 +246,15 @@ void Storage::sortList(){
 	return;
 }
 
-list <Task> Storage::searchByName(string searchKeyWord){
+string Storage::searchByName(string searchKeyWord){
 	list <Task> searchResultList;
-
 	list <Task>::iterator i;
 	for (i = _TaskList.begin(); i!= _TaskList.end(); i++){
 		if ((i->getName()).find(searchKeyWord) != std::string::npos){
 			searchResultList.push_back(*i);
 		}
 	}
-	return searchResultList;
+	return toStringTaskDetail(searchResultList);
 }
 
 void Storage::deleteByName(string searchKeyWord){
@@ -267,6 +266,26 @@ void Storage::deleteByName(string searchKeyWord){
 		}
 	}
 	return;
+}
+
+string Storage::toStringTaskDetail(list <Task> listToFormat){
+	stringstream s;
+	list <Task>::iterator i;
+	for ( i = listToFormat.begin(); i != listToFormat.end(); i++){
+		if (i->getTaskType() == "FloatingTask"){
+			s << i->getName() << endl;
+		}
+		else if (i ->getTaskType() == "TimedTask"){
+			s << "[" << i->getDate() << "][" << i->getStartTimeHour() << ":";
+			s << i->getStartTimeMin() << "-" << i->getEndTimeHour() << ":";
+			s << i->getEndTimeMin() << "]" << i->getName() << endl;
+		}
+		else if (i->getTaskType() == "DeadlineTask"){
+			s << "[" << i->getDate() << "][" <<i->getEndTimeHour() << ":";
+			s << i->getEndTimeMin() << "]"<< i->getName() << endl;
+		}
+	}
+	return s.str();
 }
 
 string Storage::toStringTaskDetail(){
@@ -288,21 +307,5 @@ string Storage::toStringTaskDetail(){
 	return s.str();
 }
 
-//main() for testing
-//int main () {
-//	//Storage::showDirectory();
-//	string filename;
-//	cin >> filename;
-//	Storage::setFileName(filename);
-//	//Storage::readFile();
-//	Storage::openFile();
-//	Task hello("add", "lol");
-//	Storage::storeTask(hello);
-//	Storage::storeTask(hello);
-//	Storage::writeToFile();
-//	cin >> filename;
-//
-//	return 0;
-//}
 
 
