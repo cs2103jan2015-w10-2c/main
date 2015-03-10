@@ -262,11 +262,11 @@ string Storage::searchByName(string searchKeyWord){
 }
 
 void Storage::deleteByName(string searchKeyWord){
-	list <Task>::iterator i;
-	for (i = _TaskList.begin(); i!= _TaskList.end(); i++){
-		if ((*i).getName() == searchKeyWord){
-			_TaskList.erase(i);
-			i--;
+	for (_TaskIt = _TaskList.begin(); _TaskIt!= _TaskList.end(); _TaskIt++){
+		//while 
+		if(_TaskIt->getName() == searchKeyWord){
+			//_TaskList.erase(_TaskIt);
+			cout << "Found" << endl;
 		}
 	}
 	return;
