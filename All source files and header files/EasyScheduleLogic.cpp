@@ -69,15 +69,16 @@ void EasyScheduleLogic::storingTask() {
 
 void EasyScheduleLogic::deletingTask(){
 	name = cp.name;
-
+	storage.deleteTask(name);
 }
 
 void EasyScheduleLogic::searchingTask(){
 	name = cp.name;
+	storage.searchTask(name);
 }
 
 void EasyScheduleLogic::displayingTask(){
-
+	storage.displayTask();
 }
 
 void EasyScheduleLogic::sortingTask(){
