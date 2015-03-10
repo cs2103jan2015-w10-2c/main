@@ -27,10 +27,11 @@ void EasyScheduleLogic::main(string userInput) {
 	} else if (cp.commandType == "delete") {
 		deletingTask();
 	} else if (cp.commandType == "display") {
+		displayingTask();
 	} else if (cp.commandType == "search") {
 		searchingTask();
 	} else if (cp.commandType == "sort") {
-		
+		sortingTask();
 	}
 
 	return;

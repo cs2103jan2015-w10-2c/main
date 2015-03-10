@@ -38,6 +38,10 @@ public:
 	static void parsingCommand(string userInput);
 	static void creatingTask();
 	static void storingTask();
+	static void deletingTask();
+	static void searchingTask();
+	static void displayingTask();
+	static void sortingTask();
 	static string tellUI();
 	static bool isDuplicate();
 	EasyScheduleLogic(void);
