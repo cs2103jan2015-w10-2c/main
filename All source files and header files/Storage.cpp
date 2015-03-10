@@ -273,7 +273,7 @@ string Storage::toStringTaskDetail(){
 	stringstream s;
 	for (_TaskIt = _TaskList.begin(); _TaskIt != _TaskList.end(); _TaskIt++){
 		if (_TaskIt->getTaskType() == "FloatingTask"){
-			s << "[" << _TaskIt->getDate() << "]" << _TaskIt->getName() << endl;
+			s << _TaskIt->getName() << endl;
 		}
 		else if (_TaskIt->getTaskType() == "TimedTask"){
 			s << "[" << _TaskIt->getDate() << "][" <<_TaskIt->getStartTimeHour() << ":";
