@@ -168,6 +168,7 @@ int main () {
 	string filename;
 	cin >> filename;
 	Storage::setFileName(filename);
+	Storage::readFile();
 	Storage::openFile();
 	Task hello("add", "lol");
 	Storage::storeTask(hello);
