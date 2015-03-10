@@ -4,6 +4,7 @@
 #include <string>
 #include <iostream>
 #include <sstream>
+#include <algorithm>
 //#include "EasyScheduleLogic.h"
 //#include "Task.h"
 

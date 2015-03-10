@@ -26,7 +26,7 @@ void CommandParser::identifyTask(string userInput) {
 	//one devider -> deadline: endTime//description
 	//two devider -> timed: startTime//endTime//description
 
-	string devider = "//";
+	string devider = "/";
 	size_t posD1 = userInput.find(devider);
 	if(posD1 == string::npos) {
 		taskType = "FloatingTask";

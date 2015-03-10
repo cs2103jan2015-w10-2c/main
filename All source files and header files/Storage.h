@@ -43,6 +43,7 @@ public:
 	static void setFileName(string name);
 	static void writeToFile();
 	static void readFile();
+
 	static void sortList();
 	static list <Task> searchByName(string searchKeyWord);
 	static void deleteByName(string searchKeyWord);

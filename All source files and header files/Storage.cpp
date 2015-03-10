@@ -70,6 +70,7 @@ void Storage::writeToFile() {
 		cout << buffer;
 		cout << _TaskIt->getName();
 		_fWrite << buffer << endl;
+		_TaskIt++;
 	}
 	_fWrite.close();
 }
@@ -202,33 +203,34 @@ bool Storage::isDeadlineDuplicate(Task task) {
 }
 
 bool cmpTime(Task a, Task b){
+
 	if(a.getYear() < b.getYear()){
 		return true;
-	}else if (a.getYear() == b.getYear()){
-		if(a.getMonth() < b.getMonth()){
-			return true;
-		}else if(a.getMonth() == b.getMonth()){
-			if(a.getDay() < b.getDay()){
-				return true;
-			}else if (a.getDay() == b.getDay()){
-				if(a.getStartTimeHour() < b.getStartTimeHour()){
-					return true;
-				}else if (a.getStartTimeHour() == b.getStartTimeHour()){
-					if(a.getStartTimeMin() < b.getStartTimeMin()){
-						return true;
-					}else{
-						return false;
-					}
-				}else {
-					return false;
-				}
-			}else{
-				return false;
-			}
-		}else{
-			return false;
-		}
-	}else {
+	} else if (a.getYear() > b.getYear()){
+		return false;
+	}
+
+	if(a.getMonth() < b.getMonth()){
+		return true;
+	} else if(a.getMonth() > b.getMonth()){
+		return false;
+	}
+
+	if(a.getDay() < b.getDay()){
+		return true;
+	} else if (a.getDay() > b.getDay()){
+		return false;
+	}
+
+	if(a.getStartTimeHour() < b.getStartTimeHour()){
+		return true;
+	} else if (a.getStartTimeHour() > b.getStartTimeHour()){
+		return false;
+	}
+
+	if(a.getStartTimeMin() < b.getStartTimeMin()){
+		return true;
+	} else if(a.getStartTimeMin() > b.getStartTimeMin()) {
 		return false;
 	}
 }
@@ -239,7 +241,7 @@ bool sortTime(Task a, Task b){
 }
 
 void Storage::sortList(){
-	sort(_TaskList.begin(), _TaskList.end(), sortTime);
+	_TaskList.sort(sortTime);
 	return;
 }
 
@@ -266,20 +268,21 @@ void Storage::deleteByName(string searchKeyWord){
 	return;
 }
 
-int main () {
-	//Storage::showDirectory();
-	string filename;
-	cin >> filename;
-	Storage::setFileName(filename);
-	//Storage::readFile();
-	Storage::openFile();
-	Task hello("add", "lol");
-	Storage::storeTask(hello);
-	Storage::storeTask(hello);
-	Storage::writeToFile();
-	cin >> filename;
-
-	return 0;
-}
+//main() for testing
+//int main () {
+//	//Storage::showDirectory();
+//	string filename;
+//	cin >> filename;
+//	Storage::setFileName(filename);
+//	//Storage::readFile();
+//	Storage::openFile();
+//	Task hello("add", "lol");
+//	Storage::storeTask(hello);
+//	Storage::storeTask(hello);
+//	Storage::writeToFile();
+//	cin >> filename;
+//
+//	return 0;
+//}
 
 

@@ -9,7 +9,7 @@
 #define EASYSCHEDULELOGIC_H
 
 #include "CommandParser.h"
-#include "Task.h"
+//#include "Task.h"
 #include "Storage.h"
 //#include <sstream>
 #include <string>
@@ -49,7 +49,8 @@ private:
 	static int endTimeMin;
 
 public:
-	static void main(string userInput);
+	static void main();
+	static void executeLogic(string userInput);
 
 	static void parsingCommand(string userInput);
 	static void creatingTask();

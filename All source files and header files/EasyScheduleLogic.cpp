@@ -28,7 +28,31 @@ int EasyScheduleLogic::startTimeMin;
 int EasyScheduleLogic::endTimeHour;
 int EasyScheduleLogic::endTimeMin;
 
-void EasyScheduleLogic::main(string userInput) {
+int main () {
+	EasyScheduleLogic::main();
+}
+
+void EasyScheduleLogic::main() {
+	storage.showDirectory();
+	string filename;
+	cin >> filename;
+	storage.setFileName(filename);
+	storage.openFile();
+	storage.readFile();
+	string input;
+	cin.ignore();
+	getline(cin, input);
+
+	while (input!="exit") {
+		executeLogic(input);
+		getline(cin, input);
+	}
+	
+	storage.writeToFile();
+	
+}
+
+void EasyScheduleLogic::executeLogic(string userInput) {
 	parsingCommand(userInput);
 	if(parser.commandType == "add") {
 		creatingTask(); 
@@ -43,7 +67,6 @@ void EasyScheduleLogic::main(string userInput) {
 		sortingTask();
 	}
 
-	return;
 }
 
 void EasyScheduleLogic::parsingCommand(string userInput) {
