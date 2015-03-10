@@ -276,12 +276,13 @@ string Storage::toStringTaskDetail(){
 			s << "[" << _TaskIt->getDate() << "]" << _TaskIt->getName() << endl;
 		}
 		else if (_TaskIt->getTaskType() == "TimedTask"){
-			s << "[" << _TaskIt->getDate() << "][" <<_TaskIt->getStartTimeHour() << ":" << _TaskIt->getStartTimeMin();
-			s << "-" << _TaskIt->getEndTimeHour() << ":" << _TaskIt->getEndTimeMin() << "]" << _TaskIt->getName() << endl;
+			s << "[" << _TaskIt->getDate() << "][" <<_TaskIt->getStartTimeHour() << ":";
+			s << _TaskIt->getStartTimeMin() << "-" << _TaskIt->getEndTimeHour() << ":";
+			s << _TaskIt->getEndTimeMin() << "]" << _TaskIt->getName() << endl;
 		}
 		else if (_TaskIt->getTaskType() == "DeadlineTask"){
-			s << "[" << _TaskIt->getDate() << "][" <<_TaskIt->getEndTimeHour() << ":" << _TaskIt->getEndTimeMin() << "]";
-			s << _TaskIt->getName() << endl;
+			s << "[" << _TaskIt->getDate() << "][" <<_TaskIt->getEndTimeHour() << ":";
+			s << _TaskIt->getEndTimeMin() << "]"<< _TaskIt->getName() << endl;
 		}
 	}
 	return s.str();

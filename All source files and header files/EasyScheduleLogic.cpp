@@ -61,9 +61,9 @@ void EasyScheduleLogic::executeLogic(string userInput) {
 	} else if (parser.commandType == "delete") {
 		deletingTask();
 	} else if (parser.commandType == "display") {
-		displayingTask();
+		cout << displayingTask();
 	} else if (parser.commandType == "search") {
-		searchingTask();
+		cout << searchingTask();
 	} else if (parser.commandType == "sort") {
 		sortingTask();
 	}
