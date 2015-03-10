@@ -69,24 +69,20 @@ void EasyScheduleLogic::storingTask() {
 
 void EasyScheduleLogic::deletingTask(){
 	name = cp.name;
+	storage.deleteByName(name);
 }
 
 void EasyScheduleLogic::searchingTask(){
 	name = cp.name;
+	storage.searchByName(name);
 }
 
 void EasyScheduleLogic::displayingTask(){
-
+	storage.displayTask();
 }
 
 void EasyScheduleLogic::sortingTask(){
-	year = cp.year;
-	month = cp.month;
-	day = cp.day;
-	startTimeHour = cp.startTimeHour;
-	startTimeMin = cp.startTimeMin;
-	endTimeHour = cp.endTimeHour;
-	endTimeMin = cp.endTimeMin;
+	storage.sortList();
 }
 
 //receive bool from storeFloat and create output message

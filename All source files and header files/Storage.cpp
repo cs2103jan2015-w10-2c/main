@@ -237,7 +237,7 @@ bool sortTime(Task a, Task b){
 	return (cmpTime(a,b));
 }
 
-void Storage::issortList(){
+void Storage::sortList(){
 	sort(_TaskList.begin(), _TaskList.end(), sortTime);
 	return;
 }
