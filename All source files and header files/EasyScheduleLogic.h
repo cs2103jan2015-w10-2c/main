@@ -56,7 +56,7 @@ public:
 	static void creatingTask();
 	static void storingTask();
 	static void deletingTask();
-	static void searchingTask();
+	static string searchingTask();
 	static string displayingTask();
 	static void sortingTask();
 	static string tellUI();
