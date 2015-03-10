@@ -5,7 +5,7 @@
 
 using namespace std;
 
-const string Storage::LINE_BUFFER = "%s\\%s\\%s\\%s\\%s\\%s\\%s\\%s\\%s\\%s\\%s";
+const string Storage::LINE_BUFFER = "%s/%s/%s/%s/%s/%s/%s/%s/%s/%s/%s";
 
 char Storage::buffer[500];
 list<Task> Storage::_TaskList;
@@ -58,7 +58,6 @@ void Storage::openFile() {
 }
 
 void Storage::writeToFile() {
-	cout << _TaskList.size(); 
 	int i;
 	_TaskIt = _TaskList.begin();
 	for (i=1;i<=_TaskList.size();i++) {
@@ -68,8 +67,6 @@ void Storage::writeToFile() {
 			, to_string(_TaskIt->getDay()).c_str(), to_string(_TaskIt->getStartTimeHour()).c_str()
 			, to_string(_TaskIt->getStartTimeMin()).c_str(), to_string(_TaskIt->getEndTimeHour()).c_str()
 			, to_string(_TaskIt->getEndTimeMin()).c_str(), to_string(_TaskIt->isDone()).c_str());
-		cout << buffer;
-		cout << _TaskIt->getName();
 		_fWrite << buffer << endl;
 		_TaskIt++;
 	}
@@ -79,9 +76,9 @@ void Storage::writeToFile() {
 //this is extremely inefficient but sigh
 void Storage::readFile() {
 	
-	string pathName = "./Databank/";
+	string pathName = "./";
 	string combined = pathName + _fileName;
-	_fRead.open(combined, ios_base::in);
+	_fRead.open(combined);
 
 	size_t posStart;
 	size_t posD1;
@@ -108,10 +105,10 @@ void Storage::readFile() {
 	double endTimeMin;
 	bool isDone;
 
-	string devider = "\\";
+	string devider = "/";
 	Task* inputTask;
 
-	while (_fRead>>input) {
+	while (getline(_fRead,input)) {
 		posStart = 0;
 		posD1 = input.find(devider);
 		posD2 = input.find(devider, posD1+1);
@@ -124,7 +121,6 @@ void Storage::readFile() {
 		posD9 = input.find(devider, posD8+1);
 		posD10 = input.find(devider, posD9+1);
 
-
 		commandType = (input.substr(posStart, (posD1-posStart)));
 		taskType = (input.substr((posD1+1), (posD2-posD1-1)));
 		name = (input.substr((posD2+1), (posD3-posD2-1)));
@@ -136,7 +132,7 @@ void Storage::readFile() {
 		endTimeHour = stod(input.substr((posD8+1), (posD9-posD8)));
 		endTimeMin = stod(input.substr((posD9+1), (posD10-posD9)));
 		isDone = stoi(input.substr(posD10+1));
-
+		
 		inputTask = new Task(commandType,taskType,name,year,month,day,startTimeHour,startTimeMin,endTimeHour,endTimeMin,isDone);
 		_TaskList.push_back(*inputTask);
 		delete inputTask;
