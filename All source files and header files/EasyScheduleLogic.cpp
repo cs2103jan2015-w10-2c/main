@@ -69,7 +69,6 @@ void EasyScheduleLogic::storingTask() {
 
 void EasyScheduleLogic::deletingTask(){
 	name = cp.name;
-
 }
 
 void EasyScheduleLogic::searchingTask(){

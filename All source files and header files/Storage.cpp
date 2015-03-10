@@ -22,7 +22,7 @@ void Storage::setFileName(string name) {
 }
 
 void Storage::showDirectory() {
-	if ((dir = opendir ("./Databank")) != NULL) {
+	if ((dir = opendir ("./")) != NULL) {
 		/* print all the files and directories within directory */
 		while ((ent = readdir (dir)) != NULL) {
 			printf ("%s\n", ent->d_name);
@@ -36,7 +36,7 @@ void Storage::showDirectory() {
 }
 
 bool Storage::isExistingFile() {
-	dir = opendir ("./Databank");
+	dir = opendir ("./");
 	while ((ent = readdir (dir)) != NULL) {
 		if (_fileName==ent->d_name) {
 			closedir (dir);
@@ -50,7 +50,7 @@ bool Storage::isExistingFile() {
 //i have folder called databank which is where all text files will be saved into
 //pathName can be respecified if you wish to save it in another EXISTING folder
 void Storage::openFile() {
-	string pathName = "./Databank/";
+	string pathName = "./";
 	string combined = pathName + _fileName;
 	_fWrite.open(combined);
 }
@@ -200,7 +200,59 @@ bool Storage::isDeadlineDuplicate(Task task) {
 	return false;
 }
 
-//comment the main function when integrating
+bool cmpTime(Task a, Task b){
+	if(a.getYear() < b.getYear()){
+		return true;
+	}else if (a.getYear() == b.getYear()){
+		if(a.getMonth() < b.getMonth()){
+			return true;
+		}else if(a.getMonth() == b.getMonth()){
+			if(a.getDay() < b.getDay()){
+				return true;
+			}else if (a.getDay() == b.getDay()){
+				if(a.getStartTimeHour < b. getStartTimeHour){
+					return true;
+				}else if (a.getStartTimeHour == b.getStartTimeHour){
+					if(a.getStartTimeMin < b.getStartTimeMin){
+						return true;
+					}else{
+						return false;
+					}
+				}else {
+					return false;
+				}
+			}else{
+				return false;
+			}
+		}else{
+			return false;
+		}
+	}else {
+		return false;
+	}
+}
+
+
+bool sortTime(Task a, Task b){
+	return (cmpTime(a,b));
+}
+
+void Storage::issortList(){
+	sort(_TaskList.begin(), _TaskList.end(), sortTime);
+	return;
+}
+
+list <Task> Storage::searchByName(string searchKeyWord){
+	list <Task> searchResultList;
+
+	list <Task>::iterator i;
+	for (i = _TaskList.begin(); i!= _TaskList.end(); i++){
+		if ((*i).getName == searchKeyWord){
+			searchResultList.push_back(*i);
+		}
+	}
+	return searchResultList;
+}
 
 int main () {
 	//Storage::showDirectory();
