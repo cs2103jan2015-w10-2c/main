@@ -18,15 +18,26 @@ using namespace std;
 
 class EasyScheduleLogic {
 private:
-	static Storage* storage;
-	static Task* task;
+	static CommandParser _cp;
+	static Storage _storage;
+	static Task _task;
+	static string _commandType;
+	static string _taskType;
+	static string  _name;
+	static int _year;
+	static int _month;
+	static int _day;
+	static int _startTimeHour;
+	static int _startTimeMin;
+	static int _endTimeHour;
+	static int _endTimeMin;
 
 public:
 	static void main(string userInput);
 
-	static void parsingCommand(string userInput); //haven't done
-	static void createTask(); //haven't done
-	static void storeTask();
+	static void parsingCommand(string userInput);
+	static void creatingTask();
+	static void storingTask();
 	static string tellUI();
 	static bool isDuplicate();
 	EasyScheduleLogic(void);
