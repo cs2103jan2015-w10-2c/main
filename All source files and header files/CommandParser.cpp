@@ -5,7 +5,7 @@ using namespace std;
 //string CommandParser::userInput;
 string CommandParser::taskType;
 string CommandParser::commandType;
-string CommandParser::description;
+string CommandParser::name;
 int CommandParser::year;
 int CommandParser::month;
 int CommandParser::day;
@@ -29,7 +29,7 @@ void CommandParser::identifyTask(string userInput) {
 	size_t posD1 = userInput.find(devider);
 	if(posD1 == string::npos) {
 		taskType = "FloatingTask";
-		description = userInput.substr(pos1+1);
+		name = userInput.substr(pos1+1);
 
 	} else {
 		//add 2015//01//02//8//0//meeting
@@ -49,7 +49,7 @@ void CommandParser::identifyTask(string userInput) {
 			taskType = "DeadlineTask";
 			endTimeHr = stod(userInput.substr(posD3+1, (posD4-posD3)));
 			endTimeMin = stod(userInput.substr(posD4+1, (posD5-posD4)));
-			description = userInput.substr(posD5+1);
+			name = userInput.substr(posD5+1);
 
 		} else {
 			size_t posD7 = userInput.find(devider, posD6+1);
@@ -59,7 +59,7 @@ void CommandParser::identifyTask(string userInput) {
 			startTimeMin = stod(userInput.substr(posD4+1, (posD5-posD4)));
 			endTimeHr = stod(userInput.substr(posD5+1, (posD6-posD5)));
 			endTimeMin = stod(userInput.substr(posD6+1, (posD7-posD6)));
-			description = userInput.substr(posD7+1);
+			name = userInput.substr(posD7+1);
 
 		}	
 	}
