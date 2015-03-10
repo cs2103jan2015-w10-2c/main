@@ -33,6 +33,8 @@ private:
 
 private:
 	static char buffer[1000];
+	static bool isInvalidCommandType;
+	static bool isInvalidTaskType;
 private:
 	static CommandParser parser;
 	static Storage storage;

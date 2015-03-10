@@ -14,7 +14,8 @@ const string EasyScheduleLogic::MESSAGE_INVALID_INPUT_COMMAND = "Invalid command
 const string EasyScheduleLogic::MESSAGE_INVALID_INPUT_NAME = "Invalid task.";
 
 char EasyScheduleLogic::buffer[1000];
-
+bool EasyScheduleLogic::isInvalidCommandType = false;
+bool EasyScheduleLogic::isInvalidTaskType = false;
 CommandParser EasyScheduleLogic::parser;
 Storage EasyScheduleLogic::storage;
 Task EasyScheduleLogic::task;
@@ -57,7 +58,7 @@ void EasyScheduleLogic::executeLogic(string userInput) {
 	parsingCommand(userInput);
 	if(parser.commandType == "add") {
 		creatingTask(); 
-		storingTask(); 
+		//store task is done in tellUI function.
 	} else if (parser.commandType == "delete") {
 		//does nothing here. delete being called in tellUI function.
 	} else if (parser.commandType == "display") {
@@ -66,6 +67,8 @@ void EasyScheduleLogic::executeLogic(string userInput) {
 		//does nothing here. search being called in tellUI function.
 	} else if (parser.commandType == "sort") {
 		sortingTask();
+	} else {
+		isInvalidCommandType = true;
 	}
 
 }
@@ -92,10 +95,12 @@ void EasyScheduleLogic::creatingTask() {
 		if (taskType=="DeadlineTask") {
 			
 			task = Task(commandType,  name, year, month, day, endTimeHour, endTimeMin);
-		} else {
+		} else if (taskType=="TimedTask"){
 			startTimeHour = parser.startTimeHour;
 			startTimeMin = parser.startTimeMin;
 			task = Task(commandType,  name, year, month, day, startTimeHour, startTimeMin, endTimeHour, endTimeMin);
+		} else {
+			isInvalidTaskType = true; 
 		}
 	}
 }
@@ -126,14 +131,22 @@ void EasyScheduleLogic::sortingTask(){
 
 //receive bool from storeFloat and create output message
 string EasyScheduleLogic::tellUI() {
+	if(isInvalidCommandType) {
+		sprintf_s(buffer, MESSAGE_INVALID_INPUT_COMMAND.c_str());
+		return buffer;
+	}
+	if(isInvalidTaskType) {
+		sprintf_s(buffer, MESSAGE_INVALID_INPUT_NAME.c_str());
+		return buffer;
+	}
 	if(commandType=="add") {
-		if (!isDuplicate()) {
+		if (!isDuplicate()) {	//Bug: isDuplicate() always returns true regardless of actual situation.
+			storingTask(); 
 			sprintf_s(buffer, MESSAGE_ADD.c_str());
 			return buffer;
-		} else {
-			sprintf_s(buffer, MESSAGE_ADD_FAIL.c_str());
-			return buffer;
 		}
+		sprintf_s(buffer, MESSAGE_ADD_FAIL.c_str());
+		return buffer;
 	} else if(commandType == "delete") {
 		return deletingTask();
 	} else if(commandType == "display") {
@@ -143,7 +156,7 @@ string EasyScheduleLogic::tellUI() {
 		return buffer;
 	} else if (commandType == "search") {
 		return searchingTask();
-	}
+	} 
 }
 
 

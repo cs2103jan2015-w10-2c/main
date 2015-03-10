@@ -35,7 +35,8 @@ void CommandParser::identifyTask(string userInput) {
 	} else {
 		//add 2015//01//02//8//0//meeting
 		//add 2015//01//02//8//0//11//0//meeting
-		
+		//NOTE: doesn't cover the case where the task type is invalid.
+
 		size_t posD2 = userInput.find(devider, posD1+1);
 		size_t posD3 = userInput.find(devider, posD2+1);
 		size_t posD4 = userInput.find(devider, posD3+1);

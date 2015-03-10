@@ -27,13 +27,13 @@ void Storage::showDirectory() {
 	if ((dir = opendir ("./")) != NULL) {
 		/* print all the files and directories within directory */
 		while ((ent = readdir (dir)) != NULL) {
-			printf ("%s\n", ent->d_name);
+			printf ("%s\r\n", ent->d_name);
 		}
 		closedir (dir);
-		cout << "Type in name of file to open existing files" << endl;
-		cout << "Enter a new name to create a new file" << endl;
+		cout << "Type in name of file to open existing files" << "\n";
+		cout << "Enter a new name to create a new file" << "\n";
 	} else {
-		cout << "Could not find directory" << endl;
+		cout << "Could not find directory" << "\r\n";
 	}
 }
 
@@ -70,7 +70,7 @@ void Storage::writeToFile() {
 			, to_string(_TaskIt->getEndTimeMin()).c_str(), to_string(_TaskIt->isDone()).c_str());
 		cout << buffer;
 		cout << _TaskIt->getName();
-		_fWrite << buffer << endl;
+		_fWrite << buffer << "\r\n";
 		_TaskIt++;
 	}
 	_fWrite.close();
@@ -155,30 +155,27 @@ bool Storage::isTaskDuplicate(Task task) {
 	_TaskIt = _TaskList.begin();
 	if (task.getTaskType() == "FloatingTask") {
 		return isFloatDuplicate(task);
+	} else if (task.getTaskType() == "TimedTask") {
+		return isTimedDuplicate(task);
+	} else if (task.getTaskType() == "DeadlineTask") {
+		return isDeadlineDuplicate(task);
 	} else {
-		if (task.getTaskType() == "TimedTask") {
-			return isTimedDuplicate(task);
-		} else {
-			if (task.getTaskType() == "DeadlineTask") {
-				return isDeadlineDuplicate(task);
-			} else {
-				return false;
-			}
-		}
-	}	
-
+		return false;
+	}
 }
 
+//bug
 bool Storage::isFloatDuplicate(Task task) {
-	for (int i=1;i<=_TaskList.size();i++) {
+
+	for (_TaskIt = _TaskList.begin(); _TaskIt != _TaskList.end(); _TaskIt++) {
 		if ((task.getName())==(_TaskIt->getName())) {
-				return true;
-			}
-		_TaskIt++;
+			return true;
+		}
 	}
 	return false;
 }
 
+//bug
 bool Storage::isTimedDuplicate(Task task) {
 	for (int i=1;i<=_TaskList.size();i++) {
 		if ((task.getName())==(_TaskIt->getName())) {
@@ -194,6 +191,7 @@ bool Storage::isTimedDuplicate(Task task) {
 	return false;
 }
 
+//bug
 bool Storage::isDeadlineDuplicate(Task task) {
 		for (int i=1;i<=_TaskList.size();i++) {
 		if ((task.getName())==(_TaskIt->getName())) {
@@ -278,12 +276,12 @@ string Storage::deleteByName(string searchKeyWord){
     }
 	ostringstream s;
 	if(count==_TaskList.size()) {
-		s << "There is no such task in the schedule.\n";
+		s << "There is no such task in the schedule.\r\n";
 		return s.str();
 	}
     _TaskList.clear();
     _TaskList = deleteResultList;
-	s << "Tasks containing the keyword have been deleted.\n";
+	s << "Tasks containing the keyword have been deleted.\r\n";
 	return s.str();
 
 }
@@ -291,22 +289,22 @@ string Storage::deleteByName(string searchKeyWord){
 string Storage::toStringTaskDetail(list <Task> listToFormat){
 	ostringstream s;
 	if(listToFormat.empty()) {
-		s << "There is no such task in the schedule.\n";
+		s << "There is no such task in the schedule.\r\n";
 		return s.str();
 	} else {
 		list <Task>::iterator i;
 		for ( i = listToFormat.begin(); i != listToFormat.end(); i++){
 			if (i->getTaskType() == "FloatingTask"){
-				s << i->getName() << endl;
+				s << i->getName() << "\r\n";
 			}
 			else if (i->getTaskType() == "TimedTask"){
 				s << "[" << i->getDate() << "][" <<i->getStartTimeHour() << ":";
 				s << i->getStartTimeMin() << "-" << i->getEndTimeHour() << ":";
-				s << i->getEndTimeMin() << "]" << i->getName() << endl;
+				s << i->getEndTimeMin() << "]" << i->getName() << "\r\n";
 			}
 			else if (i->getTaskType() == "DeadlineTask"){
 				s << "[" << i->getDate() << "][" <<i->getEndTimeHour() << ":";
-				s << i->getEndTimeMin() << "]"<< i->getName() << endl;
+				s << i->getEndTimeMin() << "]"<< i->getName() << "\r\n";
 			}
 		}
 		return s.str();
@@ -316,52 +314,55 @@ string Storage::toStringTaskDetail(list <Task> listToFormat){
 string Storage::toStringTaskDetail(){
 	stringstream s;
 	if(_TaskList.empty()) {
-		s << "There is no task in the schedule.\n";
+		s << "There is no task in the schedule.\r\n";
 		return s.str();
 	} else {
 		for (_TaskIt = _TaskList.begin(); _TaskIt != _TaskList.end(); _TaskIt++){
 			if (_TaskIt->getTaskType() == "FloatingTask"){
-				s << _TaskIt->getName() << endl;
+				s << _TaskIt->getName() << "\r\n";
 			}
 			else if (_TaskIt->getTaskType() == "TimedTask"){
 				s << "[" << _TaskIt->getDate() << "][";
 
 				if(_TaskIt->getStartTimeHour() < 10){
 					s << "0" << _TaskIt->getStartTimeHour() <<":";
-				} else s << _TaskIt->getStartTimeHour() << ":";
-			
+				} else {
+					s << _TaskIt->getStartTimeHour() << ":";
+				}
 				if(_TaskIt->getStartTimeMin() < 10){
 					s << "0" << _TaskIt->getStartTimeMin() <<"-";
-				} else s << _TaskIt->getStartTimeMin() << "-";
-
+				} else {
+					s << _TaskIt->getStartTimeMin() << "-";
+				}
 				if(_TaskIt->getEndTimeHour() < 10){
 					s << "0" << _TaskIt->getEndTimeHour() <<":";
-				} else s << _TaskIt->getEndTimeHour() << ":";
-			
+				} else {
+					s << _TaskIt->getEndTimeHour() << ":";
+				}
 				if(_TaskIt->getEndTimeMin() < 10){
 					s << "0" << _TaskIt->getEndTimeMin() <<"]";
-				} else s << _TaskIt->getEndTimeMin() << "]";
-
-				s << _TaskIt->getName() << endl;
+				} else {
+					s << _TaskIt->getEndTimeMin() << "]";
+				}
+				s << _TaskIt->getName() << "\r\n";
 			}
-
 			else if (_TaskIt->getTaskType() == "DeadlineTask"){
 				s << "[" << _TaskIt->getDate() << "][";
 
 				if(_TaskIt->getEndTimeHour() < 10){
 					s << "0" << _TaskIt->getEndTimeHour() <<":";
-				} else s << _TaskIt->getEndTimeHour() << ":";
-			
+				} else {
+					s << _TaskIt->getEndTimeHour() << ":";
+				}
 				if(_TaskIt->getEndTimeMin() < 10){
 					s << "0" << _TaskIt->getEndTimeMin() <<"]";
-				} else s << _TaskIt->getEndTimeMin() << "]";
-			
-				s<< _TaskIt->getName() << endl;
+				} else {
+					s << _TaskIt->getEndTimeMin() << "]";
+				}
+				s<< _TaskIt->getName() << "\r\n";
 			}
 		}
-	
 	}
-	
 	return s.str();
 }
 
