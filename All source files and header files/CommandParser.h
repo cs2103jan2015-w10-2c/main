@@ -10,10 +10,6 @@ using namespace std;
 
 class CommandParser {
 public:
-	EasyScheduleLogic esLogic;
-
-public:
-	//static string userInput;
 	static string taskType;
 	static string commandType;
 	static string name;
@@ -22,8 +18,8 @@ public:
 	static int day;
 	static int startTimeMin;
 	static int endTimeMin;
-	static int startTimeHr;
-	static int endTimeHr;
+	static int startTimeHour;
+	static int endTimeHour;
 
 public:
 	CommandParser(void);

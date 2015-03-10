@@ -1,33 +1,33 @@
 #include "EasyScheduleLogic.h"
 
 
-CommandParser EasyScheduleLogic::_cp;
-Storage EasyScheduleLogic::_storage;
-Task EasyScheduleLogic::_task;
-string EasyScheduleLogic::_commandType;
-string EasyScheduleLogic::_taskType;
-string EasyScheduleLogic:: _name;
-int EasyScheduleLogic::_year;
-int EasyScheduleLogic::_month;
-int EasyScheduleLogic::_day;
-int EasyScheduleLogic::_startTimeHour;
-int EasyScheduleLogic::_startTimeMin;
-int EasyScheduleLogic::_endTimeHour;
-int EasyScheduleLogic::_endTimeMin;
+CommandParser EasyScheduleLogic::cp;
+Storage EasyScheduleLogic::storage;
+Task EasyScheduleLogic::task;
+string EasyScheduleLogic::commandType;
+string EasyScheduleLogic::taskType;
+string EasyScheduleLogic::name;
+int EasyScheduleLogic::year;
+int EasyScheduleLogic::month;
+int EasyScheduleLogic::day;
+int EasyScheduleLogic::startTimeHour;
+int EasyScheduleLogic::startTimeMin;
+int EasyScheduleLogic::endTimeHour;
+int EasyScheduleLogic::endTimeMin;
 
 void EasyScheduleLogic::main(string userInput) {
-//	floating task
-//	string userInput = "add cs2103 meeting";
-
-
 	parsingCommand(userInput);
-	if(_commandType == "add") {
+	if(cp.commandType == "add") {
 		creatingTask(); 
 		storingTask(); 
-	} else if (_commandType == "delete") {
-	} else if (_commandType == "display") {
-	} else if (_commandType == "search") {
-	} else if (_commandType == "sort") {
+	} else if (cp.commandType == "delete") {
+		deletingTask();
+	} else if (cp.commandType == "display") {
+		displayingTask();
+	} else if (cp.commandType == "search") {
+		searchingTask();
+	} else if (cp.commandType == "sort") {
+		sortingTask();
 	}
 
 	return;
@@ -35,47 +35,66 @@ void EasyScheduleLogic::main(string userInput) {
 
 void EasyScheduleLogic::parsingCommand(string userInput) {
 	
-	_cp.identifyTask(userInput);
-	_commandType = _cp.commandType;
-//	cout << "Command Type: "<< commandType<< endl;
-	_taskType = _cp.taskType;
-//	cout << "Task Type: "<< taskType<< endl;
-	_name = _cp.name;
-//	cout << "name: "<< name<< endl;
-	_year = _cp.year;
-	_month = _cp.month;
-	_day = _cp.day;
-
+	cp.identifyTask(userInput);
+	commandType = cp.commandType;
+	taskType = cp.taskType;
+	name = cp.name;
+	year = cp.year;
+	month = cp.month;
+	day = cp.day;
 }
 
 void EasyScheduleLogic::creatingTask() {
-	if(_cp.taskType=="FloatingTask") {
-		_task = Task(_cp.commandType,  _cp.name);
+	if(taskType=="FloatingTask") {
+		task = Task(commandType,  name);
 	} else {
 		
-		_endTimeHour = _cp.endTimeHour;
-		_endTimeMin = _cp.endTimeMin;
+		endTimeHour = cp.endTimeHour;
+		endTimeMin = cp.endTimeMin;
 
-		if (_cp.taskType=="DeadlineTask") {
-			_task = Task(_cp.commandType,  _cp.name, _year, _month, _day, _endTimeHour, _endTimeMin);
+		if (taskType=="DeadlineTask") {
+			task = Task(commandType,  name, year, month, day, endTimeHour, endTimeMin);
 		} else {
-			_startTimeHour = _cp.startTimeHour;
-			_startTimeMin = _cp.startTimeMin;
-			_task = Task(_cp.commandType,  _cp.name, _year, _month, _day, _startTimeHour, _startTimeMin, _endTimeHour, _endTimeMin);
+			startTimeHour = cp.startTimeHour;
+			startTimeMin = cp.startTimeMin;
+			task = Task(commandType,  name, year, month, day, startTimeHour, startTimeMin, endTimeHour, endTimeMin);
 		}
 	}
 }
 
-//identify commandType and required parameters and call storeFloat(string taskName)
+//identify commandType and required parameters
 void EasyScheduleLogic::storingTask() {
-	_storage.storeTask(_task);
+	storage.storeTask(task);
+}
+
+void EasyScheduleLogic::deletingTask(){
+	name = cp.name;
+
+}
+
+void EasyScheduleLogic::searchingTask(){
+	name = cp.name;
+}
+
+void EasyScheduleLogic::displayingTask(){
+
+}
+
+void EasyScheduleLogic::sortingTask(){
+	year = cp.year;
+	month = cp.month;
+	day = cp.day;
+	startTimeHour = cp.startTimeHour;
+	startTimeMin = cp.startTimeMin;
+	endTimeHour = cp.endTimeHour;
+	endTimeMin = cp.endTimeMin;
 }
 
 //receive bool from storeFloat and create output message
 string EasyScheduleLogic::tellUI() {
 	ostringstream os;
 	if (!isDuplicate()) {
-		os << "\"" << _task.getName() << "\" has been stored successfully.";
+		os << "\"" << task.getName() << "\" has been stored successfully.";
 	} else {
 		os << "Sorry, the task is already in the schedule.";
 	}
@@ -86,7 +105,7 @@ string EasyScheduleLogic::tellUI() {
 
 
 bool EasyScheduleLogic::isDuplicate() {
-	return _storage.isTaskDuplicate(_task);
+	return storage.isTaskDuplicate(task);
 }
 
 EasyScheduleLogic::EasyScheduleLogic(void) { }
