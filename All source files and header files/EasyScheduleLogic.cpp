@@ -119,13 +119,7 @@ string EasyScheduleLogic::displayingTask(){
 }
 
 void EasyScheduleLogic::sortingTask(){
-	year = parser.year;
-	month = parser.month;
-	day = parser.day;
-	startTimeHour = parser.startTimeHour;
-	startTimeMin = parser.startTimeMin;
-	endTimeHour = parser.endTimeHour;
-	endTimeMin = parser.endTimeMin;
+	storage.sortList();
 }
 
 //receive bool from storeFloat and create output message
