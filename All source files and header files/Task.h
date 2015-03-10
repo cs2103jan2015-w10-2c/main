@@ -10,7 +10,6 @@ private:
 	string _commandType;
 	string _taskType;
 	string  _name;
-	string _taskType;
 	int _year;
 	int _month;
 	int _day;
@@ -22,7 +21,8 @@ private:
 
 public:
 	Task();
-	Task(string commandType, string name, int year, int month, int day, double startTimeHour, double startTimeMin, double endTimehour, double endTimeMin);
+	Task(string commandType, string taskType, string name, int year, int month, int day, double startTimeHour, double startTimeMin, double endTimeHour, double endTimeMin, bool isDone);
+	Task(string commandType, string name, int year, int month, int day, double startTimeHour, double startTimeMin, double endTimeHour, double endTimeMin);
 	Task(string commandType, string name, int year, int month, int day, double endTimeHour, double endTimeMin);
 	Task(string commandType, string name);
 

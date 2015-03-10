@@ -3,10 +3,25 @@
 
 Task::Task() { };
 
+Task::Task(string commandType, string taskType, string name, int year, int month, int day, double startTimeHour, double startTimeMin, double endTimeHour, double endTimeMin, bool isDone) {
+	_commandType = commandType;
+	_taskType = taskType;
+	_name = name;
+	_year = year;
+	_month = month;
+	_day = day;
+	_startTimeHour = startTimeHour;
+	_startTimeMin = startTimeMin;
+	_endTimeHour = endTimeHour;
+	_endTimeMin = endTimeMin;
+	_isDone = isDone;
+}
+
+
 Task::Task(string commandType, string name, int year, int month, int day, double startTimeHour, double startTimeMin, double endTimeHour, double endTimeMin) {
 	_isDone = false;
 	_taskType = "TimedTask";
-	_commandType = commandType);
+	_commandType = commandType;
 	_name = name;
 	_year = year;
 	_month = month;
@@ -56,7 +71,19 @@ string Task::getDate() {
 }
 
 string Task::getName() {
-	return  _name;
+	return _name;
+}
+
+int Task::getYear() {
+	return _year;
+}
+
+int Task::getMonth() {
+	return _month;
+}
+
+int Task::getDay() {
+	return _day;
 }
 
 double Task::getEndTimeHour() {
