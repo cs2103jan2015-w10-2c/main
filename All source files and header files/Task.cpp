@@ -41,12 +41,21 @@ Task::Task(string commandType, string name, int year, int month, int day, double
 	_day = day;
 	_endTimeHour = endTimeHour;
 	_endTimeMin = endTimeMin;
+	_startTimeHour = endTimeHour;
+	_startTimeMin = endTimeMin;
 }
 
 Task::Task(string commandType, string name):
 _commandType(commandType),  _name(name) {
 	_isDone = false;
 	_taskType = "FloatingTask";
+	_year = 0;
+	_month = 0;
+	_day = 0;
+	_startTimeHour=0;
+	_startTimeMin=0;
+	_endTimeHour=0;
+	_endTimeMin=0;
 }
 
 void Task::markDone() {

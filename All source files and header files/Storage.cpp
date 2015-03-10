@@ -234,6 +234,10 @@ bool cmpTime(Task a, Task b){
 	} else if(a.getStartTimeMin() > b.getStartTimeMin()) {
 		return false;
 	}
+
+	if (a.getName() < b.getName()){
+		return true;
+	} else {return false;}
 }
 
 
