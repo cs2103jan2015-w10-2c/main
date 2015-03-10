@@ -60,11 +60,8 @@ void CommandParser::identifyTask(string userInput) {
 			endTimeHr = stod(userInput.substr(posD5+1, (posD6-posD5)));
 			endTimeMin = stod(userInput.substr(posD6+1, (posD7-posD6)));
 			name = userInput.substr(posD7+1);
-
 		}	
-	}
-
-	
+	}	
 }
 
 CommandParser::CommandParser(void) { }
