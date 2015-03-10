@@ -90,6 +90,7 @@ void EasyScheduleLogic::creatingTask() {
 		endTimeMin = parser.endTimeMin;
 
 		if (taskType=="DeadlineTask") {
+			
 			task = Task(commandType,  name, year, month, day, endTimeHour, endTimeMin);
 		} else {
 			startTimeHour = parser.startTimeHour;
