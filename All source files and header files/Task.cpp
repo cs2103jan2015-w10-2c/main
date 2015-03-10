@@ -6,7 +6,7 @@ Task::Task() { };
 Task::Task(string commandType, string name, int year, int month, int day, int startTimeHour, int startTimeMin, int endTimeHour, int endTimeMin) {
 	_isDone = false;
 	_taskType = "TimedTask";
-	_commandType = commandType);
+	_commandType = commandType;
 	_name = name;
 	_year = year;
 	_month = month;

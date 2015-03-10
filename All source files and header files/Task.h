@@ -10,7 +10,6 @@ private:
 	string _commandType;
 	string _taskType;
 	string  _name;
-	string _taskType;
 	int _year;
 	int _month;
 	int _day;

@@ -47,18 +47,18 @@ void CommandParser::identifyTask(string userInput) {
 
 		if(posD6 == string::npos) {
 			taskType = "DeadlineTask";
-			endTimeHour = stod(userInput.substr(posD3+1, (posD4-posD3)));
-			endTimeMin = stod(userInput.substr(posD4+1, (posD5-posD4)));
+			endTimeHour = stoi(userInput.substr(posD3+1, (posD4-posD3)));
+			endTimeMin = stoi(userInput.substr(posD4+1, (posD5-posD4)));
 			name = userInput.substr(posD5+1);
 
 		} else {
 			size_t posD7 = userInput.find(devider, posD6+1);
 
 			taskType = "TimedTask";
-			startTimeHour = stod(userInput.substr(posD3+1, (posD4-posD3)));
-			startTimeMin = stod(userInput.substr(posD4+1, (posD5-posD4)));
-			endTimeHour = stod(userInput.substr(posD5+1, (posD6-posD5)));
-			endTimeMin = stod(userInput.substr(posD6+1, (posD7-posD6)));
+			startTimeHour = stoi(userInput.substr(posD3+1, (posD4-posD3)));
+			startTimeMin = stoi(userInput.substr(posD4+1, (posD5-posD4)));
+			endTimeHour = stoi(userInput.substr(posD5+1, (posD6-posD5)));
+			endTimeMin = stoi(userInput.substr(posD6+1, (posD7-posD6)));
 			name = userInput.substr(posD7+1);
 		}	
 	}	

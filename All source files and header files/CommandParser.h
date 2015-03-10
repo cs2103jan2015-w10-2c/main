@@ -10,10 +10,6 @@ using namespace std;
 
 class CommandParser {
 public:
-	EasyScheduleLogic esLogic;
-
-public:
-	//static string userInput;
 	static string taskType;
 	static string commandType;
 	static string name;
