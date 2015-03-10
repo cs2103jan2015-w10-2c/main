@@ -263,7 +263,6 @@ string Storage::searchByName(string searchKeyWord){
 
 void Storage::deleteByName(string searchKeyWord){
 	for (_TaskIt = _TaskList.begin(); _TaskIt!= _TaskList.end(); _TaskIt++){
-		//while 
 		if(_TaskIt->getName() == searchKeyWord){
 			//_TaskList.erase(_TaskIt);
 			cout << "Found" << endl;
@@ -279,8 +278,8 @@ string Storage::toStringTaskDetail(list <Task> listToFormat){
 		if (i->getTaskType() == "FloatingTask"){
 			s << i->getName() << endl;
 		}
-		else if (i ->getTaskType() == "TimedTask"){
-			s << "[" << i->getDate() << "][" << i->getStartTimeHour() << ":";
+		else if (i->getTaskType() == "TimedTask"){
+			s << "[" << i->getDate() << "][" <<i->getStartTimeHour() << ":";
 			s << i->getStartTimeMin() << "-" << i->getEndTimeHour() << ":";
 			s << i->getEndTimeMin() << "]" << i->getName() << endl;
 		}
@@ -299,13 +298,39 @@ string Storage::toStringTaskDetail(){
 			s << _TaskIt->getName() << endl;
 		}
 		else if (_TaskIt->getTaskType() == "TimedTask"){
-			s << "[" << _TaskIt->getDate() << "][" <<_TaskIt->getStartTimeHour() << ":";
-			s << _TaskIt->getStartTimeMin() << "-" << _TaskIt->getEndTimeHour() << ":";
-			s << _TaskIt->getEndTimeMin() << "]" << _TaskIt->getName() << endl;
+			s << "[" << _TaskIt->getDate() << "][";
+
+			if(_TaskIt->getStartTimeHour() < 10){
+				s << "0" << _TaskIt->getStartTimeHour() <<":";
+			} else s << _TaskIt->getStartTimeHour() << ":";
+			
+			if(_TaskIt->getStartTimeMin() < 10){
+				s << "0" << _TaskIt->getStartTimeMin() <<"-";
+			} else s << _TaskIt->getStartTimeMin() << "-";
+
+			if(_TaskIt->getEndTimeHour() < 10){
+				s << "0" << _TaskIt->getEndTimeHour() <<":";
+			} else s << _TaskIt->getEndTimeHour() << ":";
+			
+			if(_TaskIt->getEndTimeMin() < 10){
+				s << "0" << _TaskIt->getEndTimeMin() <<"]";
+			} else s << _TaskIt->getEndTimeMin() << "]";
+
+			s << _TaskIt->getName() << endl;
 		}
+
 		else if (_TaskIt->getTaskType() == "DeadlineTask"){
-			s << "[" << _TaskIt->getDate() << "][" <<_TaskIt->getEndTimeHour() << ":";
-			s << _TaskIt->getEndTimeMin() << "]"<< _TaskIt->getName() << endl;
+			s << "[" << _TaskIt->getDate() << "][";
+
+			if(_TaskIt->getEndTimeHour() < 10){
+				s << "0" << _TaskIt->getEndTimeHour() <<":";
+			} else s << _TaskIt->getEndTimeHour() << ":";
+			
+			if(_TaskIt->getEndTimeMin() < 10){
+				s << "0" << _TaskIt->getEndTimeMin() <<"]";
+			} else s << _TaskIt->getEndTimeMin() << "]";
+			
+			s<< _TaskIt->getName() << endl;
 		}
 	}
 	return s.str();
