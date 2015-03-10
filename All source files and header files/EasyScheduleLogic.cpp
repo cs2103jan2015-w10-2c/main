@@ -21,9 +21,13 @@ void EasyScheduleLogic::main(string userInput) {
 		creatingTask(); 
 		storingTask(); 
 	} else if (cp.commandType == "delete") {
+		deletingTask();
 	} else if (cp.commandType == "display") {
+		displayingTask();
 	} else if (cp.commandType == "search") {
+		searchingTask();
 	} else if (cp.commandType == "sort") {
+		sortingTask();
 	}
 
 	return;
@@ -58,9 +62,32 @@ void EasyScheduleLogic::creatingTask() {
 	}
 }
 
-//identify commandType and required parameters and call storeFloat(string taskName)
+//identify commandType and required parameters
 void EasyScheduleLogic::storingTask() {
 	storage.storeTask(task);
+}
+
+void EasyScheduleLogic::deletingTask(){
+	name = cp.name;
+
+}
+
+void EasyScheduleLogic::searchingTask(){
+	name = cp.name;
+}
+
+void EasyScheduleLogic::displayingTask(){
+
+}
+
+void EasyScheduleLogic::sortingTask(){
+	year = cp.year;
+	month = cp.month;
+	day = cp.day;
+	startTimeHour = cp.startTimeHour;
+	startTimeMin = cp.startTimeMin;
+	endTimeHour = cp.endTimeHour;
+	endTimeMin = cp.endTimeMin;
 }
 
 //receive bool from storeFloat and create output message
