@@ -45,7 +45,7 @@ public:
 	static void readFile();
 	static void sortList();
 	static list <Task> searchByName(string searchKeyWord);
-
+	static void deleteByName(string searchKeyWord);
 };
 
 

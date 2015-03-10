@@ -254,6 +254,17 @@ list <Task> Storage::searchByName(string searchKeyWord){
 	return searchResultList;
 }
 
+static void Storage::deleteByName(string searchKeyWord){
+	list <Task>::iterator i;
+	for (i = _TaskList.begin(); i!= _TaskList.end(); i++){
+		if ((*i).getName == searchKeyWord){
+			_TaskList.erase(i);
+			i--;
+		}
+	}
+	return;
+}
+
 int main () {
 	//Storage::showDirectory();
 	string filename;
