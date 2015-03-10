@@ -17,20 +17,20 @@
 using namespace std;
 
 class EasyScheduleLogic {
-private:
-	static CommandParser _cp;
-	static Storage _storage;
-	static Task _task;
-	static string _commandType;
-	static string _taskType;
-	static string  _name;
-	static int _year;
-	static int _month;
-	static int _day;
-	static int _startTimeHour;
-	static int _startTimeMin;
-	static int _endTimeHour;
-	static int _endTimeMin;
+public:
+	static CommandParser cp;
+	static Storage storage;
+	static Task task;
+	static string commandType;
+	static string taskType;
+	static string name;
+	static int year;
+	static int month;
+	static int day;
+	static int startTimeHour;
+	static int startTimeMin;
+	static int endTimeHour;
+	static int endTimeMin;
 
 public:
 	static void main(string userInput);

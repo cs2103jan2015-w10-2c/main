@@ -49,6 +49,8 @@ string Task::getTaskType() {
 	return _taskType;
 }
 
+
+
 string Task::getDate() {
 	stringstream s;
 	s << _year << "/" << _month << "/" << _day;
