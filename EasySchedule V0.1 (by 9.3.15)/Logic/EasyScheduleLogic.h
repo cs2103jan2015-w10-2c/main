@@ -23,7 +23,14 @@ private:
 	static Task _task;
 	static string _commandType;
 	static string _taskType;
-	static string _name;
+	static string  _name;
+	static int _year;
+	static int _month;
+	static int _day;
+	static int _startTimeHour;
+	static int _startTimeMin;
+	static int _endTimeHour;
+	static int _endTimeMin;
 
 public:
 	static void main(string userInput);

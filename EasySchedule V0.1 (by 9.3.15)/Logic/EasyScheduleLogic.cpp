@@ -6,16 +6,30 @@ Storage EasyScheduleLogic::_storage;
 Task EasyScheduleLogic::_task;
 string EasyScheduleLogic::_commandType;
 string EasyScheduleLogic::_taskType;
-string EasyScheduleLogic::_name;
+string EasyScheduleLogic:: _name;
+int EasyScheduleLogic::_year;
+int EasyScheduleLogic::_month;
+int EasyScheduleLogic::_day;
+int EasyScheduleLogic::_startTimeHour;
+int EasyScheduleLogic::_startTimeMin;
+int EasyScheduleLogic::_endTimeHour;
+int EasyScheduleLogic::_endTimeMin;
 
 void EasyScheduleLogic::main(string userInput) {
 //	floating task
 //	string userInput = "add cs2103 meeting";
 
 
-	parsingCommand(userInput); //parse userInput
-	creatingTask(); //create a task
-	storingTask(); //store the task
+	parsingCommand(userInput);
+	if(_commandType == "add") {
+		creatingTask(); 
+		storingTask(); 
+	} else if (_commandType == "delete") {
+	} else if (_commandType == "display") {
+	} else if (_commandType == "search") {
+	} else if (_commandType == "sort") {
+	}
+
 	return;
 }
 
@@ -26,26 +40,28 @@ void EasyScheduleLogic::parsingCommand(string userInput) {
 //	cout << "Command Type: "<< commandType<< endl;
 	_taskType = _cp.taskType;
 //	cout << "Task Type: "<< taskType<< endl;
-	_name = _cp.description;
-//	cout << "Description: "<< description<< endl;
-
+	_name = _cp.name;
+//	cout << "name: "<< name<< endl;
+	_year = _cp.year;
+	_month = _cp.month;
+	_day = _cp.day;
 
 }
 
 void EasyScheduleLogic::creatingTask() {
-	if(_taskType=="FloatingTask") {
-		_task = Task(_commandType, _name);
+	if(_cp.taskType=="FloatingTask") {
+		_task = Task(_cp.commandType,  _cp.name);
 	} else {
-		int year = _cp.year;
-		int month = _cp.month;
-		int day = _cp.day;
-		double endTime = _cp.endTime;
+		
+		_endTimeHour = _cp.endTimeHour;
+		_endTimeMin = _cp.endTimeMin;
 
-		if (_taskType=="DeadlineTask") {
-			_task = Task(_commandType, _name, year, month, day, endTime);
+		if (_cp.taskType=="DeadlineTask") {
+			_task = Task(_cp.commandType,  _cp.name, _year, _month, _day, _endTimeHour, _endTimeMin);
 		} else {
-			double startTime = _cp.startTime;
-			_task = Task(_commandType, _name, year, month, day, startTime, endTime);
+			_startTimeHour = _cp.startTimeHour;
+			_startTimeMin = _cp.startTimeMin;
+			_task = Task(_cp.commandType,  _cp.name, _year, _month, _day, _startTimeHour, _startTimeMin, _endTimeHour, _endTimeMin);
 		}
 	}
 }
