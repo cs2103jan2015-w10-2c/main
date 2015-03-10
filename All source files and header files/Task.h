@@ -22,8 +22,8 @@ private:
 
 public:
 	Task();
-	Task(string commandType, string name, int year, int month, int day, double startTimeHour, double startTimeMin, double endTimehour, double endTimeMin);
-	Task(string commandType, string name, int year, int month, int day, double endTimeHour, double endTimeMin);
+	Task(string commandType, string name, int year, int month, int day, int startTimeHour, int startTimeMin, int endTimehour, int endTimeMin);
+	Task(string commandType, string name, int year, int month, int day, int endTimeHour, int endTimeMin);
 	Task(string commandType, string name);
 
 	void markDone();

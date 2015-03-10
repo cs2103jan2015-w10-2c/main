@@ -3,7 +3,7 @@
 
 Task::Task() { };
 
-Task::Task(string commandType, string name, int year, int month, int day, double startTimeHour, double startTimeMin, double endTimeHour, double endTimeMin) {
+Task::Task(string commandType, string name, int year, int month, int day, int startTimeHour, int startTimeMin, int endTimeHour, int endTimeMin) {
 	_isDone = false;
 	_taskType = "TimedTask";
 	_commandType = commandType);
@@ -17,7 +17,7 @@ Task::Task(string commandType, string name, int year, int month, int day, double
 	_endTimeMin = endTimeMin;
 }
 
-Task::Task(string commandType, string name, int year, int month, int day, double endTimeHour, double endTimeMin) {
+Task::Task(string commandType, string name, int year, int month, int day, int endTimeHour, int endTimeMin) {
 	_isDone = false;
 	_taskType = "DeadlineTask";
 	_year = year;
