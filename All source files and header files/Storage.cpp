@@ -183,7 +183,10 @@ bool Storage::isTimedDuplicate(Task task) {
 	for (int i=1;i<=_TaskList.size();i++) {
 		if ((task.getName())==(_TaskIt->getName())) {
 			if ((task.getStartTimeHour())==(_TaskIt->getStartTimeHour())
-				&& (task.getStartTimeMin())==(_TaskIt->getStartTimeMin())) 
+				&& (task.getStartTimeMin())==(_TaskIt->getStartTimeMin())
+				&& (task.getYear())==(_TaskIt->getYear())
+				&& (task.getMonth())==(_TaskIt->getMonth())
+				&& (task.getDay())==(_TaskIt->getDay())) 
 				return true;
 			}
 		_TaskIt++;
