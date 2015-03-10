@@ -22,8 +22,8 @@ public:
 	static int day;
 	static int startTimeMin;
 	static int endTimeMin;
-	static int startTimeHr;
-	static int endTimeHr;
+	static int startTimeHour;
+	static int endTimeHour;
 
 public:
 	CommandParser(void);

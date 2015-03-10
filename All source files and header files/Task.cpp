@@ -59,19 +59,19 @@ string Task::getName() {
 	return  _name;
 }
 
-double Task::getEndTimeHour() {
+int Task::getEndTimeHour() {
 	return _endTimeHour;
 }
 
-double Task::getEndTimeMin() {
+int Task::getEndTimeMin() {
 	return _endTimeMin;
 }
 
-double Task::getStartTimeHour() {
+int Task::getStartTimeHour() {
 	return _startTimeHour;
 }
 
-double Task::getStartTimeMin() {
+int Task::getStartTimeMin() {
 	return _startTimeMin;
 }
 

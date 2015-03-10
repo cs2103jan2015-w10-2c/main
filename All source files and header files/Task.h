@@ -14,10 +14,10 @@ private:
 	int _year;
 	int _month;
 	int _day;
-	double _startTimeHour;
-	double _startTimeMin;
-	double _endTimeHour;
-	double _endTimeMin;
+	int _startTimeHour;
+	int _startTimeMin;
+	int _endTimeHour;
+	int _endTimeMin;
 	bool _isDone;
 
 public:
@@ -36,10 +36,10 @@ public:
 	int getMonth();
 	int getDay();
 	string getDate();
-	double getStartTimeHour();
-	double getStartTimeMin();
-	double getEndTimeHour();
-	double getEndTimeMin();
+	int getStartTimeHour();
+	int getStartTimeMin();
+	int getEndTimeHour();
+	int getEndTimeMin();
 	bool isDone();
 };
 
