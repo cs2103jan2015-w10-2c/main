@@ -247,7 +247,7 @@ list <Task> Storage::searchByName(string searchKeyWord){
 
 	list <Task>::iterator i;
 	for (i = _TaskList.begin(); i!= _TaskList.end(); i++){
-		if ((*i).getName == searchKeyWord){
+		if ((i->getName).find(searchKeyWord) != std::string::npos){
 			searchResultList.push_back(*i);
 		}
 	}
