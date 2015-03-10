@@ -1,5 +1,6 @@
 #include "Storage.h"
 #include "dirent.h"
+#include<algorithm>
 
 using namespace std;
 
@@ -247,17 +248,17 @@ list <Task> Storage::searchByName(string searchKeyWord){
 
 	list <Task>::iterator i;
 	for (i = _TaskList.begin(); i!= _TaskList.end(); i++){
-		if ((i->getName).find(searchKeyWord) != std::string::npos){
+		if ((i->getName()).find(searchKeyWord) != std::string::npos){
 			searchResultList.push_back(*i);
 		}
 	}
 	return searchResultList;
 }
 
-static void Storage::deleteByName(string searchKeyWord){
+void Storage::deleteByName(string searchKeyWord){
 	list <Task>::iterator i;
 	for (i = _TaskList.begin(); i!= _TaskList.end(); i++){
-		if ((*i).getName == searchKeyWord){
+		if ((*i).getName() == searchKeyWord){
 			_TaskList.erase(i);
 			i--;
 		}
