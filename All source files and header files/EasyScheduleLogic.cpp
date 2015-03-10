@@ -2,16 +2,16 @@
 #include "Storage.h"
 
 const string EasyScheduleLogic::MESSAGE_WELCOME = "Welcome to EasySchedule!";
-const string EasyScheduleLogic::MESSAGE_ADD = "%s has been stored successfully.";
+const string EasyScheduleLogic::MESSAGE_ADD = "The task has been stored successfully.";
 const string EasyScheduleLogic::MESSAGE_ADD_FAIL = "Sorry, the task is already in the schedule.";
-const string EasyScheduleLogic::MESSAGE_DELETE = "";
-const string EasyScheduleLogic::MESSAGE_DELETE_FAIL = "";
-const string EasyScheduleLogic::MESSAGE_CLEAR = "";
-const string EasyScheduleLogic::MESSAGE_SEARCH_FAIL = "";
-const string EasyScheduleLogic::MESSAGE_SORT = "";
-const string EasyScheduleLogic::MESSAGE_EMPTY = "";
-const string EasyScheduleLogic::MESSAGE_INVALID_INPUT_COMMAND = "";
-const string EasyScheduleLogic::MESSAGE_INVALID_INPUT_NAME = "";
+const string EasyScheduleLogic::MESSAGE_DELETE = "The task %s has been deleted.";
+const string EasyScheduleLogic::MESSAGE_DELETE_FAIL = "There is no task \"%s\" in the schedule.";
+const string EasyScheduleLogic::MESSAGE_CLEAR = "All tasks have been deleted.";
+//const string EasyScheduleLogic::MESSAGE_SEARCH_FAIL = "There is no task \"%s\" in the schedule.";
+const string EasyScheduleLogic::MESSAGE_SORT = "All tasks have been sorted by time.";
+const string EasyScheduleLogic::MESSAGE_EMPTY = "The schedule is empty.";
+const string EasyScheduleLogic::MESSAGE_INVALID_INPUT_COMMAND = "Invalid command type.";
+const string EasyScheduleLogic::MESSAGE_INVALID_INPUT_NAME = "Invalid task.";
 
 char EasyScheduleLogic::buffer[1000];
 
@@ -59,11 +59,11 @@ void EasyScheduleLogic::executeLogic(string userInput) {
 		creatingTask(); 
 		storingTask(); 
 	} else if (parser.commandType == "delete") {
-		deletingTask();
+		//does nothing here. delete being called in tellUI function.
 	} else if (parser.commandType == "display") {
-		cout << displayingTask();
+		//does nothing here. display being called in tellUI function.
 	} else if (parser.commandType == "search") {
-		cout << searchingTask();
+		//does nothing here. search being called in tellUI function.
 	} else if (parser.commandType == "sort") {
 		sortingTask();
 	}
@@ -105,9 +105,9 @@ void EasyScheduleLogic::storingTask() {
 	storage.storeTask(task);
 }
 
-void EasyScheduleLogic::deletingTask(){
+string EasyScheduleLogic::deletingTask(){
 	name = parser.name;
-	storage.deleteByName(name);
+	return storage.deleteByName(name);
 }
 
 string EasyScheduleLogic::searchingTask(){
@@ -128,20 +128,21 @@ void EasyScheduleLogic::sortingTask(){
 string EasyScheduleLogic::tellUI() {
 	if(commandType=="add") {
 		if (!isDuplicate()) {
-			sprintf_s(buffer, MESSAGE_ADD.c_str(), task.getName().c_str());
+			sprintf_s(buffer, MESSAGE_ADD.c_str());
 			return buffer;
 		} else {
 			sprintf_s(buffer, MESSAGE_ADD_FAIL.c_str());
 			return buffer;
 		}
 	} else if(commandType == "delete") {
-
+		return deletingTask();
 	} else if(commandType == "display") {
-
+		return displayingTask();
 	} else if(commandType == "sort") {
-
+		sprintf_s(buffer, MESSAGE_SORT.c_str());
+		return buffer;
 	} else if (commandType == "search") {
-
+		return searchingTask();
 	}
 }
 

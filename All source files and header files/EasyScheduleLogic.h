@@ -25,7 +25,7 @@ private:
 	static const string MESSAGE_DELETE;
 	static const string MESSAGE_DELETE_FAIL;
 	static const string MESSAGE_CLEAR;
-	static const string MESSAGE_SEARCH_FAIL;
+	//static const string MESSAGE_SEARCH_FAIL;
 	static const string MESSAGE_SORT;
 	static const string MESSAGE_EMPTY;
 	static const string MESSAGE_INVALID_INPUT_COMMAND;
@@ -55,7 +55,7 @@ public:
 	static void parsingCommand(string userInput);
 	static void creatingTask();
 	static void storingTask();
-	static void deletingTask();
+	static string deletingTask();
 	static string searchingTask();
 	static string displayingTask();
 	static void sortingTask();
