@@ -1,18 +1,18 @@
 #include "Storage.h"
 #include "dirent.h"
+#include<algorithm>
 
 using namespace std;
 
 const string Storage::LINE_BUFFER = "%s\\%s\\%s\\%s\\%s\\%s\\%s\\%s\\%s\\%s\\%s";
 
-char Storage::buffer[255];
+char Storage::buffer[500];
 list<Task> Storage::_TaskList;
 list<Task>::iterator Storage::_TaskIt;
 ofstream Storage::_fWrite;
 ifstream Storage::_fRead;
 string Storage::_fileName;
 
-bool Storage::_isDuplicate;
 DIR *dir = NULL;
 struct dirent *ent;
 
@@ -23,7 +23,7 @@ void Storage::setFileName(string name) {
 }
 
 void Storage::showDirectory() {
-	if ((dir = opendir ("./Databank")) != NULL) {
+	if ((dir = opendir ("./")) != NULL) {
 		/* print all the files and directories within directory */
 		while ((ent = readdir (dir)) != NULL) {
 			printf ("%s\n", ent->d_name);
@@ -37,7 +37,7 @@ void Storage::showDirectory() {
 }
 
 bool Storage::isExistingFile() {
-	dir = opendir ("./Databank");
+	dir = opendir ("./");
 	while ((ent = readdir (dir)) != NULL) {
 		if (_fileName==ent->d_name) {
 			closedir (dir);
@@ -51,23 +51,24 @@ bool Storage::isExistingFile() {
 //i have folder called databank which is where all text files will be saved into
 //pathName can be respecified if you wish to save it in another EXISTING folder
 void Storage::openFile() {
-	string pathName = "./Databank/";
+	string pathName = "./";
 	string combined = pathName + _fileName;
 	_fWrite.open(combined);
 }
 
 void Storage::writeToFile() {
-	cout << _TaskList.size();
+	cout << _TaskList.size(); 
 	int i;
 	_TaskIt = _TaskList.begin();
 	for (i=1;i<=_TaskList.size();i++) {
-		sprintf_s(buffer, LINE_BUFFER.c_str(), (to_string(_TaskIt->getSerialID()).c_str())
-			, (_TaskIt->getCommandType()).c_str(), (_TaskIt->getName()).c_str()
-			, to_string((_TaskIt->getDate()).year).c_str(), to_string((_TaskIt->getDate()).month).c_str()
-			, to_string((_TaskIt->getDate()).day).c_str(), to_string(_TaskIt->getStartTime()).c_str()
-			, to_string(_TaskIt->getEndTime()).c_str(), to_string(_TaskIt->getDone()).c_str()
-			, to_string(_TaskIt->getFloat()).c_str(), to_string(_TaskIt->getDeadline()).c_str());
+		sprintf_s(buffer, LINE_BUFFER.c_str(), ((_TaskIt->getCommandType()).c_str())
+			, (_TaskIt->getTaskType()).c_str(), (_TaskIt->getName()).c_str()
+			, to_string(_TaskIt->getYear()).c_str(), to_string((_TaskIt->getMonth())).c_str()
+			, to_string(_TaskIt->getDay()).c_str(), to_string(_TaskIt->getStartTimeHour()).c_str()
+			, to_string(_TaskIt->getStartTimeMin()).c_str(), to_string(_TaskIt->getEndTimeHour()).c_str()
+			, to_string(_TaskIt->getEndTimeMin()).c_str(), to_string(_TaskIt->isDone()).c_str());
 		cout << buffer;
+		cout << _TaskIt->getName();
 		_fWrite << buffer << endl;
 	}
 	_fWrite.close();
@@ -93,21 +94,22 @@ void Storage::readFile() {
 	size_t posD10;
 	string input;
 
-	double serialID;
 	string commandType;
-	string name;
-	Date date;
-	double startTime;
-	double endTime;
+	string taskType;
+	string  name;
+	int year;
+	int month;
+	int day;
+	double startTimeHour;
+	double startTimeMin;
+	double endTimeHour;
+	double endTimeMin;
 	bool isDone;
-	bool isFloat;
-	bool isDeadline;
 
 	string devider = "\\";
 	Task* inputTask;
 
-	while (!_fRead.eof()) {
-		_fRead>>input;
+	while (_fRead>>input) {
 		posStart = 0;
 		posD1 = input.find(devider);
 		posD2 = input.find(devider, posD1+1);
@@ -121,19 +123,19 @@ void Storage::readFile() {
 		posD10 = input.find(devider, posD9+1);
 
 
-		serialID = stod(input.substr(posStart, (posD1-posStart)));
-		commandType = (input.substr(posD1+1, (posD2-posD1)));
-		name = (input.substr(posD2+1, (posD3-posD2)));
-		date.year = stoi(input.substr(posD3+1, (posD4-posD3)));
-		date.month = stoi(input.substr(posD4+1, (posD5-posD4)));
-		date.day = stoi(input.substr(posD5+1, (posD6-posD5)));
-		startTime = stod(input.substr(posD6+1, (posD7-posD6)));
-		endTime = stod(input.substr(posD7+1, (posD8-posD7)));
-		isDone = stoi(input.substr(posD8+1, (posD9-posD8)));
-		isFloat = stoi(input.substr(posD9+1, (posD10-posD9)));
-		isDeadline = stoi(input.substr(posD10+1));
+		commandType = (input.substr(posStart, (posD1-posStart)));
+		taskType = (input.substr((posD1+1), (posD2-posD1-1)));
+		name = (input.substr((posD2+1), (posD3-posD2-1)));
+		year = stoi(input.substr((posD3+1), (posD4-posD3)));
+		month = stoi(input.substr((posD4+1), (posD5-posD4)));
+		day = stoi(input.substr((posD5+1), (posD6-posD5)));
+		startTimeHour = stod(input.substr((posD6+1), (posD7-posD6)));
+		startTimeMin = stod(input.substr((posD7+1), (posD8-posD7)));
+		endTimeHour = stod(input.substr((posD8+1), (posD9-posD8)));
+		endTimeMin = stod(input.substr((posD9+1), (posD10-posD9)));
+		isDone = stoi(input.substr(posD10+1));
 
-		inputTask = new Task(serialID,commandType,name,date,startTime,endTime,isDone,isFloat,isDeadline);
+		inputTask = new Task(commandType,taskType,name,year,month,day,startTimeHour,startTimeMin,endTimeHour,endTimeMin,isDone);
 		_TaskList.push_back(*inputTask);
 		delete inputTask;
 	}
@@ -148,32 +150,135 @@ void Storage::storeTask(Task task) {
 }
 
 bool Storage::isTaskDuplicate(Task task) {
-	_isDuplicate = false;
 	_TaskIt = _TaskList.begin();
-	for (int i=1;i<=_TaskList.size();i++) {
-		if ((task.getName())==(_TaskIt->getName())) {
-			if ((task.getStartTime())==(_TaskIt->getStartTime())) {
-				_isDuplicate = true;
+	if (task.getTaskType() == "FloatingTask") {
+		return isFloatDuplicate(task);
+	} else {
+		if (task.getTaskType() == "TimedTask") {
+			return isTimedDuplicate(task);
+		} else {
+			if (task.getTaskType() == "DeadlineTask") {
+				return isDeadlineDuplicate(task);
+			} else {
+				return false;
 			}
 		}
-		_TaskIt++;
-	}
-	return _isDuplicate;
+	}	
+
 }
 
-//comment the main function when integrating
+bool Storage::isFloatDuplicate(Task task) {
+	for (int i=1;i<=_TaskList.size();i++) {
+		if ((task.getName())==(_TaskIt->getName())) {
+				return true;
+			}
+		_TaskIt++;
+	}
+	return false;
+}
+
+bool Storage::isTimedDuplicate(Task task) {
+	for (int i=1;i<=_TaskList.size();i++) {
+		if ((task.getName())==(_TaskIt->getName())) {
+			if ((task.getStartTimeHour())==(_TaskIt->getStartTimeHour())
+				&& (task.getStartTimeMin())==(_TaskIt->getStartTimeMin())) 
+				return true;
+			}
+		_TaskIt++;
+	}
+	return false;
+}
+
+bool Storage::isDeadlineDuplicate(Task task) {
+		for (int i=1;i<=_TaskList.size();i++) {
+		if ((task.getName())==(_TaskIt->getName())) {
+			if ((task.getEndTimeHour())==(_TaskIt->getEndTimeHour())
+				&& (task.getEndTimeMin())==(_TaskIt->getEndTimeMin())) 
+				return true;
+			}
+		_TaskIt++;
+	}
+	return false;
+}
+
+bool cmpTime(Task a, Task b){
+	if(a.getYear() < b.getYear()){
+		return true;
+	}else if (a.getYear() == b.getYear()){
+		if(a.getMonth() < b.getMonth()){
+			return true;
+		}else if(a.getMonth() == b.getMonth()){
+			if(a.getDay() < b.getDay()){
+				return true;
+			}else if (a.getDay() == b.getDay()){
+				if(a.getStartTimeHour() < b.getStartTimeHour()){
+					return true;
+				}else if (a.getStartTimeHour() == b.getStartTimeHour()){
+					if(a.getStartTimeMin() < b.getStartTimeMin()){
+						return true;
+					}else{
+						return false;
+					}
+				}else {
+					return false;
+				}
+			}else{
+				return false;
+			}
+		}else{
+			return false;
+		}
+	}else {
+		return false;
+	}
+}
+
+
+bool sortTime(Task a, Task b){
+	return (cmpTime(a,b));
+}
+
+void Storage::sortList(){
+	sort(_TaskList.begin(), _TaskList.end(), sortTime);
+	return;
+}
+
+list <Task> Storage::searchByName(string searchKeyWord){
+	list <Task> searchResultList;
+
+	list <Task>::iterator i;
+	for (i = _TaskList.begin(); i!= _TaskList.end(); i++){
+		if ((i->getName()).find(searchKeyWord) != std::string::npos){
+			searchResultList.push_back(*i);
+		}
+	}
+	return searchResultList;
+}
+
+void Storage::deleteByName(string searchKeyWord){
+	list <Task>::iterator i;
+	for (i = _TaskList.begin(); i!= _TaskList.end(); i++){
+		if ((*i).getName() == searchKeyWord){
+			_TaskList.erase(i);
+			i--;
+		}
+	}
+	return;
+}
 
 int main () {
-	Storage::showDirectory();
+	//Storage::showDirectory();
 	string filename;
 	cin >> filename;
 	Storage::setFileName(filename);
+	//Storage::readFile();
 	Storage::openFile();
 	Task hello("add", "lol");
 	Storage::storeTask(hello);
 	Storage::storeTask(hello);
 	Storage::writeToFile();
 	cin >> filename;
+
 	return 0;
 }
 

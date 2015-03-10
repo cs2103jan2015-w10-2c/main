@@ -30,17 +30,22 @@ public:
 
 	static ofstream _fWrite;
 	static ifstream _fRead;
-	static bool _isDuplicate;
-	static char buffer[255];
+	static char buffer[500];
 
 	static void storeTask(Task task);
 	static bool isTaskDuplicate(Task task);
+	static bool isFloatDuplicate(Task task);
+	static bool isTimedDuplicate(Task task);
+	static bool isDeadlineDuplicate(Task task);
 	static void showDirectory();
 	static bool isExistingFile();
 	static void openFile();
 	static void setFileName(string name);
 	static void writeToFile();
 	static void readFile();
+	static void sortList();
+	static list <Task> searchByName(string searchKeyWord);
+	static void deleteByName(string searchKeyWord);
 };
 
 
