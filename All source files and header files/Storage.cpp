@@ -262,17 +262,19 @@ string Storage::searchByName(string searchKeyWord){
 }
 
 void Storage::deleteByName(string searchKeyWord){
+	
+    list <Task>::iterator i;
+    list <Task> deleteResultList;
+    for (i = _TaskList.begin(); i!= _TaskList.end(); i++){
 
-	list <Task>::iterator i;
-	list <Task> deleteResultList;
-	for (i = _TaskList.begin(); i!= _TaskList.end(); i++){
-		if (i->getName() != searchKeyWord){
-			deleteResultList.push_back(*i);
-		}
-	}
-	_TaskList.clear();
-	_TaskList = deleteResultList;
+        if (i->getName() != searchKeyWord){
+            deleteResultList.push_back(*i);
+        }
+    }
+    _TaskList.clear();
+    _TaskList = deleteResultList;
 	return;
+
 }
 
 string Storage::toStringTaskDetail(list <Task> listToFormat){
@@ -282,8 +284,8 @@ string Storage::toStringTaskDetail(list <Task> listToFormat){
 		if (i->getTaskType() == "FloatingTask"){
 			s << i->getName() << endl;
 		}
-		else if (i ->getTaskType() == "TimedTask"){
-			s << "[" << i->getDate() << "][" << i->getStartTimeHour() << ":";
+		else if (i->getTaskType() == "TimedTask"){
+			s << "[" << i->getDate() << "][" <<i->getStartTimeHour() << ":";
 			s << i->getStartTimeMin() << "-" << i->getEndTimeHour() << ":";
 			s << i->getEndTimeMin() << "]" << i->getName() << endl;
 		}
@@ -302,13 +304,39 @@ string Storage::toStringTaskDetail(){
 			s << _TaskIt->getName() << endl;
 		}
 		else if (_TaskIt->getTaskType() == "TimedTask"){
-			s << "[" << _TaskIt->getDate() << "][" <<_TaskIt->getStartTimeHour() << ":";
-			s << _TaskIt->getStartTimeMin() << "-" << _TaskIt->getEndTimeHour() << ":";
-			s << _TaskIt->getEndTimeMin() << "]" << _TaskIt->getName() << endl;
+			s << "[" << _TaskIt->getDate() << "][";
+
+			if(_TaskIt->getStartTimeHour() < 10){
+				s << "0" << _TaskIt->getStartTimeHour() <<":";
+			} else s << _TaskIt->getStartTimeHour() << ":";
+			
+			if(_TaskIt->getStartTimeMin() < 10){
+				s << "0" << _TaskIt->getStartTimeMin() <<"-";
+			} else s << _TaskIt->getStartTimeMin() << "-";
+
+			if(_TaskIt->getEndTimeHour() < 10){
+				s << "0" << _TaskIt->getEndTimeHour() <<":";
+			} else s << _TaskIt->getEndTimeHour() << ":";
+			
+			if(_TaskIt->getEndTimeMin() < 10){
+				s << "0" << _TaskIt->getEndTimeMin() <<"]";
+			} else s << _TaskIt->getEndTimeMin() << "]";
+
+			s << _TaskIt->getName() << endl;
 		}
+
 		else if (_TaskIt->getTaskType() == "DeadlineTask"){
-			s << "[" << _TaskIt->getDate() << "][" <<_TaskIt->getEndTimeHour() << ":";
-			s << _TaskIt->getEndTimeMin() << "]"<< _TaskIt->getName() << endl;
+			s << "[" << _TaskIt->getDate() << "][";
+
+			if(_TaskIt->getEndTimeHour() < 10){
+				s << "0" << _TaskIt->getEndTimeHour() <<":";
+			} else s << _TaskIt->getEndTimeHour() << ":";
+			
+			if(_TaskIt->getEndTimeMin() < 10){
+				s << "0" << _TaskIt->getEndTimeMin() <<"]";
+			} else s << _TaskIt->getEndTimeMin() << "]";
+			
+			s<< _TaskIt->getName() << endl;
 		}
 	}
 	return s.str();
