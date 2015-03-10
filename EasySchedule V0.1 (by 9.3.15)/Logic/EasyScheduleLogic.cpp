@@ -1,72 +1,65 @@
 #include "EasyScheduleLogic.h"
 
-Storage* EasyScheduleLogic::storage;
-Task* EasyScheduleLogic::task;
+
+CommandParser EasyScheduleLogic::_cp;
+Storage EasyScheduleLogic::_storage;
+Task EasyScheduleLogic::_task;
+string EasyScheduleLogic::_commandType;
+string EasyScheduleLogic::_taskType;
+string EasyScheduleLogic::_name;
 
 void EasyScheduleLogic::main(string userInput) {
 //	floating task
 //	string userInput = "add cs2103 meeting";
 
 
-/*********Parse command and create task*********/
-	CommandParser* cp;
-	cp = new CommandParser;
-
-	cp->identifyTask(userInput);
-	string commandType = cp->commandType;
-//	cout << "Command Type: "<< commandType<< endl;
-	string taskType = cp->taskType;
-//	cout << "Task Type: "<< taskType<< endl;
-	string description = cp->description;
-//	cout << "Description: "<< description<< endl;
-
-	if(taskType=="FloatingTask") {
-		task = new Task(commandType, description);
-	} else {
-		int year = cp->year;
-		int month = cp->month;
-		int day = cp->day;
-		double endTime =cp->endTime;
-
-		if (taskType=="DeadlineTask") {
-			task = new Task(commandType, description, year, month, day, endTime);
-		} else {
-			double startTime = cp->startTime;
-			task = new Task(commandType, description, year, month, day, startTime, endTime);
-		}
-	}
-
-
-/*********Store task*********/
-
-	storage = new Storage;
-	storeTask();
-	/*
-
-	enter code here
-
-
-	*/
-
+	parsingCommand(userInput); //parse userInput
+	creatingTask(); //create a task
+	storingTask(); //store the task
 	return;
 }
 
-//identify commandType and required parameters and call storeFloat(string taskName)
-void EasyScheduleLogic::storeTask() {
-	if (task->isFloat()) {
-		storage->storeFloat(task->getName());
-	} else if(task->isDeadline) {
-		storage->storeDeadline(task->getName(), task->getDate(), task->getEndTime());
+void EasyScheduleLogic::parsingCommand(string userInput) {
+	
+	_cp.identifyTask(userInput);
+	_commandType = _cp.commandType;
+//	cout << "Command Type: "<< commandType<< endl;
+	_taskType = _cp.taskType;
+//	cout << "Task Type: "<< taskType<< endl;
+	_name = _cp.description;
+//	cout << "Description: "<< description<< endl;
+
+
+}
+
+void EasyScheduleLogic::creatingTask() {
+	if(_taskType=="FloatingTask") {
+		_task = Task(_commandType, _name);
 	} else {
-		storage->storeTimed(task->getName(), task->getDate(), task->getStartTime(), task->getEndTime());
+		int year = _cp.year;
+		int month = _cp.month;
+		int day = _cp.day;
+		double endTime = _cp.endTime;
+
+		if (_taskType=="DeadlineTask") {
+			_task = Task(_commandType, _name, year, month, day, endTime);
+		} else {
+			double startTime = _cp.startTime;
+			_task = Task(_commandType, _name, year, month, day, startTime, endTime);
+		}
 	}
+}
+
+//identify commandType and required parameters and call storeFloat(string taskName)
+void EasyScheduleLogic::storingTask() {
+	_storage.storeTask(_task);
 }
 
 //receive bool from storeFloat and create output message
 string EasyScheduleLogic::tellUI() {
 	ostringstream os;
 	if (!isDuplicate()) {
-		os << "\"" << task->getName() << "\" has been stored successfully.";
+		os << "\"" << _task.getName() << "\" has been stored successfully.";
 	} else {
 		os << "Sorry, the task is already in the schedule.";
 	}
@@ -77,13 +70,7 @@ string EasyScheduleLogic::tellUI() {
 
 
 bool EasyScheduleLogic::isDuplicate() {
-	if (storage->isFloatDuplicate(task->getName()) || 
-		storage->isTimedDuplicate(task->getName()) || 
-		storage->isDeadlineDuplicate(task->getName())) {
-		return true;
-	} else {
-		return false;
-	}
+	return _storage.isTaskDuplicate(_task);
 }
 
 EasyScheduleLogic::EasyScheduleLogic(void) { }
