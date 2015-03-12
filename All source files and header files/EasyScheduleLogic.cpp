@@ -67,6 +67,8 @@ void EasyScheduleLogic::executeLogic(string userInput) {
 		//does nothing here. search being called in tellUI function.
 	} else if (parser.commandType == "sort") {
 		sortingTask();
+	} else if (parser.commandType == "exit") {
+		exit(0);
 	} else {
 		isInvalidCommandType = true;
 	}
@@ -132,10 +134,12 @@ void EasyScheduleLogic::sortingTask(){
 //receive bool from storeFloat and create output message
 string EasyScheduleLogic::tellUI() {
 	if(isInvalidCommandType) {
+		isInvalidCommandType = false; //for future uses
 		sprintf_s(buffer, MESSAGE_INVALID_INPUT_COMMAND.c_str());
 		return buffer;
 	}
 	if(isInvalidTaskType) {
+		isInvalidTaskType = false; //for future uses
 		sprintf_s(buffer, MESSAGE_INVALID_INPUT_NAME.c_str());
 		return buffer;
 	}
