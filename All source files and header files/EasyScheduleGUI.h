@@ -122,12 +122,28 @@ namespace UI {
 			this->Controls->Add(this->enterButton);
 			this->Name = L"EasyScheduleGUI";
 			this->Text = L"EasyScheduleGUI";
+			this->Load += gcnew System::EventHandler(this, &EasyScheduleGUI::EasyScheduleGUI_Load);
 			this->ResumeLayout(false);
 			this->PerformLayout();
 
 		}
 #pragma endregion
+	//When users loads (opens) the programme
+	private: System::Void EasyScheduleGUI_Load(System::Object^  sender, System::EventArgs^  e) {
+				 this->outputBox->Text = "Hello Jim. Welcome to EasySchedule!\r\n\r\nWhat would you like to do?";
+				 /*
+				 other welcome messages such as show all the command types; show today's tasks by calling EasyScheduleLogic::.....
+				 */
+		 }
 
+	//User press "Enter" key after typing to replace clicking "Enter" button
+	//Debug: Now it doesn't work. Why???
+	private: System::Void inputBox_KeyUp(System::Object^  sender, System::Windows::Forms::KeyEventArgs^  e) {
+			 if(e->KeyCode == Keys::Enter) {
+				 enterButton->PerformClick();
+			 }
+		 }
+	//Actions happen after user clicks the "Enter" button 
 	private: System::Void enterButton_Click(System::Object^  sender, System::EventArgs^  e) {
 				 //allUserInputs.push_back(this->inputBox->Text);
 				 userInput = this->inputBox->Text;
@@ -145,13 +161,10 @@ namespace UI {
 				this->outputBox->Text = tempString;				 
 		 }
 
-private: System::Void exitToolStripMenuItem_Click(System::Object^  sender, System::EventArgs^  e) {
-		//	 MessageBox::Show("Exit the programme?");
-			 Close();
+	private: System::Void inputBox_TextChanged(System::Object^  sender, System::EventArgs^  e) {
 		 }
-private: System::Void inputBox_TextChanged(System::Object^  sender, System::EventArgs^  e) {
+	private: System::Void outputBox_TextChanged(System::Object^  sender, System::EventArgs^  e) {
 		 }
-private: System::Void outputBox_TextChanged(System::Object^  sender, System::EventArgs^  e) {
-		 }
+
 };
 }
