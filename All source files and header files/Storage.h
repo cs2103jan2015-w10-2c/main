@@ -19,8 +19,8 @@ class Storage {
 
 private:
 	static string _fileName;
-	static list<Task>_TaskList;
-	static list<Task>::iterator _TaskIt;
+	static list<Task>_taskList;
+	static list<Task>::iterator _taskIt;
 
 	static const string LINE_BUFFER;
 
@@ -30,7 +30,7 @@ public:
 
 	static ofstream _fWrite;
 	static ifstream _fRead;
-	static char buffer[500];
+	static char buffer[1000];
 
 	static void storeTask(Task task);
 	static bool isTaskDuplicate(Task task);
@@ -40,9 +40,10 @@ public:
 	static void showDirectory();
 	static bool isExistingFile();
 	static void openFile();
+	static void readFile();
 	static void setFileName(string name);
 	static void writeToFile();
-	static void readFile();
+	
 
 	static void sortList();
 	static string searchByName(string searchKeyWord);
