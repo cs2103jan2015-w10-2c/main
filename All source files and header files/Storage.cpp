@@ -167,7 +167,8 @@ bool Storage::isTaskDuplicate(Task task) {
 bool Storage::isFloatDuplicate(Task task) {
 
 	for (_taskIt = _taskList.begin(); _taskIt != _taskList.end(); _taskIt++) {
-		if ((task.getName())==(_taskIt->getName())) {
+		if ((task.getName())==(_taskIt->getName())
+			&& !(_taskIt->isDone())) {
 			return true;
 		}
 	}
@@ -182,7 +183,8 @@ bool Storage::isTimedDuplicate(Task task) {
 				&& (task.getStartTimeMin())==(_taskIt->getStartTimeMin())
 				&& (task.getYear())==(_taskIt->getYear())
 				&& (task.getMonth())==(_taskIt->getMonth())
-				&& (task.getDay())==(_taskIt->getDay())) 
+				&& (task.getDay())==(_taskIt->getDay())
+				&& !(_taskIt->isDone())) 
 				return true;
 			}
 		_taskIt++;
@@ -195,7 +197,8 @@ bool Storage::isDeadlineDuplicate(Task task) {
 		for (int i=1;i<=_taskList.size();i++) {
 		if ((task.getName())==(_taskIt->getName())) {
 			if ((task.getEndTimeHour())==(_taskIt->getEndTimeHour())
-				&& (task.getEndTimeMin())==(_taskIt->getEndTimeMin())) 
+				&& (task.getEndTimeMin())==(_taskIt->getEndTimeMin())
+				&& !(_taskIt->isDone())) 
 				return true;
 			}
 		_taskIt++;
