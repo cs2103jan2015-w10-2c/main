@@ -3,8 +3,16 @@
 #include "EasyScheduleLogic.h"
 #include <string>
 //#include <cliext/vector>
+#include <assert.h>
 #include <msclr\marshal_cppstd.h>
 #using <mscorlib.dll>
+
+
+//change to exception: because it is user's fault.
+void checkUserInput (string userInput) {
+	
+	assert(isalpha(userInput[0]));
+}
 
 namespace UI {
 
@@ -81,7 +89,7 @@ namespace UI {
 			// 
 			// enterButton
 			// 
-			this->enterButton->Location = System::Drawing::Point(638, 284);
+			this->enterButton->Location = System::Drawing::Point(463, 284);
 			this->enterButton->Name = L"enterButton";
 			this->enterButton->Size = System::Drawing::Size(75, 45);
 			this->enterButton->TabIndex = 0;
@@ -98,17 +106,19 @@ namespace UI {
 			this->inputBox->Multiline = true;
 			this->inputBox->Name = L"inputBox";
 			this->inputBox->ScrollBars = System::Windows::Forms::ScrollBars::Vertical;
-			this->inputBox->Size = System::Drawing::Size(570, 45);
+			this->inputBox->Size = System::Drawing::Size(394, 45);
 			this->inputBox->TabIndex = 1;
 			this->inputBox->TextChanged += gcnew System::EventHandler(this, &EasyScheduleGUI::inputBox_TextChanged);
 			// 
 			// outputBox
 			// 
+			this->outputBox->Font = (gcnew System::Drawing::Font(L"Arial", 11.25F, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point, 
+				static_cast<System::Byte>(0)));
 			this->outputBox->Location = System::Drawing::Point(34, 27);
 			this->outputBox->Multiline = true;
 			this->outputBox->Name = L"outputBox";
 			this->outputBox->ScrollBars = System::Windows::Forms::ScrollBars::Vertical;
-			this->outputBox->Size = System::Drawing::Size(679, 240);
+			this->outputBox->Size = System::Drawing::Size(504, 240);
 			this->outputBox->TabIndex = 2;
 			this->outputBox->TextChanged += gcnew System::EventHandler(this, &EasyScheduleGUI::outputBox_TextChanged);
 			// 
@@ -116,7 +126,7 @@ namespace UI {
 			// 
 			this->AutoScaleDimensions = System::Drawing::SizeF(6, 12);
 			this->AutoScaleMode = System::Windows::Forms::AutoScaleMode::Font;
-			this->ClientSize = System::Drawing::Size(753, 350);
+			this->ClientSize = System::Drawing::Size(569, 350);
 			this->Controls->Add(this->outputBox);
 			this->Controls->Add(this->inputBox);
 			this->Controls->Add(this->enterButton);
@@ -128,30 +138,35 @@ namespace UI {
 
 		}
 #pragma endregion
+
 	//When users loads (opens) the programme
 	private: System::Void EasyScheduleGUI_Load(System::Object^  sender, System::EventArgs^  e) {
 				 this->outputBox->Text = "Hello Jim. Welcome to EasySchedule!\r\n\r\nWhat would you like to do?";
 				 /*
-				 other welcome messages such as show all the command types; show today's tasks by calling EasyScheduleLogic::.....
+				 other welcome messages such as show all the command types, show today's tasks, etc 
 				 */
 		 }
 
 	//User press "Enter" key after typing to replace clicking "Enter" button
 	//Debug: Now it doesn't work. Why???
 	private: System::Void inputBox_KeyUp(System::Object^  sender, System::Windows::Forms::KeyEventArgs^  e) {
-			 if(e->KeyCode == Keys::Enter) {
-				 enterButton->PerformClick();
-			 }
+				if(e->KeyCode == Keys::Enter) {
+					enterButton->PerformClick();
+				}
 		 }
+
 	//Actions happen after user clicks the "Enter" button 
 	private: System::Void enterButton_Click(System::Object^  sender, System::EventArgs^  e) {
-				 //allUserInputs.push_back(this->inputBox->Text);
-				 userInput = this->inputBox->Text;
+				//allUserInputs.push_back(this->inputBox->Text);
+				userInput = this->inputBox->Text;
 
-				//convert from System::String to std::string and pass to command parser cp
+				//convert from System::String to std::string and pass to logic
 				msclr::interop::marshal_context context;
 				std::string userInputString = context.marshal_as<std::string>(userInput);
-					 
+				
+				checkUserInput(userInputString); //assertion
+
+
 				EasyScheduleLogic::executeLogic(userInputString);
 				this->inputBox->Text = ""; //clear userinput in the inputBox
 
