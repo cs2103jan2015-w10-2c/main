@@ -5,11 +5,11 @@
 
 using namespace std;
 
-const string Storage::LINE_BUFFER = "%s\\%s\\%s\\%s\\%s\\%s\\%s\\%s\\%s\\%s\\%s";
+const string Storage::LINE_BUFFER = "%s/%s/%s/%s/%s/%s/%s/%s/%s/%s/%s";
 
-char Storage::buffer[500];
-list<Task> Storage::_TaskList;
-list<Task>::iterator Storage::_TaskIt;
+char Storage::buffer[1000];
+list<Task> Storage::_taskList;
+list<Task>::iterator Storage::_taskIt;
 ofstream Storage::_fWrite;
 ifstream Storage::_fRead;
 string Storage::_fileName;
@@ -58,20 +58,20 @@ void Storage::openFile() {
 }
 
 void Storage::writeToFile() {
-	cout << _TaskList.size(); 
+	cout << _taskList.size(); 
 	int i;
-	_TaskIt = _TaskList.begin();
-	for (i=1;i<=_TaskList.size();i++) {
-		sprintf_s(buffer, LINE_BUFFER.c_str(), ((_TaskIt->getCommandType()).c_str())
-			, (_TaskIt->getTaskType()).c_str(), (_TaskIt->getName()).c_str()
-			, to_string(_TaskIt->getYear()).c_str(), to_string((_TaskIt->getMonth())).c_str()
-			, to_string(_TaskIt->getDay()).c_str(), to_string(_TaskIt->getStartTimeHour()).c_str()
-			, to_string(_TaskIt->getStartTimeMin()).c_str(), to_string(_TaskIt->getEndTimeHour()).c_str()
-			, to_string(_TaskIt->getEndTimeMin()).c_str(), to_string(_TaskIt->isDone()).c_str());
+	_taskIt = _taskList.begin();
+	for (i=1;i<=_taskList.size();i++) {
+		sprintf_s(buffer, LINE_BUFFER.c_str(), ((_taskIt->getCommandType()).c_str())
+			, (_taskIt->getTaskType()).c_str(), (_taskIt->getName()).c_str()
+			, to_string(_taskIt->getYear()).c_str(), to_string((_taskIt->getMonth())).c_str()
+			, to_string(_taskIt->getDay()).c_str(), to_string(_taskIt->getStartTimeHour()).c_str()
+			, to_string(_taskIt->getStartTimeMin()).c_str(), to_string(_taskIt->getEndTimeHour()).c_str()
+			, to_string(_taskIt->getEndTimeMin()).c_str(), to_string(_taskIt->isDone()).c_str());
 		cout << buffer;
-		cout << _TaskIt->getName();
+		cout << _taskIt->getName();
 		_fWrite << buffer << "\r\n";
-		_TaskIt++;
+		_taskIt++;
 	}
 	_fWrite.close();
 }
@@ -79,9 +79,9 @@ void Storage::writeToFile() {
 //this is extremely inefficient but sigh
 void Storage::readFile() {
 	
-	string pathName = "./Databank/";
+	string pathName = "./";
 	string combined = pathName + _fileName;
-	_fRead.open(combined, ios_base::in);
+	_fRead.open(combined);
 
 	size_t posStart;
 	size_t posD1;
@@ -108,10 +108,10 @@ void Storage::readFile() {
 	double endTimeMin;
 	bool isDone;
 
-	string devider = "\\";
+	string devider = "/";
 	Task* inputTask;
 
-	while (_fRead>>input) {
+	while (getline(_fRead,input)) {
 		posStart = 0;
 		posD1 = input.find(devider);
 		posD2 = input.find(devider, posD1+1);
@@ -124,7 +124,6 @@ void Storage::readFile() {
 		posD9 = input.find(devider, posD8+1);
 		posD10 = input.find(devider, posD9+1);
 
-
 		commandType = (input.substr(posStart, (posD1-posStart)));
 		taskType = (input.substr((posD1+1), (posD2-posD1-1)));
 		name = (input.substr((posD2+1), (posD3-posD2-1)));
@@ -136,9 +135,9 @@ void Storage::readFile() {
 		endTimeHour = stod(input.substr((posD8+1), (posD9-posD8)));
 		endTimeMin = stod(input.substr((posD9+1), (posD10-posD9)));
 		isDone = stoi(input.substr(posD10+1));
-
+		
 		inputTask = new Task(commandType,taskType,name,year,month,day,startTimeHour,startTimeMin,endTimeHour,endTimeMin,isDone);
-		_TaskList.push_back(*inputTask);
+		_taskList.push_back(*inputTask);
 		delete inputTask;
 	}
 	_fRead.close();
@@ -147,12 +146,12 @@ void Storage::readFile() {
 
 void Storage::storeTask(Task task) {
 	if (!isTaskDuplicate(task)) {
-		_TaskList.push_back(task);
+		_taskList.push_back(task);
 	}
 }
 
 bool Storage::isTaskDuplicate(Task task) {
-	_TaskIt = _TaskList.begin();
+	_taskIt = _taskList.begin();
 	if (task.getTaskType() == "FloatingTask") {
 		return isFloatDuplicate(task);
 	} else if (task.getTaskType() == "TimedTask") {
@@ -167,8 +166,9 @@ bool Storage::isTaskDuplicate(Task task) {
 //bug
 bool Storage::isFloatDuplicate(Task task) {
 
-	for (_TaskIt = _TaskList.begin(); _TaskIt != _TaskList.end(); _TaskIt++) {
-		if ((task.getName())==(_TaskIt->getName())) {
+	for (_taskIt = _taskList.begin(); _taskIt != _taskList.end(); _taskIt++) {
+		if ((task.getName())==(_taskIt->getName())
+			&& !(_taskIt->isDone())) {
 			return true;
 		}
 	}
@@ -177,29 +177,31 @@ bool Storage::isFloatDuplicate(Task task) {
 
 //bug
 bool Storage::isTimedDuplicate(Task task) {
-	for (int i=1;i<=_TaskList.size();i++) {
-		if ((task.getName())==(_TaskIt->getName())) {
-			if ((task.getStartTimeHour())==(_TaskIt->getStartTimeHour())
-				&& (task.getStartTimeMin())==(_TaskIt->getStartTimeMin())
-				&& (task.getYear())==(_TaskIt->getYear())
-				&& (task.getMonth())==(_TaskIt->getMonth())
-				&& (task.getDay())==(_TaskIt->getDay())) 
+	for (int i=1;i<=_taskList.size();i++) {
+		if ((task.getName())==(_taskIt->getName())) {
+			if ((task.getStartTimeHour())==(_taskIt->getStartTimeHour())
+				&& (task.getStartTimeMin())==(_taskIt->getStartTimeMin())
+				&& (task.getYear())==(_taskIt->getYear())
+				&& (task.getMonth())==(_taskIt->getMonth())
+				&& (task.getDay())==(_taskIt->getDay())
+				&& !(_taskIt->isDone())) 
 				return true;
 			}
-		_TaskIt++;
+		_taskIt++;
 	}
 	return false;
 }
 
 //bug
 bool Storage::isDeadlineDuplicate(Task task) {
-		for (int i=1;i<=_TaskList.size();i++) {
-		if ((task.getName())==(_TaskIt->getName())) {
-			if ((task.getEndTimeHour())==(_TaskIt->getEndTimeHour())
-				&& (task.getEndTimeMin())==(_TaskIt->getEndTimeMin())) 
+		for (int i=1;i<=_taskList.size();i++) {
+		if ((task.getName())==(_taskIt->getName())) {
+			if ((task.getEndTimeHour())==(_taskIt->getEndTimeHour())
+				&& (task.getEndTimeMin())==(_taskIt->getEndTimeMin())
+				&& !(_taskIt->isDone())) 
 				return true;
 			}
-		_TaskIt++;
+		_taskIt++;
 	}
 	return false;
 }
@@ -247,14 +249,14 @@ bool sortTime(Task a, Task b){
 }
 
 void Storage::sortList(){
-	_TaskList.sort(sortTime);
+	_taskList.sort(sortTime);
 	return;
 }
 
 string Storage::searchByName(string searchKeyWord){
 	list <Task> searchResultList;
 	list <Task>::iterator i;
-	for (i = _TaskList.begin(); i!= _TaskList.end(); i++){
+	for (i = _taskList.begin(); i!= _taskList.end(); i++){
 		if ((i->getName()).find(searchKeyWord) != std::string::npos){
 			searchResultList.push_back(*i);
 		}
@@ -267,7 +269,7 @@ string Storage::deleteByName(string searchKeyWord){
     list <Task>::iterator i;
     list <Task> deleteResultList;
 	int count=0;
-    for (i = _TaskList.begin(); i!= _TaskList.end(); i++){
+    for (i = _taskList.begin(); i!= _taskList.end(); i++){
 
         if (i->getName() != searchKeyWord){
             deleteResultList.push_back(*i);
@@ -275,12 +277,12 @@ string Storage::deleteByName(string searchKeyWord){
         }
     }
 	ostringstream s;
-	if(count==_TaskList.size()) {
+	if(count==_taskList.size()) {
 		s << "There is no such task in the schedule.\r\n";
 		return s.str();
 	}
-    _TaskList.clear();
-    _TaskList = deleteResultList;
+    _taskList.clear();
+    _taskList = deleteResultList;
 	s << "Tasks containing the keyword have been deleted.\r\n";
 	return s.str();
 
@@ -313,53 +315,53 @@ string Storage::toStringTaskDetail(list <Task> listToFormat){
 
 string Storage::toStringTaskDetail(){
 	stringstream s;
-	if(_TaskList.empty()) {
+	if(_taskList.empty()) {
 		s << "There is no task in the schedule.\r\n";
 		return s.str();
 	} else {
-		for (_TaskIt = _TaskList.begin(); _TaskIt != _TaskList.end(); _TaskIt++){
-			if (_TaskIt->getTaskType() == "FloatingTask"){
-				s << _TaskIt->getName() << "\r\n";
+		for (_taskIt = _taskList.begin(); _taskIt != _taskList.end(); _taskIt++){
+			if (_taskIt->getTaskType() == "FloatingTask"){
+				s << _taskIt->getName() << "\r\n";
 			}
-			else if (_TaskIt->getTaskType() == "TimedTask"){
-				s << "[" << _TaskIt->getDate() << "][";
+			else if (_taskIt->getTaskType() == "TimedTask"){
+				s << "[" << _taskIt->getDate() << "][";
 
-				if(_TaskIt->getStartTimeHour() < 10){
-					s << "0" << _TaskIt->getStartTimeHour() <<":";
+				if(_taskIt->getStartTimeHour() < 10){
+					s << "0" << _taskIt->getStartTimeHour() <<":";
 				} else {
-					s << _TaskIt->getStartTimeHour() << ":";
+					s << _taskIt->getStartTimeHour() << ":";
 				}
-				if(_TaskIt->getStartTimeMin() < 10){
-					s << "0" << _TaskIt->getStartTimeMin() <<"-";
+				if(_taskIt->getStartTimeMin() < 10){
+					s << "0" << _taskIt->getStartTimeMin() <<"-";
 				} else {
-					s << _TaskIt->getStartTimeMin() << "-";
+					s << _taskIt->getStartTimeMin() << "-";
 				}
-				if(_TaskIt->getEndTimeHour() < 10){
-					s << "0" << _TaskIt->getEndTimeHour() <<":";
+				if(_taskIt->getEndTimeHour() < 10){
+					s << "0" << _taskIt->getEndTimeHour() <<":";
 				} else {
-					s << _TaskIt->getEndTimeHour() << ":";
+					s << _taskIt->getEndTimeHour() << ":";
 				}
-				if(_TaskIt->getEndTimeMin() < 10){
-					s << "0" << _TaskIt->getEndTimeMin() <<"]";
+				if(_taskIt->getEndTimeMin() < 10){
+					s << "0" << _taskIt->getEndTimeMin() <<"]";
 				} else {
-					s << _TaskIt->getEndTimeMin() << "]";
+					s << _taskIt->getEndTimeMin() << "]";
 				}
-				s << _TaskIt->getName() << "\r\n";
+				s << _taskIt->getName() << "\r\n";
 			}
-			else if (_TaskIt->getTaskType() == "DeadlineTask"){
-				s << "[" << _TaskIt->getDate() << "][";
+			else if (_taskIt->getTaskType() == "DeadlineTask"){
+				s << "[" << _taskIt->getDate() << "][";
 
-				if(_TaskIt->getEndTimeHour() < 10){
-					s << "0" << _TaskIt->getEndTimeHour() <<":";
+				if(_taskIt->getEndTimeHour() < 10){
+					s << "0" << _taskIt->getEndTimeHour() <<":";
 				} else {
-					s << _TaskIt->getEndTimeHour() << ":";
+					s << _taskIt->getEndTimeHour() << ":";
 				}
-				if(_TaskIt->getEndTimeMin() < 10){
-					s << "0" << _TaskIt->getEndTimeMin() <<"]";
+				if(_taskIt->getEndTimeMin() < 10){
+					s << "0" << _taskIt->getEndTimeMin() <<"]";
 				} else {
-					s << _TaskIt->getEndTimeMin() << "]";
+					s << _taskIt->getEndTimeMin() << "]";
 				}
-				s<< _TaskIt->getName() << "\r\n";
+				s<< _taskIt->getName() << "\r\n";
 			}
 		}
 	}

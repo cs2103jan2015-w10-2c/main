@@ -1,5 +1,6 @@
 #include "EasyScheduleLogic.h"
 #include "Storage.h"
+#include <sys/stat.h>
 
 const string EasyScheduleLogic::MESSAGE_WELCOME = "Welcome to EasySchedule!";
 const string EasyScheduleLogic::MESSAGE_ADD = "The task has been stored successfully.";
@@ -39,8 +40,8 @@ void EasyScheduleLogic::main() {
 	string filename;
 	cin >> filename;
 	storage.setFileName(filename);
-	storage.openFile();
 	storage.readFile();
+	storage.openFile();
 	string input;
 	cin.ignore();
 	getline(cin, input);
