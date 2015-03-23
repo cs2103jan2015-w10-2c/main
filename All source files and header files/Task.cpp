@@ -66,6 +66,34 @@ void Task::setName(string newName) {
 	_name = newName;
 }
 
+void Task::setYear(int newYear){
+	_year = newYear;
+}
+
+void Task::setMonth(int newMonth){
+	_month = newMonth;
+}
+
+void Task::setDay(int newDay){
+	_day = newDay;
+}
+
+void Task::setStartTimeHour(int newStartTimeHour){
+	_startTimeHour = newStartTimeHour;
+}
+
+void Task::setStartTimeMin(int newStartTimeMin){
+	_startTimeMin = newStartTimeMin;
+}
+
+void Task::setEndTimeHour(int newEndTimeHour){
+	_endTimeHour = newEndTimeHour;
+}
+
+void Task::setEndTimeMin(int newEndTimeMin){
+	_endTimeMin = newEndTimeMin;
+}
+
 string Task::getCommandType() {
 	return _commandType;
 }
