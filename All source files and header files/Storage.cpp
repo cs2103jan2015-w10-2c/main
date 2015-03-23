@@ -1,11 +1,13 @@
 #include "Storage.h"
 #include "dirent.h"
-#include<algorithm>
-#include<sstream>
+#include <algorithm>
+#include <sstream>
+#include <assert.h>
 
 using namespace std;
 
 const string Storage::LINE_BUFFER = "%s/%s/%s/%s/%s/%s/%s/%s/%s/%s/%s";
+const string Storage::COMMANDLIST = "List of commands:\n1. add\n2. display\n3. delete\n4. search";
 
 char Storage::buffer[1000];
 list<Task> Storage::_taskList;
@@ -20,7 +22,13 @@ struct dirent *ent;
 Storage::Storage() {}
 
 void Storage::setFileName(string name) {
-	_fileName = name;
+	string fileType = ".txt";
+	size_t findPos = name.find(fileType);
+	if (findPos==std::string::npos) {
+	_fileName = name+fileType;
+	} else {
+		_fileName = name;
+	}
 }
 
 void Storage::showDirectory() {
@@ -112,6 +120,7 @@ void Storage::readFile() {
 	Task* inputTask;
 
 	while (getline(_fRead,input)) {
+		ASSERT(getDeviderNum(input) == 10)
 		posStart = 0;
 		posD1 = input.find(devider);
 		posD2 = input.find(devider, posD1+1);
@@ -207,6 +216,7 @@ bool Storage::isDeadlineDuplicate(Task task) {
 }
 
 bool cmpTime(Task a, Task b){
+	string s1, s2;
 
 	if(a.getYear() < b.getYear()){
 		return true;
@@ -238,7 +248,10 @@ bool cmpTime(Task a, Task b){
 		return false;
 	}
 
-	if (a.getName() < b.getName()){
+	s1 = toLower(a.getName());
+	s2 = toLower(b.getName());
+
+	if (s1 < s2) {
 		return true;
 	} else {return false;}
 }
@@ -256,13 +269,22 @@ void Storage::sortList(){
 string Storage::searchByName(string searchKeyWord){
 	list <Task> searchResultList;
 	list <Task>::iterator i;
-	for (i = _taskList.begin(); i!= _taskList.end(); i++){
-		if ((i->getName()).find(searchKeyWord) != std::string::npos){
+	string text;
+	searchKeyWord = toLower(searchKeyWord);
+	for (i = _taskList.begin(); i!= _taskList.end(); i++) {
+		text = toLower(i->getName());
+		if (text.find(searchKeyWord) != std::string::npos) {
 			searchResultList.push_back(*i);
 		}
 	}
 	return toStringTaskDetail(searchResultList);
 }
+
+string Storage::toLower(string text) {
+	transform(text.begin(), text.end(), text.begin(), ::tolower);
+	return text;
+}
+
 
 string Storage::deleteByName(string searchKeyWord){
 	
@@ -369,4 +391,6 @@ string Storage::toStringTaskDetail(){
 }
 
 
-
+string Storage::getCommandList(){
+	return COMMANDLIST;
+}

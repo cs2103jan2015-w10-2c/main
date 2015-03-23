@@ -23,6 +23,7 @@ private:
 	static list<Task>::iterator _taskIt;
 
 	static const string LINE_BUFFER;
+	static const string COMMANDLIST;
 
 public:
 
@@ -43,7 +44,8 @@ public:
 	static void readFile();
 	static void setFileName(string name);
 	static void writeToFile();
-	
+	static string toLower(string text);
+	static string getCommandList();
 
 	static void sortList();
 	static string searchByName(string searchKeyWord);
