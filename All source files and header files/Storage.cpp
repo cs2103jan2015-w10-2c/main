@@ -293,7 +293,7 @@ string Storage::markDone(string name){
 		}
 	}
 
-		return toStringTaskDetail(markedTask);
+	return toStringTaskDetail(markedTask);
 }
 
 string Storage::markNotDone(string name){
@@ -309,7 +309,7 @@ string Storage::markNotDone(string name){
 		}
 	}
 
-		return toStringTaskDetail(markedTask);
+	return toStringTaskDetail(markedTask);
 }
 
 
@@ -354,10 +354,13 @@ string Storage::toStringTaskDetail(list <Task> listToFormat){
 		for (iter = listToFormat.begin(); iter != listToFormat.end(); iter++) {
 			/****Index****/
 			index++;
-		
 			s << index << "]"; // "]" as a divider to divide each component
 			/****check if Mark as Done****/
-			s << "mark" << "]";
+			if(iter->isDone()) {
+				s << "Yes" << "]";
+			} else {
+				s << "No" << "]";
+			}
 			/****For floating task****/
 			if (iter->getTaskType() == "FloatingTask") {
 				s << "Float]" << iter->getName() << "]N.A.]N.A.]N.A.]";
@@ -413,7 +416,11 @@ string Storage::toStringTaskDetail() {
 			/****Index****/
 			s << index << "]"; // "]" as a divider to divide each component
 			/****check if Mark as Done****/
-			s << "mark" << "]";
+			if(_taskIt->isDone()) {
+				s << "Yes" << "]";
+			} else {
+				s << "No" << "]";
+			}
 			/****For floating task****/
 			if (_taskIt->getTaskType() == "FloatingTask") {
 				s << "Float]" << _taskIt->getName() << "]N.A.]N.A.]N.A.]";
