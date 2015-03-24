@@ -27,6 +27,7 @@ public:
 	Task(string commandType, string name);
 
 	void markDone();
+	void markNotDone();
 	void setName(string newName);
 	void setYear(int newYear);
 	void setMonth(int newMonth);

@@ -49,7 +49,8 @@ public:
 
 	static void sortList();
 	static string searchByName(string searchKeyWord);
-	static string markTask(string name);
+	static string markDone(string name);
+	static string markNotDone(string name);
 	static string deleteByName(string searchKeyWord);
 	static string toStringTaskDetail();
 	static string toStringTaskDetail(list <Task> listToFormat);

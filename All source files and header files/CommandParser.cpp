@@ -71,7 +71,7 @@ void CommandParser::identifyTask(string userInput) {
 			name = userInput.substr(posD7+1);
 		}	
 	}
-	}else if(commandType == "delete" || commandType == "search" || commandType == "mark"){
+	}else if(commandType == "delete" || commandType == "search" || commandType == "done" || commandType == "notdone" ){
 		name = userInput.substr(pos1+1);
 	}else if(commandType == "sort" || commandType == "display"){
 		return;}

@@ -280,7 +280,7 @@ string Storage::searchByName(string searchKeyWord){
 	return toStringTaskDetail(searchResultList);
 }
 
-string Storage::markTask(string name){
+string Storage::markDone(string name){
 	list <Task>::iterator i;
 	list <Task> markedTask;
 	string text;
@@ -295,6 +295,23 @@ string Storage::markTask(string name){
 
 		return toStringTaskDetail(markedTask);
 }
+
+string Storage::markNotDone(string name){
+	list <Task>::iterator i;
+	list <Task> markedTask;
+	string text;
+	name = toLower(name);
+	for (i = _taskList.begin(); i!= _taskList.end(); i++) {
+		text = toLower(i->getName());
+		if (text.find(name) != std::string::npos) {
+			(*i).markNotDone();
+			markedTask.push_back(*i);
+		}
+	}
+
+		return toStringTaskDetail(markedTask);
+}
+
 
 string Storage::toLower(string text) {
 	transform(text.begin(), text.end(), text.begin(), ::tolower);

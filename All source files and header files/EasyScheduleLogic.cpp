@@ -146,9 +146,14 @@ string EasyScheduleLogic::searchingTask(){
 	
 }
 
-string EasyScheduleLogic::markTask(){
+string EasyScheduleLogic::markDone(){
 	name = parser.name;
-	return storage.markTask(name);
+	return storage.markDone(name);
+}
+
+string EasyScheduleLogic::markNotDone(){
+	name = parser.name;
+	return storage.markNotDone(name);
 }
 
 string EasyScheduleLogic::displayingTask(){
@@ -194,8 +199,10 @@ if(isInvalidCommandType) {
 		//return buffer;
 	} else if (commandType == "search") {
 		return searchingTask();
-	} else if (commandType == "mark"){
-		return markTask();
+	} else if (commandType == "done"){
+		return markNotDone();
+	}else if (commandType == "notdone"){
+		return markDone();
 	}else{
 		return "";
 	}

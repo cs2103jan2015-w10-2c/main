@@ -62,6 +62,10 @@ void Task::markDone() {
 	_isDone = true;
 }
 
+void Task::markNotDone(){
+	_isDone = false;
+}
+
 void Task::setName(string newName) {
 	_name = newName;
 }
