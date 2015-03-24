@@ -134,7 +134,7 @@ void EasyScheduleLogic::sortingTask(){
 
 //receive bool from storeFloat and create output message
 string EasyScheduleLogic::tellUI() {
-	if(isInvalidCommandType) {
+if(isInvalidCommandType) {
 		isInvalidCommandType = false; //for future uses
 		sprintf_s(buffer, MESSAGE_INVALID_INPUT_COMMAND.c_str());
 		return buffer;
@@ -145,10 +145,9 @@ string EasyScheduleLogic::tellUI() {
 		return buffer;
 	}
 	if(commandType=="add") {
-		if (!isDuplicate()) {	//Bug: isDuplicate() always returns true regardless of actual situation.
+		if (!isDuplicate()) {	
 			storingTask(); 
-			sprintf_s(buffer, MESSAGE_ADD.c_str());
-			return buffer;
+			return displayingTask();
 		}
 		sprintf_s(buffer, MESSAGE_ADD_FAIL.c_str());
 		return buffer;
@@ -157,8 +156,9 @@ string EasyScheduleLogic::tellUI() {
 	} else if(commandType == "display") {
 		return displayingTask();
 	} else if(commandType == "sort") {
-		sprintf_s(buffer, MESSAGE_SORT.c_str());
-		return buffer;
+		return displayingTask();
+		//sprintf_s(buffer, MESSAGE_SORT.c_str());
+		//return buffer;
 	} else if (commandType == "search") {
 		return searchingTask();
 	} 
