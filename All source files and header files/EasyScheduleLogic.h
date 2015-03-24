@@ -76,6 +76,7 @@ public:
 	static string deletingTask();
 	static string searchingTask();
 	static string displayingTask();
+	static string markTask();
 	static void sortingTask();
 	static string tellUI();
 	static bool isDuplicate();

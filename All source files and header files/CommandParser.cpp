@@ -1,5 +1,6 @@
 #include "CommandParser.h"
-#include <assert.h>
+
+
 
 
 using namespace std;
@@ -21,27 +22,11 @@ void CommandParser::identifyTask(string userInput) {
 	//get the first word before the first white space
 	size_t pos1 = userInput.find_first_of(' ');
 
-	//cout << "Analyzing string before input" << endl; 
-	//assert( commandType != "");
 	commandType = userInput.substr(0, pos1);
-
-	//cout << "Analyzing string after input command: " << commandType << " Assertion Passed"<< endl; 
-	//assert( commandType != "");
+	//convert all letters in the commandType to lower case
+	transform(commandType.begin(), commandType.end(), commandType.begin(), ::tolower);
+	assert(commandType != "");
 	
-	
-	//commandType = "";
-	try{
-	if(commandType == ""){
-		throw 0;
-		}
-	}catch(int e){
-		cout << "Exception: Error: no commandType stored" <<endl;
-	}
-	catch(...){
-		cout << "Exception Error"<< endl;
-	}
-	
-
 	if(commandType == "add"){
 	//check the number of devider "//"
 	//no devider -> floating: description
@@ -86,7 +71,7 @@ void CommandParser::identifyTask(string userInput) {
 			name = userInput.substr(posD7+1);
 		}	
 	}
-	}else if(commandType == "delete" || commandType == "search"){
+	}else if(commandType == "delete" || commandType == "search" || commandType == "mark"){
 		name = userInput.substr(pos1+1);
 	}else if(commandType == "sort" || commandType == "display"){
 		return;}

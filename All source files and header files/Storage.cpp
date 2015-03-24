@@ -120,7 +120,7 @@ void Storage::readFile() {
 	Task* inputTask;
 
 	while (getline(_fRead,input)) {
-		ASSERT(getDeviderNum(input) == 10)
+		assert(getDeviderNum(input) == 10);
 		posStart = 0;
 		posD1 = input.find(devider);
 		posD2 = input.find(devider, posD1+1);
@@ -280,6 +280,12 @@ string Storage::searchByName(string searchKeyWord){
 	return toStringTaskDetail(searchResultList);
 }
 
+string Storage::markTask(string name){
+	list <Task>::iterator i;
+	string text;
+	name = toLower(name);
+}
+
 string Storage::toLower(string text) {
 	transform(text.begin(), text.end(), text.begin(), ::tolower);
 	return text;
@@ -371,53 +377,53 @@ string Storage::toStringTaskDetail(list <Task> listToFormat){
 
 string Storage::toStringTaskDetail() {
 	stringstream s;
-	if(_TaskList.empty()) {
+	if(_taskList.empty()) {
 		s << "The schedule is empty.";
 		return s.str();
 	} else {
 		int index = 1;
-		for (_TaskIt = _TaskList.begin(); _TaskIt != _TaskList.end(); _TaskIt++) {
+		for (_taskIt = _taskList.begin(); _taskIt != _taskList.end(); _taskIt++) {
 			/****Index****/
 			s << index << "]"; // "]" as a divider to divide each component
 			/****check if Mark as Done****/
 			s << "mark" << "]";
 			/****For floating task****/
-			if (_TaskIt->getTaskType() == "FloatingTask") {
-				s << "Float]" << _TaskIt->getName() << "]N.A.]N.A.]N.A.]";
+			if (_taskIt->getTaskType() == "FloatingTask") {
+				s << "Float]" << _taskIt->getName() << "]N.A.]N.A.]N.A.]";
 			} else { //for other 2 types of tasks
 				/****Task Type****/
-				if (_TaskIt->getTaskType() == "TimedTask"){
+				if (_taskIt->getTaskType() == "TimedTask"){
 					s << "Timed]";
 				} else {
 					s << "Deadline]";
 				}
 				/****Task name and date****/
-				s << _TaskIt->getName() << "]" << _TaskIt->getDate() << "]";
+				s << _taskIt->getName() << "]" << _taskIt->getDate() << "]";
 				/****start and end time****/
-				if (_TaskIt->getTaskType() == "TimedTask") {
-					if(_TaskIt->getStartTimeHour() < 10) {
-						s << "0" << _TaskIt->getStartTimeHour() <<":";
+				if (_taskIt->getTaskType() == "TimedTask") {
+					if(_taskIt->getStartTimeHour() < 10) {
+						s << "0" << _taskIt->getStartTimeHour() <<":";
 					} else {
-						s << _TaskIt->getStartTimeHour() << ":";
+						s << _taskIt->getStartTimeHour() << ":";
 					}
-					if(_TaskIt->getStartTimeMin() < 10) {
-						s << "0" << _TaskIt->getStartTimeMin() << "]";
+					if(_taskIt->getStartTimeMin() < 10) {
+						s << "0" << _taskIt->getStartTimeMin() << "]";
 					} else {
-						s << _TaskIt->getStartTimeMin() << "]";
+						s << _taskIt->getStartTimeMin() << "]";
 					}
 				} else {
 					s << "N.A.]"; //start time Non Applicable
 				}
 
-				if(_TaskIt->getEndTimeHour() < 10){
-					s << "0" << _TaskIt->getEndTimeHour() <<":";
+				if(_taskIt->getEndTimeHour() < 10){
+					s << "0" << _taskIt->getEndTimeHour() <<":";
 				} else {
-					s << _TaskIt->getEndTimeHour() << ":";
+					s << _taskIt->getEndTimeHour() << ":";
 				}
-				if(_TaskIt->getEndTimeMin() < 10){
-					s << "0" << _TaskIt->getEndTimeMin() <<"]";
+				if(_taskIt->getEndTimeMin() < 10){
+					s << "0" << _taskIt->getEndTimeMin() <<"]";
 				} else {
-					s << _TaskIt->getEndTimeMin() << "]";
+					s << _taskIt->getEndTimeMin() << "]";
 				}
 			}
 			index++;

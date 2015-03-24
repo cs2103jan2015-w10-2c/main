@@ -83,7 +83,9 @@ void EasyScheduleLogic::executeLogic(string userInput) {
 		//does nothing here. display being called in tellUI function.
 	} else if (parser.commandType == "search") {
 		//does nothing here. search being called in tellUI function.
-	} else if (parser.commandType == "sort") {
+	} else if (parser.commandType == "mark") {
+		//does nothing here. mark being called in tellUI function.
+	}else if (parser.commandType == "sort") {
 		sortingTask();
 	} else if (parser.commandType == "exit") {
 		exit(0);
@@ -143,6 +145,11 @@ string EasyScheduleLogic::searchingTask(){
 	
 }
 
+string EasyScheduleLogic::markTask(){
+	name = parser.name;
+	return storage.markTask(name);
+}
+
 string EasyScheduleLogic::displayingTask(){
 	return storage.toStringTaskDetail();
 }
@@ -180,7 +187,9 @@ if(isInvalidCommandType) {
 		//return buffer;
 	} else if (commandType == "search") {
 		return searchingTask();
-	} else{
+	} else if (commandType == "mark"){
+		return markTask();
+	}else{
 		return "";
 	}
 }
