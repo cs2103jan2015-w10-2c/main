@@ -120,7 +120,7 @@ void Storage::readFile() {
 	Task* inputTask;
 
 	while (getline(_fRead,input)) {
-		assert(getDeviderNum(input) == 10);
+		//assert(getDeviderNum(input) == 10);
 		posStart = 0;
 		posD1 = input.find(devider);
 		posD2 = input.find(devider, posD1+1);
@@ -248,8 +248,8 @@ bool cmpTime(Task a, Task b){
 		return false;
 	}
 
-	s1 = toLower(a.getName());
-	s2 = toLower(b.getName());
+	s1 = Storage::toLower(a.getName());
+	s2 = Storage::toLower(b.getName());
 
 	if (s1 < s2) {
 		return true;
@@ -282,8 +282,18 @@ string Storage::searchByName(string searchKeyWord){
 
 string Storage::markTask(string name){
 	list <Task>::iterator i;
+	list <Task> markedTask;
 	string text;
 	name = toLower(name);
+	for (i = _taskList.begin(); i!= _taskList.end(); i++) {
+		text = toLower(i->getName());
+		if (text.find(name) != std::string::npos) {
+			(*i).markDone();
+			markedTask.push_back(*i);
+		}
+	}
+
+		return toStringTaskDetail(markedTask);
 }
 
 string Storage::toLower(string text) {
