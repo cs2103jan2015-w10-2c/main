@@ -313,83 +313,118 @@ string Storage::deleteByName(string searchKeyWord){
 string Storage::toStringTaskDetail(list <Task> listToFormat){
 	ostringstream s;
 	if(listToFormat.empty()) {
-		s << "There is no such task in the schedule.\r\n";
+		s << "The schedule is empty.";
 		return s.str();
 	} else {
-		list <Task>::iterator i;
-		for ( i = listToFormat.begin(); i != listToFormat.end(); i++){
-			if (i->getTaskType() == "FloatingTask"){
-				s << i->getName() << "\r\n";
-			}
-			else if (i->getTaskType() == "TimedTask"){
-				s << "[" << i->getDate() << "][" <<i->getStartTimeHour() << ":";
-				s << i->getStartTimeMin() << "-" << i->getEndTimeHour() << ":";
-				s << i->getEndTimeMin() << "]" << i->getName() << "\r\n";
-			}
-			else if (i->getTaskType() == "DeadlineTask"){
-				s << "[" << i->getDate() << "][" <<i->getEndTimeHour() << ":";
-				s << i->getEndTimeMin() << "]"<< i->getName() << "\r\n";
+		list <Task>::iterator iter;
+		int index = 0;
+		for (iter = listToFormat.begin(); iter != listToFormat.end(); iter++) {
+			/****Index****/
+			index++;
+		
+			s << index << "]"; // "]" as a divider to divide each component
+			/****check if Mark as Done****/
+			s << "mark" << "]";
+			/****For floating task****/
+			if (iter->getTaskType() == "FloatingTask") {
+				s << "Float]" << iter->getName() << "]N.A.]N.A.]N.A.]";
+			} else { //for other 2 types of tasks
+				/****Task Type****/
+				if (iter->getTaskType() == "TimedTask") {
+					s << "Timed]";
+				} else {
+					s << "Deadline]";
+				}
+				/****Task name and date****/
+				s << iter->getName() << "]" << iter->getDate() << "]";
+				/****start and end time****/
+				if (iter->getTaskType() == "TimedTask") {
+					if(iter->getStartTimeHour() < 10) {
+						s << "0" << iter->getStartTimeHour() <<":";
+					} else {
+						s << iter->getStartTimeHour() << ":";
+					}
+					if(iter->getStartTimeMin() < 10) {
+						s << "0" << iter->getStartTimeMin() << "]";
+					} else {
+						s << iter->getStartTimeMin() << "]";
+					}
+				} else {
+					s << "N.A.]"; //start time Non Applicable
+				}
+
+				if(iter->getEndTimeHour() < 10) {
+					s << "0" << iter->getEndTimeHour() <<":";
+				} else {
+					s << iter->getEndTimeHour() << ":";
+				}
+				if(iter->getEndTimeMin() < 10){
+					s << "0" << iter->getEndTimeMin() <<"]";
+				} else {
+					s << iter->getEndTimeMin() << "]";
+				}
 			}
 		}
 		return s.str();
 	}
 }
 
-string Storage::toStringTaskDetail(){
+string Storage::toStringTaskDetail() {
 	stringstream s;
-	if(_taskList.empty()) {
-		s << "There is no task in the schedule.\r\n";
+	if(_TaskList.empty()) {
+		s << "The schedule is empty.";
 		return s.str();
 	} else {
-		for (_taskIt = _taskList.begin(); _taskIt != _taskList.end(); _taskIt++){
-			if (_taskIt->getTaskType() == "FloatingTask"){
-				s << _taskIt->getName() << "\r\n";
-			}
-			else if (_taskIt->getTaskType() == "TimedTask"){
-				s << "[" << _taskIt->getDate() << "][";
+		int index = 1;
+		for (_TaskIt = _TaskList.begin(); _TaskIt != _TaskList.end(); _TaskIt++) {
+			/****Index****/
+			s << index << "]"; // "]" as a divider to divide each component
+			/****check if Mark as Done****/
+			s << "mark" << "]";
+			/****For floating task****/
+			if (_TaskIt->getTaskType() == "FloatingTask") {
+				s << "Float]" << _TaskIt->getName() << "]N.A.]N.A.]N.A.]";
+			} else { //for other 2 types of tasks
+				/****Task Type****/
+				if (_TaskIt->getTaskType() == "TimedTask"){
+					s << "Timed]";
+				} else {
+					s << "Deadline]";
+				}
+				/****Task name and date****/
+				s << _TaskIt->getName() << "]" << _TaskIt->getDate() << "]";
+				/****start and end time****/
+				if (_TaskIt->getTaskType() == "TimedTask") {
+					if(_TaskIt->getStartTimeHour() < 10) {
+						s << "0" << _TaskIt->getStartTimeHour() <<":";
+					} else {
+						s << _TaskIt->getStartTimeHour() << ":";
+					}
+					if(_TaskIt->getStartTimeMin() < 10) {
+						s << "0" << _TaskIt->getStartTimeMin() << "]";
+					} else {
+						s << _TaskIt->getStartTimeMin() << "]";
+					}
+				} else {
+					s << "N.A.]"; //start time Non Applicable
+				}
 
-				if(_taskIt->getStartTimeHour() < 10){
-					s << "0" << _taskIt->getStartTimeHour() <<":";
+				if(_TaskIt->getEndTimeHour() < 10){
+					s << "0" << _TaskIt->getEndTimeHour() <<":";
 				} else {
-					s << _taskIt->getStartTimeHour() << ":";
+					s << _TaskIt->getEndTimeHour() << ":";
 				}
-				if(_taskIt->getStartTimeMin() < 10){
-					s << "0" << _taskIt->getStartTimeMin() <<"-";
+				if(_TaskIt->getEndTimeMin() < 10){
+					s << "0" << _TaskIt->getEndTimeMin() <<"]";
 				} else {
-					s << _taskIt->getStartTimeMin() << "-";
+					s << _TaskIt->getEndTimeMin() << "]";
 				}
-				if(_taskIt->getEndTimeHour() < 10){
-					s << "0" << _taskIt->getEndTimeHour() <<":";
-				} else {
-					s << _taskIt->getEndTimeHour() << ":";
-				}
-				if(_taskIt->getEndTimeMin() < 10){
-					s << "0" << _taskIt->getEndTimeMin() <<"]";
-				} else {
-					s << _taskIt->getEndTimeMin() << "]";
-				}
-				s << _taskIt->getName() << "\r\n";
 			}
-			else if (_taskIt->getTaskType() == "DeadlineTask"){
-				s << "[" << _taskIt->getDate() << "][";
-
-				if(_taskIt->getEndTimeHour() < 10){
-					s << "0" << _taskIt->getEndTimeHour() <<":";
-				} else {
-					s << _taskIt->getEndTimeHour() << ":";
-				}
-				if(_taskIt->getEndTimeMin() < 10){
-					s << "0" << _taskIt->getEndTimeMin() <<"]";
-				} else {
-					s << _taskIt->getEndTimeMin() << "]";
-				}
-				s<< _taskIt->getName() << "\r\n";
-			}
+			index++;
 		}
 	}
 	return s.str();
 }
-
 
 string Storage::getCommandList(){
 	return COMMANDLIST;

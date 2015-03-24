@@ -4,6 +4,21 @@
 #include <assert.h>
 
 
+const int MIN_MONTHS_IN_A_YEAR = 1;
+const int MAX_MONTHS_IN_A_YEAR = 12;
+const int MIN_DAY_IN_A_MONTH = 1;
+const int DAYS_IN_A_MONTH[12] = {31,28,31,30,31,30,31,31,30,31,30,31};
+const int MIN_HOURS_IN_A_DAY = 0;
+const int MAX_HOURS_IN_A_DAY = 23;
+const int MIN_MINUTES_IN_AN_HOUR = 0;
+const int MAX_MINUTES_IN_AN_HOUR = 59;
+
+const int SHIFT_BY_ONE = 1;
+
+const string FLOATING_TASK = "FloatingTask";
+const string DEADLINE_TASK = "DeadlineTask";
+const string TIMED_TASK = "TimedTask";
+
 const string EasyScheduleLogic::MESSAGE_WELCOME = "Welcome to EasySchedule!";
 const string EasyScheduleLogic::MESSAGE_ADD = "The task has been stored successfully.";
 const string EasyScheduleLogic::MESSAGE_ADD_FAIL = "Sorry, the task is already in the schedule.";
@@ -90,7 +105,7 @@ void EasyScheduleLogic::parsingCommand(string userInput) {
 }
 
 void EasyScheduleLogic::creatingTask() {
-	if(taskType=="FloatingTask") {
+	if(taskType == FLOATING_TASK) {
 		task = Task(commandType, name);
 		
 
@@ -99,10 +114,10 @@ void EasyScheduleLogic::creatingTask() {
 		endTimeHour = parser.endTimeHour;
 		endTimeMin = parser.endTimeMin;
 
-		if (taskType=="DeadlineTask") {
+		if (taskType == DEADLINE_TASK) {
 			
 			task = Task(commandType,  name, year, month, day, endTimeHour, endTimeMin);
-		} else if (taskType=="TimedTask"){
+		} else if (taskType == TIMED_TASK){
 			startTimeHour = parser.startTimeHour;
 			startTimeMin = parser.startTimeMin;
 			task = Task(commandType,  name, year, month, day, startTimeHour, startTimeMin, endTimeHour, endTimeMin);
@@ -138,21 +153,20 @@ void EasyScheduleLogic::sortingTask(){
 
 //receive bool from storeFloat and create output message
 string EasyScheduleLogic::tellUI() {
-	if(isInvalidCommandType) {
+if(isInvalidCommandType) {
 		isInvalidCommandType = false; //for future uses
 		sprintf_s(buffer, MESSAGE_INVALID_INPUT_COMMAND.c_str());
 		return buffer;
 	}
-	if(isInvalidTaskType) {
+	else if(isInvalidTaskType) {
 		isInvalidTaskType = false; //for future uses
 		sprintf_s(buffer, MESSAGE_INVALID_INPUT_NAME.c_str());
 		return buffer;
 	}
-	if(commandType=="add") {
-		if (!isDuplicate()) {	//Bug: isDuplicate() always returns true regardless of actual situation.
+	else if(commandType=="add") {
+		if (!isDuplicate() && isValidDate()) {	
 			storingTask(); 
-			sprintf_s(buffer, MESSAGE_ADD.c_str());
-			return buffer;
+			return displayingTask();
 		}
 		sprintf_s(buffer, MESSAGE_ADD_FAIL.c_str());
 		return buffer;
@@ -161,8 +175,9 @@ string EasyScheduleLogic::tellUI() {
 	} else if(commandType == "display") {
 		return displayingTask();
 	} else if(commandType == "sort") {
-		sprintf_s(buffer, MESSAGE_SORT.c_str());
-		return buffer;
+		return displayingTask();
+		//sprintf_s(buffer, MESSAGE_SORT.c_str());
+		//return buffer;
 	} else if (commandType == "search") {
 		return searchingTask();
 	} else{
@@ -173,6 +188,46 @@ string EasyScheduleLogic::tellUI() {
 
 bool EasyScheduleLogic::isDuplicate() {
 	return storage.isTaskDuplicate(task);
+}
+
+bool EasyScheduleLogic::isValidDate(){
+	if (taskType == FLOATING_TASK){
+		return true;
+	}
+	else if(taskType == TIMED_TASK){
+		if(month < MIN_MONTHS_IN_A_YEAR || month > MAX_MONTHS_IN_A_YEAR){
+			return false;	
+		}
+		else if(day < MIN_DAY_IN_A_MONTH || day > MAX_DAYS_IN_A_MONTH[month - SHIFT_BY_ONE]){
+			return false;
+		}
+		else if(startTimeHour < MIN_HOURS_IN_A_DAY || startTimeHour > MAX_HOURS_IN_A_DAY){
+			return false;
+		}
+		else if(startTimeMin < MIN_MINUTES_IN_AN_HOUR || startTimeMin > MAX_MINUTES_IN_AN_HOUR){
+			return false;
+		}
+		else if(endTimeHour < MIN_HOURS_IN_A_DAY || endTimeHour > MAX_HOURS_IN_A_DAY){
+			return false;
+		}
+		else if(endTimeMin < MIN_MINUTES_IN_AN_HOUR || endTimeMin > MAX_MINUTES_IN_AN_HOUR){
+			return false;
+		}
+	}
+	else if(taskType == DEADLINE_TASK){
+		if(month < MIN_MONTHS_IN_A_YEAR || month > MAX_MONTHS_IN_A_YEAR){
+			return false;	
+		}
+		else if(day < MIN_DAY_IN_A_MONTH || day > MAX_DAYS_IN_A_MONTH[month - SHIFT_BY_ONE]){
+			return false;
+		}
+		else if(endTimeHour < MIN_HOURS_IN_A_DAY || endTimeHour > MAX_HOURS_IN_A_DAY){
+			return false;
+		}
+		else if(endTimeMin < MIN_MINUTES_IN_AN_HOUR || endTimeMin > MAX_MINUTES_IN_AN_HOUR){
+			return false;
+		}
+	}
 }
 
 EasyScheduleLogic::EasyScheduleLogic(void) { }
