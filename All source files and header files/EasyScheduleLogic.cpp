@@ -1,6 +1,8 @@
 #include "EasyScheduleLogic.h"
 #include "Storage.h"
 #include <sys/stat.h>
+#include <assert.h>
+
 
 const string EasyScheduleLogic::MESSAGE_WELCOME = "Welcome to EasySchedule!";
 const string EasyScheduleLogic::MESSAGE_ADD = "The task has been stored successfully.";
@@ -90,6 +92,8 @@ void EasyScheduleLogic::parsingCommand(string userInput) {
 void EasyScheduleLogic::creatingTask() {
 	if(taskType=="FloatingTask") {
 		task = Task(commandType, name);
+		
+
 	} else {
 		
 		endTimeHour = parser.endTimeHour;
@@ -161,7 +165,9 @@ string EasyScheduleLogic::tellUI() {
 		return buffer;
 	} else if (commandType == "search") {
 		return searchingTask();
-	} 
+	} else{
+		return "";
+	}
 }
 
 
