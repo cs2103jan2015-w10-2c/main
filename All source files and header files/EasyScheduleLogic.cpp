@@ -4,20 +4,20 @@
 #include <assert.h>
 
 
-const int MIN_MONTHS_IN_A_YEAR = 1;
-const int MAX_MONTHS_IN_A_YEAR = 12;
-const int MIN_DAY_IN_A_MONTH = 1;
-const int DAYS_IN_A_MONTH[12] = {31,28,31,30,31,30,31,31,30,31,30,31};
-const int MIN_HOURS_IN_A_DAY = 0;
-const int MAX_HOURS_IN_A_DAY = 23;
-const int MIN_MINUTES_IN_AN_HOUR = 0;
-const int MAX_MINUTES_IN_AN_HOUR = 59;
+const int EasyScheduleLogic::MIN_MONTHS_IN_A_YEAR = 1;
+const int EasyScheduleLogic::MAX_MONTHS_IN_A_YEAR = 12;
+const int EasyScheduleLogic::MIN_DAY_IN_A_MONTH = 1;
+const int EasyScheduleLogic::MAX_DAYS_IN_A_MONTH[12] = {31,28,31,30,31,30,31,31,30,31,30,31};
+const int EasyScheduleLogic::MIN_HOURS_IN_A_DAY = 0;
+const int EasyScheduleLogic::MAX_HOURS_IN_A_DAY = 23;
+const int EasyScheduleLogic::MIN_MINUTES_IN_AN_HOUR = 0;
+const int EasyScheduleLogic::MAX_MINUTES_IN_AN_HOUR = 59;
 
-const int SHIFT_BY_ONE = 1;
+const int EasyScheduleLogic::SHIFT_BY_ONE = 1;
 
-const string FLOATING_TASK = "FloatingTask";
-const string DEADLINE_TASK = "DeadlineTask";
-const string TIMED_TASK = "TimedTask";
+const string EasyScheduleLogic::FLOATING_TASK = "FloatingTask";
+const string EasyScheduleLogic::DEADLINE_TASK = "DeadlineTask";
+const string EasyScheduleLogic::TIMED_TASK = "TimedTask";
 
 const string EasyScheduleLogic::MESSAGE_WELCOME = "Welcome to EasySchedule!";
 const string EasyScheduleLogic::MESSAGE_ADD = "The task has been stored successfully.";
