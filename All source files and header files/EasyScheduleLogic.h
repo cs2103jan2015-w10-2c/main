@@ -46,6 +46,7 @@ private:
 	static const string MESSAGE_EMPTY;
 	static const string MESSAGE_INVALID_INPUT_COMMAND;
 	static const string MESSAGE_INVALID_INPUT_NAME;
+	static const string MESSAGE_INVALID_DATE;
 
 private:
 	static char buffer[1000];

@@ -30,6 +30,7 @@ const string EasyScheduleLogic::MESSAGE_SORT = "All tasks have been sorted by ti
 const string EasyScheduleLogic::MESSAGE_EMPTY = "The schedule is empty.";
 const string EasyScheduleLogic::MESSAGE_INVALID_INPUT_COMMAND = "Invalid command type.";
 const string EasyScheduleLogic::MESSAGE_INVALID_INPUT_NAME = "Invalid task.";
+const string EasyScheduleLogic::MESSAGE_INVALID_DATE = "Invalid date.";
 
 char EasyScheduleLogic::buffer[1000];
 bool EasyScheduleLogic::isInvalidCommandType = false;
@@ -175,8 +176,14 @@ if(isInvalidCommandType) {
 			storingTask(); 
 			return displayingTask();
 		}
-		sprintf_s(buffer, MESSAGE_ADD_FAIL.c_str());
-		return buffer;
+		else if(isDuplicate()){
+			sprintf_s(buffer, MESSAGE_ADD_FAIL.c_str());
+			return buffer;
+		}
+		else if(!isValidDate()){
+			sprintf_s(buffer, MESSAGE_INVALID_DATE.c_str());
+			return buffer;
+		}
 	} else if(commandType == "delete") {
 		return deletingTask();
 	} else if(commandType == "display") {
