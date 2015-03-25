@@ -111,9 +111,7 @@ void EasyScheduleLogic::parsingCommand(string userInput) {
 
 void EasyScheduleLogic::creatingTask() {
 	if(taskType == FLOATING_TASK) {
-		task = Task(commandType, name);
-		
-
+		task = Task(commandType, name);	
 	} else {
 		
 		endTimeHour = parser.endTimeHour;
@@ -137,32 +135,32 @@ void EasyScheduleLogic::storingTask() {
 	storage.storeTask(task);
 }
 
-string EasyScheduleLogic::deletingTask(){
+string EasyScheduleLogic::deletingTask() {
 	name = parser.name;
 	return storage.deleteByName(name);
 }
 
-string EasyScheduleLogic::searchingTask(){
+string EasyScheduleLogic::searchingTask() {
 	name = parser.name;
 	return storage.searchByName(name);
 	
 }
 
-string EasyScheduleLogic::markDone(){
+string EasyScheduleLogic::markDone() {
 	name = parser.name;
 	return storage.markDone(name);
 }
 
-string EasyScheduleLogic::markNotDone(){
+string EasyScheduleLogic::markNotDone() {
 	name = parser.name;
 	return storage.markNotDone(name);
 }
 
-string EasyScheduleLogic::displayingTask(){
+string EasyScheduleLogic::displayingTask() {
 	return storage.toStringTaskDetail();
 }
 
-void EasyScheduleLogic::sortingTask(){
+void EasyScheduleLogic::sortingTask() {
 	storage.sortList();
 }
 
@@ -183,11 +181,11 @@ if(isInvalidCommandType) {
 			storingTask(); 
 			return displayingTask();
 		}
-		else if(isDuplicate()){
+		else if(isDuplicate()) {
 			sprintf_s(buffer, MESSAGE_ADD_FAIL.c_str());
 			return buffer;
 		}
-		else if(!isValidDate()){
+		else if(!isValidDate()) {
 			sprintf_s(buffer, MESSAGE_INVALID_DATE.c_str());
 			return buffer;
 		}
@@ -197,15 +195,13 @@ if(isInvalidCommandType) {
 		return displayingTask();
 	} else if(commandType == "sort") {
 		return displayingTask();
-		//sprintf_s(buffer, MESSAGE_SORT.c_str());
-		//return buffer;
 	} else if (commandType == "search") {
 		return searchingTask();
-	} else if (commandType == "done"){
+	} else if (commandType == "done") { //mark done? mark not done?
 		return markNotDone();
-	}else if (commandType == "notdone"){
+	} else if (commandType == "notdone") { //mark notdone? mark done?
 		return markDone();
-	}else{
+	} else {
 		return "";
 	}
 }
