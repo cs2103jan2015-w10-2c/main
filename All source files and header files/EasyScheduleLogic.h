@@ -67,7 +67,14 @@ private:
 	static int endTimeHour;
 	static int endTimeMin;
 
+	static int localYear;
+	static int localMonth;
+	static int localDay;
+	static int localHour;
+	static int localMin;
+
 public:
+	
 	static void main();
 	static void executeLogic(string userInput);
 
@@ -83,6 +90,7 @@ public:
 	static string tellUI();
 	static bool isDuplicate();
 	static bool isValidDate();
+	static void getLocalDateTime();
 	EasyScheduleLogic(void);
 	~EasyScheduleLogic(void);
 };

@@ -2,6 +2,7 @@
 #include "Storage.h"
 #include <sys/stat.h>
 #include <assert.h>
+#include <ctime>
 
 
 const int EasyScheduleLogic::MIN_MONTHS_IN_A_YEAR = 1;
@@ -48,6 +49,12 @@ int EasyScheduleLogic::startTimeHour;
 int EasyScheduleLogic::startTimeMin;
 int EasyScheduleLogic::endTimeHour;
 int EasyScheduleLogic::endTimeMin;
+
+int EasyScheduleLogic::localYear;
+int EasyScheduleLogic::localMonth;
+int EasyScheduleLogic::localDay;
+int EasyScheduleLogic::localHour;
+int EasyScheduleLogic::localMin;
 
 
 int main () {
@@ -249,6 +256,17 @@ bool EasyScheduleLogic::isValidDate(){
 			return false;
 		}
 	}
+}
+
+void EasyScheduleLogic::getLocalDateTime(){
+	time_t now = time(0);
+	struct tm time;
+	localtime_s(&time, &now);
+	localDay = time.tm_mday;
+	localMonth  = time.tm_mon + 1;
+	localYear = time.tm_year + 1900;
+	localHour = time.tm_hour;
+	localMin  = time.tm_min;
 }
 
 EasyScheduleLogic::EasyScheduleLogic(void) { }
