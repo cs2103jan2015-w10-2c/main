@@ -1,8 +1,5 @@
 #include "CommandParser.h"
 
-
-
-
 using namespace std;
 
 //string CommandParser::userInput;
@@ -74,8 +71,8 @@ void CommandParser::identifyTask(string userInput) {
 	}else if(commandType == "delete" || commandType == "search" || commandType == "done" || commandType == "notdone" ){
 		name = userInput.substr(pos1+1);
 	}else if(commandType == "sort" || commandType == "display"){
-		return;}
-	else{
+		return;
+	}else{
 		cout << "invalid command" << endl;
 	}
 	return;

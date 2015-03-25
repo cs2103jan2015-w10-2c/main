@@ -49,6 +49,7 @@ int EasyScheduleLogic::startTimeMin;
 int EasyScheduleLogic::endTimeHour;
 int EasyScheduleLogic::endTimeMin;
 
+
 int main () {
 	EasyScheduleLogic::main();
 }
@@ -70,6 +71,7 @@ void EasyScheduleLogic::main() {
 	}
 	
 	storage.writeToFile();
+	exit(0);
 	
 }
 
