@@ -26,16 +26,17 @@ const string EasyScheduleLogic::MESSAGE_ADD_FAIL = "Sorry, the task is already i
 const string EasyScheduleLogic::MESSAGE_DELETE = "The task %s has been deleted.";
 const string EasyScheduleLogic::MESSAGE_DELETE_FAIL = "There is no task \"%s\" in the schedule.";
 const string EasyScheduleLogic::MESSAGE_CLEAR = "All tasks have been deleted.";
-//const string EasyScheduleLogic::MESSAGE_SEARCH_FAIL = "There is no task \"%s\" in the schedule.";
+const string EasyScheduleLogic::MESSAGE_SEARCH_FAIL = "There is no task containing the keyword. Please check from display of all tasks.";
 const string EasyScheduleLogic::MESSAGE_SORT = "All tasks have been sorted by task type.";
+const string EasyScheduleLogic::MESSAGE_MARK_FAIL = "There is no such task. Please check from display of all tasks.";
 const string EasyScheduleLogic::MESSAGE_EMPTY = "The schedule is empty.";
 const string EasyScheduleLogic::MESSAGE_INVALID_INPUT_COMMAND = "Invalid command type.";
 const string EasyScheduleLogic::MESSAGE_INVALID_INPUT_NAME = "Invalid task.";
 const string EasyScheduleLogic::MESSAGE_INVALID_DATE = "Invalid date.";
-const string EasyScheduleLogic::MESSAGE_EXIT = "Program exiting now";
-const string EasyScheduleLogic::MESSAGE_UNDO_FAIL = "End of command history reached";
-const string EasyScheduleLogic::MESSAGE_UNDO_SUCCESS = "Undo successfully";
-const string EasyScheduleLogic::MESSAGE_UNDO_ERROR = "Error occured within undo function";
+const string EasyScheduleLogic::MESSAGE_EXIT = "Program exiting now.";
+const string EasyScheduleLogic::MESSAGE_UNDO_FAIL = "Undo fail. End of command history reached.";
+const string EasyScheduleLogic::MESSAGE_UNDO_SUCCESS = "Undo successfully.";
+const string EasyScheduleLogic::MESSAGE_UNDO_ERROR = "Error occured within undo function.";
 
 string EasyScheduleLogic::returnMessage;
 string EasyScheduleLogic::returnDisplay;
@@ -50,6 +51,7 @@ Record EasyScheduleLogic::record;
 string EasyScheduleLogic::commandType;
 string EasyScheduleLogic::taskType;
 string EasyScheduleLogic::name;
+int EasyScheduleLogic::taskNumber;
 int EasyScheduleLogic::year;
 int EasyScheduleLogic::month;
 int EasyScheduleLogic::day;
@@ -92,36 +94,52 @@ void EasyScheduleLogic::main() {
 	
 }
 
-
-
 void EasyScheduleLogic::executeLogic(string userInput) {
 	parsingCommand(userInput);
-	if(parser.commandType == "add") {
+	if (parser.commandType == "add") {
 		returnMessage = addingTask();
 		returnDisplay = displayingTask();//store task is done in tellUI function.
 	} else if (parser.commandType == "delete") {
-		returnMessage = deletingTask();
-		returnDisplay = displayingTask();
+		returnMessage = "";
+		returnDisplay = deletingTask();
 	} else if (parser.commandType == "display") {
 		returnMessage = ""; //not finished
 		returnDisplay = displayingTask();
 	} else if (parser.commandType == "search") {
-		returnMessage = ""; //not finished
-		returnDisplay = searchingTask();
+		if(searchingTask() == "") {
+			returnMessage = MESSAGE_SEARCH_FAIL;
+			returnDisplay = displayingTask(); //display all the tasks 
+		} else {
+			returnMessage = "";
+			returnDisplay = searchingTask();
+		}
 	} else if (parser.commandType == "sort") {
-		returnMessage = sortingTask(); //not finished
+		returnMessage = sortingTask();
 		returnDisplay = displayingTask();
-	} else if (parser.commandType == "mark") {
-		if (commandType == "done") {
-			returnMessage = markNotDone();
+	} else if (parser.commandType == "mark") { //mark done/notdone doesn't work.
+		if (commandType == "done") { //how to 
+			if(markDone() != "") {
+				returnMessage = "";
+				returnDisplay = markDone();
+			} else {
+				returnMessage = MESSAGE_MARK_FAIL;
+				returnDisplay = displayingTask();
+			}
 		} else if (commandType == "notdone") {
-			returnMessage = markDone();
+			if(markNotDone() != "") {
+				returnMessage = "";
+				returnDisplay = markNotDone();
+			} else {
+				returnMessage =  MESSAGE_MARK_FAIL;
+				returnDisplay = displayingTask();
+			}
 		}
 	} else if (parser.commandType == "exit") {
 		returnMessage = MESSAGE_EXIT;
-	}else if (parser.commandType == "undo"){
+		returnDisplay = "";
+	} else if (parser.commandType == "undo") {
 		returnMessage = undoingTask();
-		displayingTask();
+		returnDisplay = displayingTask();
 	} else {
 		returnMessage = MESSAGE_INVALID_INPUT_COMMAND;
 	}
@@ -192,7 +210,7 @@ void EasyScheduleLogic::creatingTask() {
 		//write into tracker
 		record = Record(commandType, task);
 		tracker.addRecord(record);
-		record.clear();
+		record.clear(); //no such method
 		
 	} else {
 		
@@ -234,9 +252,14 @@ string EasyScheduleLogic::addingTask(){
 	}
 }
 
-string EasyScheduleLogic::deletingTask(){
-	name = parser.name;
-	return storage.deleteByName(name);
+string EasyScheduleLogic::deletingTask() {
+	if(parser.number == -1) {
+		name = parser.name;
+		return storage.deleteByName(name);
+	} else {
+		taskNumber = parser.number;
+		return storage.deleteByNumber(taskNumber);
+	}
 }
 
 string EasyScheduleLogic::searchingTask() {
@@ -245,13 +268,23 @@ string EasyScheduleLogic::searchingTask() {
 }
 
 string EasyScheduleLogic::markDone() {
-	name = parser.name;
-	return storage.markDone(name);
+	if (parser.number == -1) {
+		name = parser.name;
+		return storage.markDoneByName(name);
+	} else {
+		taskNumber = parser.number;
+		return storage.markDoneByNumber(taskNumber);
+	}
 }
 
 string EasyScheduleLogic::markNotDone() {
-	name = parser.name;
-	return storage.markNotDone(name);
+	if (parser.number == -1) {
+		name = parser.name;
+		return storage.markDoneByName(name);
+	} else {
+		taskNumber = parser.number;
+		return storage.markDoneByNumber(taskNumber);
+	}
 }
 
 string EasyScheduleLogic::displayingTask() {

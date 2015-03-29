@@ -62,8 +62,8 @@ public:
 	static void sortList();
 	static void undoingReverseAdd(Task task);
 	static string searchByName(string searchKeyWord);
-	static string markDone(string name);
-	static string markNotDone(string name);
+	static string markDoneByName(string name);
+	static string markNotDoneByName(string name);
 	static string deleteByName(string searchKeyWord);
 	static string toStringTaskDetail();
 	static string toStringTaskDetail(list <Task> listToFormat);
