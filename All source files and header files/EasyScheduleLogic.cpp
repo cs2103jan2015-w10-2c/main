@@ -32,6 +32,7 @@ const string EasyScheduleLogic::MESSAGE_EMPTY = "The schedule is empty.";
 const string EasyScheduleLogic::MESSAGE_INVALID_INPUT_COMMAND = "Invalid command type.";
 const string EasyScheduleLogic::MESSAGE_INVALID_INPUT_NAME = "Invalid task.";
 const string EasyScheduleLogic::MESSAGE_INVALID_DATE = "Invalid date.";
+const string EasyScheduleLogic::MESSAGE_EXIT = "Program exiting now";
 
 string EasyScheduleLogic::returnMessage;
 char EasyScheduleLogic::buffer[1000];
@@ -113,7 +114,7 @@ void EasyScheduleLogic::executeLogic(string userInput) {
 		sortingTask();
 		returnMessage = displayingTask();
 	} else if (parser.commandType == "exit") {
-		exit(0);
+		returnMessage = MESSAGE_EXIT;
 	} else {
 		isInvalidCommandType = true;
 	}
@@ -134,6 +135,10 @@ void EasyScheduleLogic::parsingCommand(string userInput) {
 void EasyScheduleLogic::creatingTask() {
 	if(taskType == FLOATING_TASK) {
 		task = Task(commandType, name);	
+		//write into tracker
+		record = Record(commandType, task);
+		tracker.addRecord(record);
+		record.clear();
 		
 	} else {
 		
@@ -141,12 +146,17 @@ void EasyScheduleLogic::creatingTask() {
 		endTimeMin = parser.endTimeMin;
 
 		if (taskType == DEADLINE_TASK) {
-			
 			task = Task(commandType,  name, year, month, day, endTimeHour, endTimeMin);
+			record = Record(commandType, task);
+			tracker.addRecord(record);
+			record.clear();
 		} else if (taskType == TIMED_TASK){
 			startTimeHour = parser.startTimeHour;
 			startTimeMin = parser.startTimeMin;
 			task = Task(commandType,  name, year, month, day, startTimeHour, startTimeMin, endTimeHour, endTimeMin);
+			record = Record(commandType, task);
+			tracker.addRecord(record);
+			record.clear();
 		} else {
 			isInvalidTaskType = true; 
 		}
