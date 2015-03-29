@@ -39,6 +39,8 @@ bool EasyScheduleLogic::isInvalidTaskType = false;
 CommandParser EasyScheduleLogic::parser;
 Storage EasyScheduleLogic::storage;
 Task EasyScheduleLogic::task;
+Tracker EasyScheduleLogic::tracker;
+Record EasyScheduleLogic::record;
 string EasyScheduleLogic::commandType;
 string EasyScheduleLogic::taskType;
 string EasyScheduleLogic::name;
@@ -55,6 +57,8 @@ int EasyScheduleLogic::localMonth;
 int EasyScheduleLogic::localDay;
 int EasyScheduleLogic::localHour;
 int EasyScheduleLogic::localMin;
+
+
 
 
 int main () {
@@ -119,6 +123,7 @@ void EasyScheduleLogic::parsingCommand(string userInput) {
 void EasyScheduleLogic::creatingTask() {
 	if(taskType == FLOATING_TASK) {
 		task = Task(commandType, name);	
+		
 	} else {
 		
 		endTimeHour = parser.endTimeHour;

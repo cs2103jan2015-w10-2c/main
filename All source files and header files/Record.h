@@ -4,7 +4,7 @@
 #include<string>
 #include<list>
 #include "Task.h"
-#include "EasyScheduleLogic.h"
+
 
 using namespace std;
 

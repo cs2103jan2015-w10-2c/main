@@ -13,6 +13,7 @@
 #include "Storage.h"
 //#include <sstream>
 #include <string>
+#include "Tracker.h"
 
 using namespace std;
 
@@ -56,6 +57,8 @@ private:
 	static CommandParser parser;
 	static Storage storage;
 	static Task task;
+	static Tracker tracker;
+	static Record record;
 	static string commandType;
 	static string taskType;
 	static string name;
