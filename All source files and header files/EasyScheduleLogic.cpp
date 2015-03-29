@@ -33,6 +33,7 @@ const string EasyScheduleLogic::MESSAGE_INVALID_INPUT_COMMAND = "Invalid command
 const string EasyScheduleLogic::MESSAGE_INVALID_INPUT_NAME = "Invalid task.";
 const string EasyScheduleLogic::MESSAGE_INVALID_DATE = "Invalid date.";
 
+string EasyScheduleLogic::returnMessage;
 char EasyScheduleLogic::buffer[1000];
 bool EasyScheduleLogic::isInvalidCommandType = false;
 bool EasyScheduleLogic::isInvalidTaskType = false;
@@ -66,7 +67,7 @@ int main () {
 }
 
 void EasyScheduleLogic::main() {
-	storage.showDirectory();
+	/*storage.showDirectory();*/
 	string filename;
 	cin >> filename;
 	storage.setFileName(filename);
@@ -89,18 +90,38 @@ void EasyScheduleLogic::main() {
 void EasyScheduleLogic::executeLogic(string userInput) {
 	parsingCommand(userInput);
 	if(parser.commandType == "add") {
+		if(isInvalidCommandType) {
+			isInvalidCommandType = false; //for future uses
+			returnMessage = MESSAGE_INVALID_INPUT_COMMAND;
+		}
+		else if(isInvalidTaskType) {
+			isInvalidTaskType = false; //for future uses
+			returnMessage = MESSAGE_INVALID_INPUT_NAME;
+		} else {
 		creatingTask(); 
+		storingTask();
+		returnMessage = displayingTask();
+	}
 		//store task is done in tellUI function.
 	} else if (parser.commandType == "delete") {
+		returnMessage = deletingTask();
 		//does nothing here. delete being called in tellUI function.
 	} else if (parser.commandType == "display") {
+		returnMessage = displayingTask();
 		//does nothing here. display being called in tellUI function.
 	} else if (parser.commandType == "search") {
+		returnMessage = searchingTask();
 		//does nothing here. search being called in tellUI function.
 	} else if (parser.commandType == "mark") {
+		if (commandType == "done") { //mark done? mark not done?
+			returnMessage = markNotDone();
+		} else if (commandType == "notdone") { //mark notdone? mark done?
+			returnMessage = markDone();
+		}
 		//does nothing here. mark being called in tellUI function.
 	}else if (parser.commandType == "sort") {
 		sortingTask();
+		returnMessage = displayingTask();
 	} else if (parser.commandType == "exit") {
 		exit(0);
 	} else {
@@ -178,44 +199,7 @@ void EasyScheduleLogic::sortingTask() {
 
 //receive bool from storeFloat and create output message
 string EasyScheduleLogic::tellUI() {
-if(isInvalidCommandType) {
-		isInvalidCommandType = false; //for future uses
-		sprintf_s(buffer, MESSAGE_INVALID_INPUT_COMMAND.c_str());
-		return buffer;
-	}
-	else if(isInvalidTaskType) {
-		isInvalidTaskType = false; //for future uses
-		sprintf_s(buffer, MESSAGE_INVALID_INPUT_NAME.c_str());
-		return buffer;
-	}
-	else if(commandType=="add") {
-		if (!isDuplicate() && isValidDate()) {	
-			storingTask(); 
-			return displayingTask();
-		}
-		else if(isDuplicate()) {
-			sprintf_s(buffer, MESSAGE_ADD_FAIL.c_str());
-			return buffer;
-		}
-		else if(!isValidDate()) {
-			sprintf_s(buffer, MESSAGE_INVALID_DATE.c_str());
-			return buffer;
-		}
-	} else if(commandType == "delete") {
-		return deletingTask();
-	} else if(commandType == "display") {
-		return displayingTask();
-	} else if(commandType == "sort") {
-		return displayingTask();
-	} else if (commandType == "search") {
-		return searchingTask();
-	} else if (commandType == "done") { //mark done? mark not done?
-		return markNotDone();
-	} else if (commandType == "notdone") { //mark notdone? mark done?
-		return markDone();
-	} else {
-		return "";
-	}
+		return returnMessage;
 }
 
 
