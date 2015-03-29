@@ -87,22 +87,12 @@ void EasyScheduleLogic::main() {
 	
 }
 
+
+
 void EasyScheduleLogic::executeLogic(string userInput) {
 	parsingCommand(userInput);
 	if(parser.commandType == "add") {
-		if(isInvalidCommandType) {
-			isInvalidCommandType = false; //for future uses
-			returnMessage = MESSAGE_INVALID_INPUT_COMMAND;
-		}
-		else if(isInvalidTaskType) {
-			isInvalidTaskType = false; //for future uses
-			returnMessage = MESSAGE_INVALID_INPUT_NAME;
-		} else {
-		creatingTask(); 
-		storingTask();
-		returnMessage = displayingTask();
-	}
-		//store task is done in tellUI function.
+		returnMessage = addingTask();	//store task is done in tellUI function.
 	} else if (parser.commandType == "delete") {
 		returnMessage = deletingTask();
 		//does nothing here. delete being called in tellUI function.
@@ -168,7 +158,24 @@ void EasyScheduleLogic::storingTask() {
 	storage.storeTask(task);
 }
 
-string EasyScheduleLogic::deletingTask() {
+string EasyScheduleLogic::addingTask(){
+	string message;
+	if(isInvalidCommandType) {
+			isInvalidCommandType = false; //for future uses
+			message = MESSAGE_INVALID_INPUT_COMMAND;
+		}
+		else if(isInvalidTaskType) {
+			isInvalidTaskType = false; //for future uses
+			message = MESSAGE_INVALID_INPUT_NAME;
+		} else {
+		creatingTask(); 
+		storingTask();
+		message = MESSAGE_ADD;
+		return message;
+		}
+}
+
+string EasyScheduleLogic::deletingTask(){
 	name = parser.name;
 	return storage.deleteByName(name);
 }

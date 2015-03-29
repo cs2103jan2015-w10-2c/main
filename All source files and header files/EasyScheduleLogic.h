@@ -85,6 +85,7 @@ public:
 	static void parsingCommand(string userInput);
 	static void creatingTask();
 	static void storingTask();
+	static string addingTask();
 	static string deletingTask();
 	static string searchingTask();
 	static string displayingTask();
