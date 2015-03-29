@@ -27,8 +27,16 @@ public:
 	Task(string commandType, string name);
 
 	void markDone();
+	void markNotDone();
+	void setName(string newName);
+	void setYear(int newYear);
+	void setMonth(int newMonth);
+	void setDay(int newDay);
+	void setStartTimeHour(int newStartTimeHour);
+	void setStartTimeMin(int newStartTimeMin);
+	void setEndTimeHour(int newEndTimeHour);
+	void setEndTimeMin(int newEndTimeMin);
 
-	void setName(string newName); //in later versions V0.2 onwards: set for all date and time parameters too.
 	string getCommandType();
 	string getTaskType();
 	string getName();

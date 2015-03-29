@@ -35,25 +35,67 @@ Task::Task(string commandType, string name, int year, int month, int day, double
 Task::Task(string commandType, string name, int year, int month, int day, double endTimeHour, double endTimeMin) {
 	_isDone = false;
 	_taskType = "DeadlineTask";
+	_name = name;
 	_year = year;
 	_month = month;
 	_day = day;
 	_endTimeHour = endTimeHour;
 	_endTimeMin = endTimeMin;
+	_startTimeHour = endTimeHour;
+	_startTimeMin = endTimeMin;
 }
 
 Task::Task(string commandType, string name):
 _commandType(commandType),  _name(name) {
 	_isDone = false;
 	_taskType = "FloatingTask";
+	_year = 0;
+	_month = 0;
+	_day = 0;
+	_startTimeHour=0;
+	_startTimeMin=0;
+	_endTimeHour=0;
+	_endTimeMin=0;
 }
 
 void Task::markDone() {
 	_isDone = true;
 }
 
+void Task::markNotDone(){
+	_isDone = false;
+}
+
 void Task::setName(string newName) {
 	_name = newName;
+}
+
+void Task::setYear(int newYear){
+	_year = newYear;
+}
+
+void Task::setMonth(int newMonth){
+	_month = newMonth;
+}
+
+void Task::setDay(int newDay){
+	_day = newDay;
+}
+
+void Task::setStartTimeHour(int newStartTimeHour){
+	_startTimeHour = newStartTimeHour;
+}
+
+void Task::setStartTimeMin(int newStartTimeMin){
+	_startTimeMin = newStartTimeMin;
+}
+
+void Task::setEndTimeHour(int newEndTimeHour){
+	_endTimeHour = newEndTimeHour;
+}
+
+void Task::setEndTimeMin(int newEndTimeMin){
+	_endTimeMin = newEndTimeMin;
 }
 
 string Task::getCommandType() {
