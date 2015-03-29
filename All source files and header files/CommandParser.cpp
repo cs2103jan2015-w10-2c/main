@@ -72,6 +72,8 @@ void CommandParser::identifyTask(string userInput) {
 		name = userInput.substr(pos1+1);
 	}else if(commandType == "sort" || commandType == "display"){
 		return;
+	}else if(commandType == "exit"){
+		return;
 	}else{
 		cout << "invalid command" << endl;
 	}
