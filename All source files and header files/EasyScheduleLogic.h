@@ -51,8 +51,9 @@ private:
 
 private:
 	static string returnMessage;
+	static string returnDisplay;
 	static char buffer[1000];
-	static bool isInvalidCommandType;
+	//static bool isInvalidCommandType;
 	static bool isInvalidTaskType;
 private:
 	static CommandParser parser;
@@ -91,8 +92,9 @@ public:
 	static string displayingTask();
 	static string markDone();
 	static string markNotDone();
-	static void sortingTask();
-	static string tellUI();
+	static string sortingTask();
+	static string tellUIReturnMessage();
+	static string tellUIDisplay();
 	static bool isDuplicate();
 	static bool isValidDate();
 	static void getLocalDateTime();
