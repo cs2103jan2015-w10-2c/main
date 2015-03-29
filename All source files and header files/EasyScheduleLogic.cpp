@@ -115,6 +115,9 @@ void EasyScheduleLogic::executeLogic(string userInput) {
 		returnMessage = displayingTask();
 	} else if (parser.commandType == "exit") {
 		returnMessage = MESSAGE_EXIT;
+	}else if (parser.commandType == "undo"){
+		//undoingTask();
+			returnMessage = displayingTask();
 	} else {
 		isInvalidCommandType = true;
 	}
