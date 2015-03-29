@@ -1,4 +1,5 @@
 #include "CommandParser.h"
+#include <ctime>
 
 using namespace std;
 
@@ -13,6 +14,7 @@ int CommandParser::startTimeHour;
 int CommandParser::startTimeMin;
 int CommandParser::endTimeHour;
 int CommandParser::endTimeMin;
+
 
 void CommandParser::identifyTask(string userInput) {
 
@@ -47,27 +49,45 @@ void CommandParser::identifyTask(string userInput) {
 		size_t posD5 = userInput.find(devider, posD4+1);
 		size_t posD6 = userInput.find(devider, posD5+1);
 
-		year = stoi(userInput.substr(pos1+1, (posD1-pos1)));
-		month =  stoi(userInput.substr(posD1+1, (posD2-posD1)));
-		day =  stoi(userInput.substr(posD2+1, (posD3-posD2)));
-
-		if(posD6 == string::npos) {
-			taskType = "DeadlineTask";
-			endTimeHour = stoi(userInput.substr(posD3+1, (posD4-posD3)));
-			endTimeMin = stoi(userInput.substr(posD4+1, (posD5-posD4)));
-			name = userInput.substr(posD5+1);
-
-		} else {
-			size_t posD7 = userInput.find(devider, posD6+1);
-
-			taskType = "TimedTask";
-			startTimeHour = stoi(userInput.substr(posD3+1, (posD4-posD3)));
-			startTimeMin = stoi(userInput.substr(posD4+1, (posD5-posD4)));
-			endTimeHour = stoi(userInput.substr(posD5+1, (posD6-posD5)));
-			endTimeMin = stoi(userInput.substr(posD6+1, (posD7-posD6)));
-			name = userInput.substr(posD7+1);
+		if (userInput.substr(pos1+1, (posD1-pos1)) == "today"){
+			time_t now = time(0);	
+			struct tm time;
+			localtime_s(&time, &now);
+			day =  time.tm_mday;
+			month = time.tm_mon + 1;
+			year = time.tm_year + 1900;
 		}	
-	}
+		else if (userInput.substr(pos1+1, (posD1-pos1)) == "tomorrow"){
+			time_t now = time(0);	
+			struct tm time;
+			localtime_s(&time, &now);
+			day =  time.tm_mday + 1;
+			month = time.tm_mon + 1 + 1;
+			year = time.tm_year + 1900 + 1;
+		}
+			else {
+			year = stoi(userInput.substr(pos1+1, (posD1-pos1)));
+			month =  stoi(userInput.substr(posD1+1, (posD2-posD1)));
+			day =  stoi(userInput.substr(posD2+1, (posD3-posD2)));
+
+				if(posD6 == string::npos) {
+					taskType = "DeadlineTask";
+					endTimeHour = stoi(userInput.substr(posD3+1, (posD4-posD3)));
+					endTimeMin = stoi(userInput.substr(posD4+1, (posD5-posD4)));
+					name = userInput.substr(posD5+1);
+
+				} else {
+					size_t posD7 = userInput.find(devider, posD6+1);
+
+					taskType = "TimedTask";
+					startTimeHour = stoi(userInput.substr(posD3+1, (posD4-posD3)));
+					startTimeMin = stoi(userInput.substr(posD4+1, (posD5-posD4)));
+					endTimeHour = stoi(userInput.substr(posD5+1, (posD6-posD5)));
+					endTimeMin = stoi(userInput.substr(posD6+1, (posD7-posD6)));
+					name = userInput.substr(posD7+1);
+				}	
+			}
+		}
 	}else if(commandType == "delete" || commandType == "search" || commandType == "done" || commandType == "notdone" ){
 		name = userInput.substr(pos1+1);
 	}else if(commandType == "sort" || commandType == "display"){

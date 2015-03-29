@@ -534,3 +534,8 @@ string Storage::toStringTaskDetail() {
 string Storage::getCommandList(){
 	return COMMANDLIST;
 }
+
+void Storage::undoingReverseAdd(Task task){
+
+}
+

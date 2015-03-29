@@ -27,15 +27,20 @@ const string EasyScheduleLogic::MESSAGE_DELETE = "The task %s has been deleted."
 const string EasyScheduleLogic::MESSAGE_DELETE_FAIL = "There is no task \"%s\" in the schedule.";
 const string EasyScheduleLogic::MESSAGE_CLEAR = "All tasks have been deleted.";
 //const string EasyScheduleLogic::MESSAGE_SEARCH_FAIL = "There is no task \"%s\" in the schedule.";
-const string EasyScheduleLogic::MESSAGE_SORT = "All tasks have been sorted by time.";
+const string EasyScheduleLogic::MESSAGE_SORT = "All tasks have been sorted by task type.";
 const string EasyScheduleLogic::MESSAGE_EMPTY = "The schedule is empty.";
 const string EasyScheduleLogic::MESSAGE_INVALID_INPUT_COMMAND = "Invalid command type.";
 const string EasyScheduleLogic::MESSAGE_INVALID_INPUT_NAME = "Invalid task.";
 const string EasyScheduleLogic::MESSAGE_INVALID_DATE = "Invalid date.";
+const string EasyScheduleLogic::MESSAGE_EXIT = "Program exiting now";
+const string EasyScheduleLogic::MESSAGE_UNDO_FAIL = "End of command history reached";
+const string EasyScheduleLogic::MESSAGE_UNDO_SUCCESS = "Undo successfully";
+const string EasyScheduleLogic::MESSAGE_UNDO_ERROR = "Error occured within undo function";
 
 string EasyScheduleLogic::returnMessage;
+string EasyScheduleLogic::returnDisplay;
 char EasyScheduleLogic::buffer[1000];
-bool EasyScheduleLogic::isInvalidCommandType = false;
+//bool EasyScheduleLogic::isInvalidCommandType = false;
 bool EasyScheduleLogic::isInvalidTaskType = false;
 CommandParser EasyScheduleLogic::parser;
 Storage EasyScheduleLogic::storage;
@@ -92,32 +97,34 @@ void EasyScheduleLogic::main() {
 void EasyScheduleLogic::executeLogic(string userInput) {
 	parsingCommand(userInput);
 	if(parser.commandType == "add") {
-		returnMessage = addingTask();	//store task is done in tellUI function.
+		returnMessage = addingTask();
+		returnDisplay = displayingTask();//store task is done in tellUI function.
 	} else if (parser.commandType == "delete") {
 		returnMessage = deletingTask();
-		//does nothing here. delete being called in tellUI function.
+		returnDisplay = displayingTask();
 	} else if (parser.commandType == "display") {
-		returnMessage = displayingTask();
-		//does nothing here. display being called in tellUI function.
+		returnMessage = ""; //not finished
+		returnDisplay = displayingTask();
 	} else if (parser.commandType == "search") {
-		returnMessage = searchingTask();
-		//does nothing here. search being called in tellUI function.
+		returnMessage = ""; //not finished
+		returnDisplay = searchingTask();
+	} else if (parser.commandType == "sort") {
+		returnMessage = sortingTask(); //not finished
+		returnDisplay = displayingTask();
 	} else if (parser.commandType == "mark") {
-		if (commandType == "done") { //mark done? mark not done?
+		if (commandType == "done") {
 			returnMessage = markNotDone();
-		} else if (commandType == "notdone") { //mark notdone? mark done?
+		} else if (commandType == "notdone") {
 			returnMessage = markDone();
 		}
-		//does nothing here. mark being called in tellUI function.
-	}else if (parser.commandType == "sort") {
-		sortingTask();
-		returnMessage = displayingTask();
 	} else if (parser.commandType == "exit") {
-		exit(0);
+		returnMessage = MESSAGE_EXIT;
+	}else if (parser.commandType == "undo"){
+		returnMessage = undoingTask();
+		displayingTask();
 	} else {
-		isInvalidCommandType = true;
+		returnMessage = MESSAGE_INVALID_INPUT_COMMAND;
 	}
-
 }
 
 void EasyScheduleLogic::parsingCommand(string userInput) {
@@ -131,9 +138,61 @@ void EasyScheduleLogic::parsingCommand(string userInput) {
 	day = parser.day;
 }
 
+string EasyScheduleLogic::undoingTask(){
+	string message;
+	if(tracker.isEmptyTracker()){
+		message = MESSAGE_UNDO_FAIL;
+	}else{
+		Record recordToUndo;
+		recordToUndo = tracker.getNewestRecord();
+		if(recordToUndo.getCommandType() == "add"){
+			if(undoingAdd(recordToUndo)){
+				message = MESSAGE_UNDO_SUCCESS;
+			}else{
+				message = MESSAGE_UNDO_ERROR;
+			}
+		}else if(recordToUndo.getCommandType() == "delete"){
+			if(undoingDelete(recordToUndo)){
+				message = MESSAGE_UNDO_SUCCESS;
+			}else{
+				message = MESSAGE_UNDO_ERROR;
+			}
+		}else if(recordToUndo.getCommandType() == "done"){
+		}else if(recordToUndo.getCommandType() == "notdone"){
+		}
+	}
+	return message;
+}
+
+bool EasyScheduleLogic::undoingDelete(Record recordToUndo){
+	list <Task> listToUndo;
+	listToUndo = recordToUndo.getTaskRecord();
+
+	list<Task>:: iterator it;
+	for(it = listToUndo.begin(); it != listToUndo.end(); it++){
+		storage.storeTask(*it);
+	}
+	return true;
+}
+
+bool EasyScheduleLogic::undoingAdd(Record recordToUndo){
+	list <Task> listToUndo;
+	listToUndo = recordToUndo.getTaskRecord();
+
+	list<Task>:: iterator it;
+	for(it = listToUndo.begin(); it != listToUndo.end(); it++){
+		storage.undoingReverseAdd(*it);
+	}
+	return true;
+}
+
 void EasyScheduleLogic::creatingTask() {
 	if(taskType == FLOATING_TASK) {
 		task = Task(commandType, name);	
+		//write into tracker
+		record = Record(commandType, task);
+		tracker.addRecord(record);
+		record.clear();
 		
 	} else {
 		
@@ -141,12 +200,18 @@ void EasyScheduleLogic::creatingTask() {
 		endTimeMin = parser.endTimeMin;
 
 		if (taskType == DEADLINE_TASK) {
-			
 			task = Task(commandType,  name, year, month, day, endTimeHour, endTimeMin);
+			record = Record(commandType, task);
+			tracker.addRecord(record);
+			record.clear();
 		} else if (taskType == TIMED_TASK){
 			startTimeHour = parser.startTimeHour;
 			startTimeMin = parser.startTimeMin;
+			task = Task(commandType, name, year, month, day, startTimeHour, startTimeMin, endTimeHour, endTimeMin);
 			task = Task(commandType,  name, year, month, day, startTimeHour, startTimeMin, endTimeHour, endTimeMin);
+			record = Record(commandType, task);
+			tracker.addRecord(record);
+			record.clear();
 		} else {
 			isInvalidTaskType = true; 
 		}
@@ -159,20 +224,14 @@ void EasyScheduleLogic::storingTask() {
 }
 
 string EasyScheduleLogic::addingTask(){
-	string message;
-	if(isInvalidCommandType) {
-			isInvalidCommandType = false; //for future uses
-			message = MESSAGE_INVALID_INPUT_COMMAND;
-		}
-		else if(isInvalidTaskType) {
-			isInvalidTaskType = false; //for future uses
-			message = MESSAGE_INVALID_INPUT_NAME;
-		} else {
-		creatingTask(); 
+	creatingTask(); 
+	if(isInvalidTaskType) {
+		isInvalidTaskType = false; //for future uses
+		return MESSAGE_INVALID_INPUT_NAME;
+	} else {
 		storingTask();
-		message = MESSAGE_ADD;
-		return message;
-		}
+		return MESSAGE_ADD;
+	}
 }
 
 string EasyScheduleLogic::deletingTask(){
@@ -183,7 +242,6 @@ string EasyScheduleLogic::deletingTask(){
 string EasyScheduleLogic::searchingTask() {
 	name = parser.name;
 	return storage.searchByName(name);
-	
 }
 
 string EasyScheduleLogic::markDone() {
@@ -200,15 +258,19 @@ string EasyScheduleLogic::displayingTask() {
 	return storage.toStringTaskDetail();
 }
 
-void EasyScheduleLogic::sortingTask() {
+string EasyScheduleLogic::sortingTask() {
 	storage.sortList();
+	return MESSAGE_SORT;
 }
 
 //receive bool from storeFloat and create output message
-string EasyScheduleLogic::tellUI() {
-		return returnMessage;
+string EasyScheduleLogic::tellUIReturnMessage() {
+	return returnMessage;
 }
 
+string EasyScheduleLogic::tellUIDisplay() {
+	return returnDisplay;
+}
 
 bool EasyScheduleLogic::isDuplicate() {
 	return storage.isTaskDuplicate(task);

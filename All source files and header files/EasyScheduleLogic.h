@@ -48,11 +48,17 @@ private:
 	static const string MESSAGE_INVALID_INPUT_COMMAND;
 	static const string MESSAGE_INVALID_INPUT_NAME;
 	static const string MESSAGE_INVALID_DATE;
+	static const string MESSAGE_EXIT;
+	static const string MESSAGE_UNDO_FAIL;
+	static const string MESSAGE_UNDO_SUCCESS;
+	static const string MESSAGE_UNDO_ERROR;
+
 
 private:
 	static string returnMessage;
+	static string returnDisplay;
 	static char buffer[1000];
-	static bool isInvalidCommandType;
+	//static bool isInvalidCommandType;
 	static bool isInvalidTaskType;
 private:
 	static CommandParser parser;
@@ -91,8 +97,13 @@ public:
 	static string displayingTask();
 	static string markDone();
 	static string markNotDone();
-	static void sortingTask();
+	static string undoingTask();
+	static bool undoingAdd(Record recordToUndo);
+	static bool undoingDelete(Record recordToUndo);
 	static string tellUI();
+	static string sortingTask();
+	static string tellUIReturnMessage();
+	static string tellUIDisplay();
 	static bool isDuplicate();
 	static bool isValidDate();
 	static void getLocalDateTime();
