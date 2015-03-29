@@ -12,19 +12,17 @@ class Record{
 private:
 	string _commandType;
 	list <Task> _taskRecord;
-	bool _isPrevious;
 
 public:
 	Record();
+	Record(string newCommand, Task newTask);
 	~Record();
 	void setCommandTypeRecord(string commandTypeRecord);
 	void setlistTaskRecord(Task taskRecord);
-	void setIsPrevious();
-	void setIsNotPrevious();
 
 	string getCommandType();
 	list<Task> getTaskRecord();
-	bool getIsPrevious();
+	void clear();
 };
 
 #endif

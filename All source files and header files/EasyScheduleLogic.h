@@ -48,6 +48,8 @@ private:
 	static const string MESSAGE_INVALID_INPUT_COMMAND;
 	static const string MESSAGE_INVALID_INPUT_NAME;
 	static const string MESSAGE_INVALID_DATE;
+	static const string MESSAGE_EXIT;
+
 
 private:
 	static string returnMessage;
