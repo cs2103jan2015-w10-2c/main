@@ -23,7 +23,6 @@ public:
 	static int endTimeMin;
 	static int startTimeHour;
 	static int endTimeHour;
-	static string dayOfWeek;
 
 public:
 	CommandParser(void);
@@ -40,7 +39,6 @@ public:
 	int getStartTimeMin();
 	int getEndTimeHour();
 	int getEndTimeMin();
-	
 };
 
 #endif
