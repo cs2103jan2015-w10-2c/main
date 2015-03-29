@@ -144,13 +144,14 @@ namespace UI {
 			// feedbackBox
 			// 
 			this->feedbackBox->BackColor = System::Drawing::SystemColors::Info;
-			this->feedbackBox->Font = (gcnew System::Drawing::Font(L"Arial", 10.5F, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point, 
+			this->feedbackBox->Font = (gcnew System::Drawing::Font(L"Arial", 9, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point, 
 				static_cast<System::Byte>(0)));
 			this->feedbackBox->ForeColor = System::Drawing::SystemColors::HotTrack;
-			this->feedbackBox->Location = System::Drawing::Point(5, 323);
+			this->feedbackBox->Location = System::Drawing::Point(5, 316);
 			this->feedbackBox->Multiline = true;
 			this->feedbackBox->Name = L"feedbackBox";
-			this->feedbackBox->Size = System::Drawing::Size(319, 32);
+			this->feedbackBox->ScrollBars = System::Windows::Forms::ScrollBars::Vertical;
+			this->feedbackBox->Size = System::Drawing::Size(319, 39);
 			this->feedbackBox->TabIndex = 2;
 			this->feedbackBox->TextAlign = System::Windows::Forms::HorizontalAlignment::Center;
 			this->feedbackBox->UseWaitCursor = true;
@@ -168,9 +169,9 @@ namespace UI {
 			this->listOutput->ForeColor = System::Drawing::SystemColors::WindowText;
 			this->listOutput->FullRowSelect = true;
 			this->listOutput->GridLines = true;
-			this->listOutput->Location = System::Drawing::Point(5, 9);
+			this->listOutput->Location = System::Drawing::Point(5, 4);
 			this->listOutput->Name = L"listOutput";
-			this->listOutput->Size = System::Drawing::Size(652, 289);
+			this->listOutput->Size = System::Drawing::Size(652, 290);
 			this->listOutput->TabIndex = 3;
 			this->listOutput->UseCompatibleStateImageBehavior = false;
 			this->listOutput->View = System::Windows::Forms::View::Details;
@@ -184,7 +185,8 @@ namespace UI {
 			// 
 			// Marked
 			// 
-			this->Marked->Text = L"Done\?";
+			this->Marked->Text = L"Status";
+			this->Marked->TextAlign = System::Windows::Forms::HorizontalAlignment::Center;
 			this->Marked->Width = 50;
 			// 
 			// TaskType
@@ -224,7 +226,7 @@ namespace UI {
 			this->feedbackLabel->Font = (gcnew System::Drawing::Font(L"Arial", 10.5F, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point, 
 				static_cast<System::Byte>(0)));
 			this->feedbackLabel->ForeColor = System::Drawing::SystemColors::HotTrack;
-			this->feedbackLabel->Location = System::Drawing::Point(2, 305);
+			this->feedbackLabel->Location = System::Drawing::Point(2, 297);
 			this->feedbackLabel->Name = L"feedbackLabel";
 			this->feedbackLabel->Size = System::Drawing::Size(71, 16);
 			this->feedbackLabel->TabIndex = 4;
@@ -235,13 +237,14 @@ namespace UI {
 			// previousCommandBox
 			// 
 			this->previousCommandBox->BackColor = System::Drawing::SystemColors::Info;
-			this->previousCommandBox->Font = (gcnew System::Drawing::Font(L"Arial", 10.5F, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point, 
+			this->previousCommandBox->Font = (gcnew System::Drawing::Font(L"Arial", 9, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point, 
 				static_cast<System::Byte>(0)));
-			this->previousCommandBox->Location = System::Drawing::Point(339, 323);
+			this->previousCommandBox->Location = System::Drawing::Point(339, 316);
 			this->previousCommandBox->Multiline = true;
 			this->previousCommandBox->Name = L"previousCommandBox";
-			this->previousCommandBox->Size = System::Drawing::Size(318, 32);
+			this->previousCommandBox->Size = System::Drawing::Size(318, 39);
 			this->previousCommandBox->TabIndex = 5;
+			this->previousCommandBox->TextAlign = System::Windows::Forms::HorizontalAlignment::Center;
 			// 
 			// previousCommandLabel
 			// 
@@ -249,7 +252,7 @@ namespace UI {
 			this->previousCommandLabel->Font = (gcnew System::Drawing::Font(L"Arial", 10.5F, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point, 
 				static_cast<System::Byte>(0)));
 			this->previousCommandLabel->ForeColor = System::Drawing::SystemColors::HotTrack;
-			this->previousCommandLabel->Location = System::Drawing::Point(336, 305);
+			this->previousCommandLabel->Location = System::Drawing::Point(336, 297);
 			this->previousCommandLabel->Name = L"previousCommandLabel";
 			this->previousCommandLabel->Size = System::Drawing::Size(128, 16);
 			this->previousCommandLabel->TabIndex = 6;
@@ -282,7 +285,8 @@ namespace UI {
 
 	//When users loads (opens) the programme
 	private: System::Void EasyScheduleGUI_Load(System::Object^  sender, System::EventArgs^  e) {
-				this->feedbackBox->Text = "Hello Jim. Welcome to EasySchedule!\r\n\r\nWhat would you like to do?";
+				this->feedbackBox->Text = "Hello Jim. Welcome to EasySchedule!\r\nPlease enter the file name to open: ";
+
 				/*
 				other welcome messages such as show all the command types, show today's tasks, etc 
 				*/
@@ -290,7 +294,7 @@ namespace UI {
 
 	//User press "Enter" key after typing to replace clicking "Enter" button
 	//Debug: Now it doesn't work. Why???
-	private: System::Void inputBox_KeyUp(System::Object^  sender, System::Windows::Forms::KeyEventArgs^  e) {
+	private: System::Void inputBox_KeyDown(System::Object^  sender, System::Windows::Forms::KeyEventArgs^  e) {
 				if(e->KeyCode == Keys::Enter) {
 					enterButton->PerformClick();
 				}
@@ -301,11 +305,13 @@ namespace UI {
 				
 				//allUserInputs.push_back(this->inputBox->Text);
 				userInput = this->inputBox->Text;
-				this->previousCommandBox->Text = userInput;
+				
 				//convert from System::String to std::string and pass to logic
 				msclr::interop::marshal_context context;
 				std::string userInputString = context.marshal_as<std::string>(userInput);
-				
+				if(userInputString != "exit") {
+					this->previousCommandBox->Text = userInput;
+				}
 				//clear the previous input and output for future uses.
 				listOutput->Items->Clear();
 				this->inputBox->Clear();
@@ -340,7 +346,7 @@ namespace UI {
 						/****Index****/		//BUG: why index all 1 on display
 						tempStart = tempEnd+1;
 						tempEnd = returnInfo.find_first_of("]", tempStart);
-						componentInfo = returnInfo.substr(0, tempEnd-tempStart);
+						componentInfo = returnInfo.substr(tempStart, tempEnd-tempStart);
 						temp = gcnew String(componentInfo.c_str());
 						listViewItems = gcnew Windows::Forms::ListViewItem(temp);
 						/****Mark****/
