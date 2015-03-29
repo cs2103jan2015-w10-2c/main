@@ -49,6 +49,7 @@ private:
 	static const string MESSAGE_INVALID_DATE;
 
 private:
+	static string returnMessage;
 	static char buffer[1000];
 	static bool isInvalidCommandType;
 	static bool isInvalidTaskType;
