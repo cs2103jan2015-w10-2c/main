@@ -49,6 +49,9 @@ private:
 	static const string MESSAGE_INVALID_INPUT_NAME;
 	static const string MESSAGE_INVALID_DATE;
 	static const string MESSAGE_EXIT;
+	static const string MESSAGE_UNDO_FAIL;
+	static const string MESSAGE_UNDO_SUCCESS;
+	static const string MESSAGE_UNDO_ERROR;
 
 
 private:
@@ -94,6 +97,8 @@ public:
 	static string markDone();
 	static string markNotDone();
 	static void sortingTask();
+	static string undoingTask();
+	static bool undoingAdd(Record recordToUndo);
 	static string tellUI();
 	static bool isDuplicate();
 	static bool isValidDate();

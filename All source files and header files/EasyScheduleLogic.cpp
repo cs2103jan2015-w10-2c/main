@@ -33,6 +33,9 @@ const string EasyScheduleLogic::MESSAGE_INVALID_INPUT_COMMAND = "Invalid command
 const string EasyScheduleLogic::MESSAGE_INVALID_INPUT_NAME = "Invalid task.";
 const string EasyScheduleLogic::MESSAGE_INVALID_DATE = "Invalid date.";
 const string EasyScheduleLogic::MESSAGE_EXIT = "Program exiting now";
+const string EasyScheduleLogic::MESSAGE_UNDO_FAIL = "End of command history reached";
+const string EasyScheduleLogic::MESSAGE_UNDO_SUCCESS = "Undo successfully";
+const string EasyScheduleLogic::MESSAGE_UNDO_ERROR = "Error occured within undo function";
 
 string EasyScheduleLogic::returnMessage;
 char EasyScheduleLogic::buffer[1000];
@@ -116,8 +119,8 @@ void EasyScheduleLogic::executeLogic(string userInput) {
 	} else if (parser.commandType == "exit") {
 		returnMessage = MESSAGE_EXIT;
 	}else if (parser.commandType == "undo"){
-		//undoingTask();
-			returnMessage = displayingTask();
+		returnMessage = undoingTask();
+		displayingTask();
 	} else {
 		isInvalidCommandType = true;
 	}
@@ -133,6 +136,38 @@ void EasyScheduleLogic::parsingCommand(string userInput) {
 	year = parser.year;
 	month = parser.month;
 	day = parser.day;
+}
+
+string EasyScheduleLogic::undoingTask(){
+	string message;
+	if(tracker.isEmptyTracker()){
+		message = MESSAGE_UNDO_FAIL;
+	}else{
+		Record recordToUndo;
+		recordToUndo = tracker.getNewestRecord();
+		if(recordToUndo.getCommandType() == "add"){
+			if(undoingAdd(recordToUndo)){
+				message = MESSAGE_UNDO_SUCCESS;
+			}else{
+				message = MESSAGE_UNDO_ERROR;
+			}
+		}else if(recordToUndo.getCommandType() == "delete"){
+		}else if(recordToUndo.getCommandType() == "done"){
+		}else if(recordToUndo.getCommandType() == "notdone"){
+		}
+	}
+	return message;
+}
+
+bool EasyScheduleLogic::undoingAdd(Record recordToUndo){
+	list <Task> listToUndo;
+	listToUndo = recordToUndo.getTaskRecord();
+
+	list<Task>:: iterator it;
+	for(it = listToUndo.begin(); it != listToUndo.end(); it++){
+		storage.storeTask(*it);
+	}
+	return true;
 }
 
 void EasyScheduleLogic::creatingTask() {
