@@ -11,15 +11,22 @@ const string Storage::COMMANDLIST = "List of commands:\n1. add\n2. display\n3. d
 
 char Storage::buffer[1000];
 list<Task> Storage::_taskList;
+list<Task> Storage::_searchResultList;
+list<Task> Storage::_previousTaskList;
 list<Task>::iterator Storage::_taskIt;
 ofstream Storage::_fWrite;
 ifstream Storage::_fRead;
 string Storage::_fileName;
+bool Storage::isTaskFound;
+bool Storage::isSearched;
 
 DIR *dir = NULL;
 struct dirent *ent;
 
-Storage::Storage() {}
+Storage::Storage() {
+isSearched = false;
+isTaskFound = false;
+}
 
 void Storage::setFileName(string name) {
 	string fileType = ".txt";
@@ -266,81 +273,138 @@ void Storage::sortList(){
 	return;
 }
 
-string Storage::searchByName(string searchKeyWord){
-	list <Task> searchResultList;
-	list <Task>::iterator i;
+void Storage::findTaskInList(string searchKeyWord) {
 	string text;
+	_searchResultList.clear();
 	searchKeyWord = toLower(searchKeyWord);
-	for (i = _taskList.begin(); i!= _taskList.end(); i++) {
-		text = toLower(i->getName());
+	for (_taskIt = _taskList.begin(); _taskIt!= _taskList.end(); _taskIt++) {
+		text = toLower(_taskIt->getName());
 		if (text.find(searchKeyWord) != std::string::npos) {
-			searchResultList.push_back(*i);
+			_searchResultList.push_back(*_taskIt);
 		}
 	}
-	return toStringTaskDetail(searchResultList);
+	if (!(_searchResultList.empty())) {
+		isSearched=true;
+	}
+}
+
+
+string Storage::searchByName(string searchKeyWord){
+	return toStringTaskDetail(_searchResultList);
 }
 
 string Storage::markDone(string name){
-	list <Task>::iterator i;
-	list <Task> markedTask;
-	string text;
-	name = toLower(name);
-	for (i = _taskList.begin(); i!= _taskList.end(); i++) {
-		text = toLower(i->getName());
-		if (text.find(name) != std::string::npos) {
-			(*i).markDone();
-			markedTask.push_back(*i);
-		}
-	}
-
-	return toStringTaskDetail(markedTask);
+	findTaskInList(name);
+	return toStringTaskDetail(_searchResultList);
 }
 
 string Storage::markNotDone(string name){
-	list <Task>::iterator i;
-	list <Task> markedTask;
-	string text;
-	name = toLower(name);
-	for (i = _taskList.begin(); i!= _taskList.end(); i++) {
-		text = toLower(i->getName());
-		if (text.find(name) != std::string::npos) {
-			(*i).markNotDone();
-			markedTask.push_back(*i);
-		}
-	}
-
-	return toStringTaskDetail(markedTask);
+	findTaskInList(name);
+	return toStringTaskDetail(_searchResultList);
 }
-
 
 string Storage::toLower(string text) {
 	transform(text.begin(), text.end(), text.begin(), ::tolower);
 	return text;
 }
 
+bool Storage::compareTask(Task task) {
+	list<Task>::iterator i;
+	for (i=_taskList.begin();i!=_taskList.end();i++) {
+		
+		if ((i->getCommandType() == task.getCommandType()) 
+			&& (i->getTaskType() == task.getTaskType()) 
+			&& (i->getName() != task.getName())
+			&& (i->getYear() != task.getYear())
+			&& (i->getMonth() != task.getMonth())
+			&& (i->getDay() != task.getDay())
+			&& (i->getStartTimeHour() != task.getStartTimeHour())
+			&& (i->getStartTimeMin() != task.getStartTimeMin())
+			&& (i->getEndTimeHour() != task.getEndTimeHour())
+			&& (i->getEndTimeMin() != task.getEndTimeMin())) {
+				_taskIt = i;
+				return true;
+		}
+	}
+	return false;
+}
+
+void Storage::getIterator(int i) {
+			while (i>1) {
+				_taskIt++;
+				i--;
+			}
+}
+
+string Storage::markDoneByNumber(int i) {
+	if (isSearched) {
+		_taskIt= _searchResultList.begin();
+		if (i>_searchResultList.size()) {
+			return toStringTaskDetail(_searchResultList);
+		} else {
+			getIterator(i);
+			if (!compareTask(*(_taskIt))) {
+				return toStringTaskDetail(_searchResultList);
+			}
+		}
+	} else {
+		_taskIt= _taskList.begin();
+		getIterator(i);
+	}
+	storePreviousTask();
+	_taskIt->markDone();
+	return toStringTaskDetail();
+}		
+
+string Storage::markNotDoneByNumber(int i) {
+	if (isSearched) {
+		_taskIt= _searchResultList.begin();
+		if (i>_searchResultList.size()) {
+			return toStringTaskDetail(_searchResultList);
+		} else {
+			getIterator(i);
+			if (!compareTask(*(_taskIt))) {
+				return toStringTaskDetail(_searchResultList);
+			}
+		}
+	} else {
+		_taskIt= _taskList.begin();
+		getIterator(i);
+	}
+	storePreviousTask();
+	_taskIt->markNotDone();
+	return toStringTaskDetail();
+}		
+
+
+string Storage::deleteByNumber(int i) {
+	if (isSearched) {
+		_taskIt= _searchResultList.begin();
+		if (i>_searchResultList.size()) {
+			return toStringTaskDetail(_searchResultList);
+		} else {
+			getIterator(i);
+			if (!compareTask(*(_taskIt))) {
+				return toStringTaskDetail(_searchResultList);
+			}
+		}
+	} else {
+		_taskIt= _taskList.begin();
+		getIterator(i);
+	}
+	storePreviousTask();
+	_taskList.erase(_taskIt);
+	return toStringTaskDetail();
+}		
 
 string Storage::deleteByName(string searchKeyWord){
-	
-    list <Task>::iterator i;
-    list <Task> deleteResultList;
-	int count=0;
-    for (i = _taskList.begin(); i!= _taskList.end(); i++){
+	findTaskInList(searchKeyWord);
+	return toStringTaskDetail(_searchResultList);
+}
 
-        if (i->getName() != searchKeyWord){
-            deleteResultList.push_back(*i);
-			count++;
-        }
-    }
-	ostringstream s;
-	if(count==_taskList.size()) {
-		s << "There is no such task in the schedule.\r\n";
-		return s.str();
-	}
-    _taskList.clear();
-    _taskList = deleteResultList;
-	s << "Tasks containing the keyword have been deleted.\r\n";
-	return s.str();
-
+void Storage::storePreviousTask() {
+	_previousTaskList.clear();
+	_previousTaskList.push_back(*(_taskIt));
 }
 
 string Storage::toStringTaskDetail(list <Task> listToFormat){
@@ -406,6 +470,7 @@ string Storage::toStringTaskDetail(list <Task> listToFormat){
 }
 
 string Storage::toStringTaskDetail() {
+	isSearched = false;
 	stringstream s;
 	if(_taskList.empty()) {
 		s << "The schedule is empty.";
