@@ -22,7 +22,7 @@ public:
 
 	void setCommandTypeRecord(string commandTypeRecord);
 	void setlistTaskRecord(Task taskRecord);
-
+	void clear();
 
 	string getCommandType();
 	list<Task> getTaskRecord();

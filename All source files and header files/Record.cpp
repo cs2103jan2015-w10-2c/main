@@ -26,6 +26,11 @@ string Record::getCommandType(){
 	return _commandType;
 }
 
+void Record::clear(){
+	_commandType = "";
+	_taskRecord.clear();
+}
+
 list<Task> Record::getTaskRecord(){
 	return _taskRecord;
 }
