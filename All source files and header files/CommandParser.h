@@ -16,6 +16,7 @@ public:
 	static string taskType;
 	static string commandType;
 	static string name;
+	static int number; //for delete
 	static int year;
 	static int month;
 	static int day;
@@ -23,6 +24,7 @@ public:
 	static int endTimeMin;
 	static int startTimeHour;
 	static int endTimeHour;
+	static string dayOfWeek;
 
 public:
 	CommandParser(void);
@@ -39,6 +41,7 @@ public:
 	int getStartTimeMin();
 	int getEndTimeHour();
 	int getEndTimeMin();
+	
 };
 
 #endif
