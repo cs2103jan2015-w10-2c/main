@@ -395,7 +395,7 @@ string Storage::markNotDone(int i) {
 string Storage::deleteByNumber(int i) {
 	if (isSearched) {
 		_taskIt= _searchResultList.begin();
-		if (i>_searchResultList.size()) {
+		if (i>_searchResultList.size()||i<=0) {
 			isSuccess = false;
 			return toStringTaskDetail(_searchResultList);
 		} else {
