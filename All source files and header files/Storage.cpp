@@ -274,6 +274,8 @@ void Storage::sortList(){
 	return;
 }
 
+//store all searched tasks into list <Task> _searchResultList 
+//bool isSearched = true
 void Storage::findTaskInList(string searchKeyWord) {
 	string text;
 	_searchResultList.clear();
@@ -289,17 +291,29 @@ void Storage::findTaskInList(string searchKeyWord) {
 	}
 }
 
-
+//return and dispay all task items containing the searchKeyWord
 string Storage::searchByName(string searchKeyWord){
 	return toStringTaskDetail(_searchResultList);
 }
 
+<<<<<<< HEAD
 string Storage::markDoneByName(string name){
+=======
+//return and dispay all task items containing the searchKeyWord
+//for further selection of number
+string Storage::markDone(string name){
+>>>>>>> 8dd702aed2642b47b183cbf9caae2e01a931d405
 	findTaskInList(name);
 	return toStringTaskDetail(_searchResultList);
 }
 
+<<<<<<< HEAD
 string Storage::markNotDoneByName(string name){
+=======
+//return and dispay all task items containing the searchKeyWord
+//for further selection of number
+string Storage::markNotDone(string name){
+>>>>>>> 8dd702aed2642b47b183cbf9caae2e01a931d405
 	findTaskInList(name);
 	return toStringTaskDetail(_searchResultList);
 }
@@ -309,26 +323,28 @@ string Storage::toLower(string text) {
 	return text;
 }
 
+//search task in the _taskList for exact matches
 bool Storage::compareTask(Task task) {
 	list<Task>::iterator i;
 	for (i=_taskList.begin();i!=_taskList.end();i++) {
 		
 		if ((i->getCommandType() == task.getCommandType()) 
 			&& (i->getTaskType() == task.getTaskType()) 
-			&& (i->getName() != task.getName())
-			&& (i->getYear() != task.getYear())
-			&& (i->getMonth() != task.getMonth())
-			&& (i->getDay() != task.getDay())
-			&& (i->getStartTimeHour() != task.getStartTimeHour())
-			&& (i->getStartTimeMin() != task.getStartTimeMin())
-			&& (i->getEndTimeHour() != task.getEndTimeHour())
-			&& (i->getEndTimeMin() != task.getEndTimeMin())) {
+			&& (i->getName() == task.getName())
+			&& (i->getYear() == task.getYear())
+			&& (i->getMonth() == task.getMonth())
+			&& (i->getDay() == task.getDay())
+			&& (i->getStartTimeHour() == task.getStartTimeHour())
+			&& (i->getStartTimeMin() == task.getStartTimeMin())
+			&& (i->getEndTimeHour() == task.getEndTimeHour())
+			&& (i->getEndTimeMin() == task.getEndTimeMin())) {
 				_taskIt = i;
 				return true;
 		}
 	}
 	return false;
 }
+
 
 void Storage::getIterator(int i) {
 			while (i>1) {
@@ -403,9 +419,14 @@ string Storage::deleteByName(string searchKeyWord){
 	return toStringTaskDetail(_searchResultList);
 }
 
+//record edited task item for undo function
 void Storage::storePreviousTask() {
 	_previousTaskList.clear();
 	_previousTaskList.push_back(*(_taskIt));
+}
+
+list<Task> Storage::getPreviousTaskList(){
+	return _previousTaskList;
 }
 
 string Storage::toStringTaskDetail(list <Task> listToFormat){
