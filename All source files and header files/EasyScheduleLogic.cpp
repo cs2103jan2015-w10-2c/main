@@ -160,7 +160,7 @@ string EasyScheduleLogic::undoingTask(){
 		message = MESSAGE_UNDO_FAIL;
 	}else{
 		Record recordToUndo;
-		recordToUndo = tracker.getNewestRecord();
+		recordToUndo = storage.getTracker().getNewestRecord();
 		if(recordToUndo.getCommandType() == "add"){
 			if(undoingAdd(recordToUndo)){
 				message = MESSAGE_UNDO_SUCCESS;
@@ -174,7 +174,17 @@ string EasyScheduleLogic::undoingTask(){
 				message = MESSAGE_UNDO_ERROR;
 			}
 		}else if(recordToUndo.getCommandType() == "done"){
+			if(undoingDone(recordToUndo)){
+				message = MESSAGE_UNDO_SUCCESS;
+			}else{
+				message = MESSAGE_UNDO_ERROR;
+			}
 		}else if(recordToUndo.getCommandType() == "notdone"){
+			if(undoingNotDone(recordToUndo)){
+				message = MESSAGE_UNDO_SUCCESS;
+			}else{
+				message = MESSAGE_UNDO_ERROR;
+			}
 		}
 	}
 	return message;
