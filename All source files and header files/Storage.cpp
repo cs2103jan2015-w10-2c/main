@@ -352,6 +352,8 @@ void Storage::getIterator(int i) {
 }
 
 string Storage::markDone(int i) {
+	string commandType = "done";
+
 	if (isSearched) {
 		_taskIt= _searchResultList.begin();
 		if (i>_searchResultList.size()||i<=0) {
@@ -373,7 +375,7 @@ string Storage::markDone(int i) {
 			getIterator(i);
 		}
 	}
-	storePreviousTask();
+	storePreviousTask(commandType);
 	_taskIt->markDone();
 	isSuccess = true;
 	return toStringTaskDetail();
@@ -381,6 +383,8 @@ string Storage::markDone(int i) {
 }
 
 string Storage::markNotDone(int i) {
+	string commandType = "notdone";
+
 	if (isSearched) {
 		_taskIt= _searchResultList.begin();
 		if (i>_searchResultList.size()||i<=0) {
@@ -402,7 +406,7 @@ string Storage::markNotDone(int i) {
 			getIterator(i);
 		}
 	}
-	storePreviousTask();
+	storePreviousTask(commandType);
 	_taskIt->markNotDone();
 	isSuccess = true;
 	return toStringTaskDetail();	
