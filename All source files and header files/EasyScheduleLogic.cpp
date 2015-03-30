@@ -160,7 +160,7 @@ void EasyScheduleLogic::parsingCommand(string userInput) {
 
 string EasyScheduleLogic::undoingTask(){
 	string message;
-	if(tracker.isEmptyTracker()){
+	if(storage.getTracker().isEmptyTracker()){
 		message = MESSAGE_UNDO_FAIL;
 	}else{
 		Record recordToUndo;
