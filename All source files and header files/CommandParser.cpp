@@ -42,6 +42,7 @@ void CommandParser::identifyTask(string userInput) {
 	if(posD1 == string::npos) {
 		taskType = "FloatingTask";
 		name = userInput.substr(pos1+1);
+		return;
 
 	} else {
 		//add 2015//01//02//8//0//meeting
@@ -117,16 +118,18 @@ void CommandParser::identifyTask(string userInput) {
 			endTimeHour = stoi(userInput.substr(posD1+1, (posD2-posD1)));
 			endTimeMin = stoi(userInput.substr(posD2+1, (posD3-posD2)));
 			name = userInput.substr(posD3+1);
+			return;
 		}
-			else {
+			else if ((userInput.substr(pos1+1, (posD1-pos1-1)))[0] != '2') {
 				taskType = "TimedTask";
 				startTimeHour = stoi(userInput.substr(posD1+1, (posD2-posD1)));
 				startTimeMin = stoi(userInput.substr(posD2+1, (posD3-posD2)));
 				endTimeHour = stoi(userInput.substr(posD3+1, (posD4-posD3)));
 				endTimeMin = stoi(userInput.substr(posD4+1, (posD5-posD4)));
 				name = userInput.substr(posD5+1);
+				return;
 			}	
-
+			
 			if (stoi(userInput.substr(pos1+1, (posD1-pos1-1))) < 22000){
 				year = stoi(userInput.substr(pos1+1, (posD1-pos1)));
 				month = stoi(userInput.substr(posD1+1, (posD2-posD1)));
@@ -211,16 +214,4 @@ int CommandParser::getStartTimeMin() {
 
 int CommandParser::getYear(){
 	return year;
-}
-
-int main(){
-	string input = "add Wednesday/8/30/9/35/breakfast";
-	string input2 = "add 2015/03/26/8/30/breakitfast";
-	string input3 = "delete";
-	CommandParser cp;
-	cp.identifyTask(input3);
-
-	cout << cp.getDate() << " "<< cp.getName() << " "<< cp.getTaskType() << endl;
-	cout << cp.getStartTimeHour() << ":" << cp.getStartTimeMin() << "-" << cp.getEndTimeHour() << ":" << cp.getEndTimeMin();
-return 0;
 }
