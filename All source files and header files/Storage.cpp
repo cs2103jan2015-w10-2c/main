@@ -17,7 +17,7 @@ list<Task>::iterator Storage::_taskIt;
 ofstream Storage::_fWrite;
 ifstream Storage::_fRead;
 string Storage::_fileName;
-bool Storage::isTaskFound;
+bool Storage::isSuccess;
 bool Storage::isSearched;
 Record Storage::_record;
 Tracker Storage::_tracker;
@@ -27,7 +27,7 @@ struct dirent *ent;
 
 Storage::Storage() {
 isSearched = false;
-isTaskFound = false;
+isSuccess = false;
 }
 
 void Storage::setFileName(string name) {
@@ -165,7 +165,13 @@ void Storage::readFile() {
 void Storage::storeTask(Task task) {
 	if (!isTaskDuplicate(task)) {
 		_taskList.push_back(task);
+<<<<<<< HEAD
 		creatRecordAdd(task);
+=======
+		isSuccess = true;
+	} else {
+		isSuccess = false;
+>>>>>>> 73322872014d207b8ed221362092bdc40965d8cf
 	}
 }
 
@@ -305,22 +311,10 @@ void Storage::findTaskInList(string searchKeyWord) {
 
 //return and dispay all task items containing the searchKeyWord
 string Storage::searchByName(string searchKeyWord){
+	findTaskInList(searchKeyWord);
 	return toStringTaskDetail(_searchResultList);
 }
 
-//return and dispay all task items containing the searchKeyWord
-//for further selection of number
-string Storage::markDone(string name){
-	findTaskInList(name);
-	return toStringTaskDetail(_searchResultList);
-}
-
-//return and dispay all task items containing the searchKeyWord
-//for further selection of number
-string Storage::markNotDone(string name){
-	findTaskInList(name);
-	return toStringTaskDetail(_searchResultList);
-}
 
 string Storage::toLower(string text) {
 	transform(text.begin(), text.end(), text.begin(), ::tolower);
@@ -357,46 +351,62 @@ void Storage::getIterator(int i) {
 			}
 }
 
-string Storage::markDoneByNumber(int i) {
+string Storage::markDone(int i) {
 	if (isSearched) {
 		_taskIt= _searchResultList.begin();
-		if (i>_searchResultList.size()) {
+		if (i>_searchResultList.size()||i<=0) {
+			isSuccess = false;
 			return toStringTaskDetail(_searchResultList);
 		} else {
 			getIterator(i);
 			if (!compareTask(*(_taskIt))) {
+				isSuccess = false;
 				return toStringTaskDetail(_searchResultList);
 			}
 		}
 	} else {
-		_taskIt= _taskList.begin();
-		getIterator(i);
+		if (i>_taskList.size()||i<=0) {
+			isSuccess = false;
+			return toStringTaskDetail(_searchResultList);
+		} else {
+			_taskIt= _taskList.begin();
+			getIterator(i);
+		}
 	}
 	storePreviousTask();
 	_taskIt->markDone();
+	isSuccess = true;
 	return toStringTaskDetail();
-}		
+	
+}
 
-string Storage::markNotDoneByNumber(int i) {
+string Storage::markNotDone(int i) {
 	if (isSearched) {
 		_taskIt= _searchResultList.begin();
-		if (i>_searchResultList.size()) {
+		if (i>_searchResultList.size()||i<=0) {
+			isSuccess = false;
 			return toStringTaskDetail(_searchResultList);
 		} else {
 			getIterator(i);
 			if (!compareTask(*(_taskIt))) {
+				isSuccess = false;
 				return toStringTaskDetail(_searchResultList);
 			}
 		}
 	} else {
-		_taskIt= _taskList.begin();
-		getIterator(i);
+		if (i>_taskList.size()||i<=0) {
+			isSuccess = false;
+			return toStringTaskDetail(_searchResultList);
+		} else {
+			_taskIt= _taskList.begin();
+			getIterator(i);
+		}
 	}
 	storePreviousTask();
 	_taskIt->markNotDone();
-	return toStringTaskDetail();
-}		
-
+	isSuccess = true;
+	return toStringTaskDetail();	
+}
 
 string Storage::deleteByNumber(int i) {
 	string commandType = "delete";
@@ -404,27 +414,32 @@ string Storage::deleteByNumber(int i) {
 	if (isSearched) {
 		_taskIt= _searchResultList.begin();
 		if (i>_searchResultList.size()) {
+			isSuccess = false;
 			return toStringTaskDetail(_searchResultList);
 		} else {
 			getIterator(i);
 			if (!compareTask(*(_taskIt))) {
+				isSuccess = false;
 				return toStringTaskDetail(_searchResultList);
 			}
 		}
 	} else {
-		_taskIt= _taskList.begin();
-		getIterator(i);
+		if (i>_taskList.size()||i<=0) {
+			isSuccess = false;
+			return toStringTaskDetail(_searchResultList);
+		} else {
+			_taskIt= _taskList.begin();
+			getIterator(i);
+		}
 	}
 
 	storePreviousTask(commandType);
 	_taskList.erase(_taskIt);
+	isSuccess = true;
 	return toStringTaskDetail();
-}		
-
-string Storage::deleteByName(string searchKeyWord){
-	findTaskInList(searchKeyWord);
-	return toStringTaskDetail(_searchResultList);
 }
+
+
 
 //record edited task item for undo function
 void Storage::storePreviousTask(string commandType) {

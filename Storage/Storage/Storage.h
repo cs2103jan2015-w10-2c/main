@@ -19,7 +19,6 @@ class Storage {
 
 private:
 	static string _fileName;
-	
 	static list<Task>_searchResultList;
 	static list<Task>_previousTaskList;
 	static list<Task>::iterator _taskIt;
@@ -34,18 +33,15 @@ public:
 	static ofstream _fWrite;
 	static ifstream _fRead;
 	static char buffer[1000];
-	static bool isTaskFound;
-	static bool isSearched;
 
+	static bool isSuccess;
+	static bool isSearched;
 	static bool compareTask(Task task);
 	static void storePreviousTask();
+	static list<Task> getPreviousTaskList();
 	static void getIterator(int i);
 
 	static void findTaskInList(string searchKeyWord);
-	static string deleteByNumber(int i);
-	static string markDoneByNumber(int i);
-	static string markNotDoneByNumber(int i);
-	static void storeTask(Task task);
 	static bool isTaskDuplicate(Task task);
 	static bool isFloatDuplicate(Task task);
 	static bool isTimedDuplicate(Task task);
@@ -61,10 +57,14 @@ public:
 
 	static void sortList();
 	static void undoingReverseAdd(Task task);
+	
+	static void storeTask(Task task);
 	static string searchByName(string searchKeyWord);
-	static string markDone(string name);
-	static string markNotDone(string name);
-	static string deleteByName(string searchKeyWord);
+	static string markDone(int i);
+	static string markNotDone(int i);
+	static string deleteByNumber(int i);
+
+
 	static string toStringTaskDetail();
 	static string toStringTaskDetail(list <Task> listToFormat);
 

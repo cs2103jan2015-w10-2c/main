@@ -14,6 +14,7 @@
 //#include <sstream>
 #include <string>
 #include "Tracker.h"
+#include "Record.h"
 
 using namespace std;
 
@@ -42,8 +43,9 @@ private:
 	static const string MESSAGE_DELETE;
 	static const string MESSAGE_DELETE_FAIL;
 	static const string MESSAGE_CLEAR;
-	//static const string MESSAGE_SEARCH_FAIL;
+	static const string MESSAGE_SEARCH_FAIL;
 	static const string MESSAGE_SORT;
+	static const string MESSAGE_MARK_FAIL;
 	static const string MESSAGE_EMPTY;
 	static const string MESSAGE_INVALID_INPUT_COMMAND;
 	static const string MESSAGE_INVALID_INPUT_NAME;
@@ -67,6 +69,7 @@ private:
 	static string commandType;
 	static string taskType;
 	static string name;
+	static int taskNumber;
 	static int year;
 	static int month;
 	static int day;
