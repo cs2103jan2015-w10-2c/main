@@ -98,13 +98,8 @@ void EasyScheduleLogic::executeLogic(string userInput) {
 		returnMessage = addingTask();
 		returnDisplay = displayingTask();//store task is done in tellUI function.
 	} else if (parser.commandType == "delete") {
-<<<<<<< HEAD
 		returnDisplay = deletingTask();
 		returnMessage = ""; //not finished
-=======
-		returnMessage = "";
-		returnDisplay = deletingTask();
->>>>>>> 73322872014d207b8ed221362092bdc40965d8cf
 	} else if (parser.commandType == "display") {
 		returnMessage = ""; //not finished
 		returnDisplay = displayingTask();
