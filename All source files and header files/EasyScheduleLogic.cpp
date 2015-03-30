@@ -92,8 +92,6 @@ void EasyScheduleLogic::main() {
 	
 }
 
-
-
 void EasyScheduleLogic::executeLogic(string userInput) {
 	parsingCommand(userInput);
 	if(parser.commandType == "add") {

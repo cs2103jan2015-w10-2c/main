@@ -39,6 +39,7 @@ public:
 
 	static bool compareTask(Task task);
 	static void storePreviousTask();
+	static list<Task> getPreviousTaskList();
 	static void getIterator(int i);
 
 	static void findTaskInList(string searchKeyWord);
