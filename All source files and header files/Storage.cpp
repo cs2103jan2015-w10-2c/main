@@ -321,14 +321,14 @@ bool Storage::compareTask(Task task) {
 		
 		if ((i->getCommandType() == task.getCommandType()) 
 			&& (i->getTaskType() == task.getTaskType()) 
-			&& (i->getName() != task.getName())
-			&& (i->getYear() != task.getYear())
-			&& (i->getMonth() != task.getMonth())
-			&& (i->getDay() != task.getDay())
-			&& (i->getStartTimeHour() != task.getStartTimeHour())
-			&& (i->getStartTimeMin() != task.getStartTimeMin())
-			&& (i->getEndTimeHour() != task.getEndTimeHour())
-			&& (i->getEndTimeMin() != task.getEndTimeMin())) {
+			&& (i->getName() == task.getName())
+			&& (i->getYear() == task.getYear())
+			&& (i->getMonth() == task.getMonth())
+			&& (i->getDay() == task.getDay())
+			&& (i->getStartTimeHour() == task.getStartTimeHour())
+			&& (i->getStartTimeMin() == task.getStartTimeMin())
+			&& (i->getEndTimeHour() == task.getEndTimeHour())
+			&& (i->getEndTimeMin() == task.getEndTimeMin())) {
 				_taskIt = i;
 				return true;
 		}
