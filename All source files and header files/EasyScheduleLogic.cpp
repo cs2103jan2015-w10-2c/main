@@ -74,7 +74,7 @@ int main () {
 }
 
 void EasyScheduleLogic::main() {
-	/*storage.showDirectory();*/
+	storage.showDirectory();
 	string filename;
 	cin >> filename;
 	storage.setFileName(filename);
