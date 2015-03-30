@@ -98,8 +98,9 @@ void EasyScheduleLogic::executeLogic(string userInput) {
 		returnMessage = addingTask();
 		returnDisplay = displayingTask();//store task is done in tellUI function.
 	} else if (parser.commandType == "delete") {
-		returnDisplay = deletingTask();
 		returnMessage = ""; //not finished
+		returnDisplay = deletingTask();
+
 	} else if (parser.commandType == "display") {
 		returnMessage = ""; //not finished
 		returnDisplay = displayingTask();
@@ -114,8 +115,7 @@ void EasyScheduleLogic::executeLogic(string userInput) {
 	} else if (parser.commandType == "sort") {
 		returnMessage = sortingTask();
 		returnDisplay = displayingTask();
-	} else if (parser.commandType == "mark") { //mark done/notdone doesn't work.
-		if (commandType == "done") { //how to 
+	} else if (parser.commandType == "done") { //mark done/notdone doesn't work.
 			if(markDone() != "") {
 				returnMessage = "";
 				returnDisplay = markDone();
@@ -131,10 +131,10 @@ void EasyScheduleLogic::executeLogic(string userInput) {
 				returnMessage =  MESSAGE_MARK_FAIL;
 				returnDisplay = displayingTask();
 			}
-		}
-	} else if (parser.commandType == "exit") {
-		returnMessage = MESSAGE_EXIT;
-		returnDisplay = "";
+		} 
+		else if (parser.commandType == "exit") {
+			returnMessage = MESSAGE_EXIT;
+			returnDisplay = "";
 	} else if (parser.commandType == "undo") {
 		returnMessage = undoingTask();
 		returnDisplay = displayingTask();
@@ -215,13 +215,12 @@ bool EasyScheduleLogic::undoingAdd(Record recordToUndo){
 void EasyScheduleLogic::creatingTask() {
 	if(taskType == FLOATING_TASK) {
 		task = Task(commandType, name);	
-<<<<<<< HEAD
-=======
+
 		//write into tracker
 		record = Record(commandType, task);
 		tracker.addRecord(record);
 		record.clear(); //no such method
->>>>>>> 73322872014d207b8ed221362092bdc40965d8cf
+
 		
 	} else {
 		
@@ -260,7 +259,7 @@ string EasyScheduleLogic::addingTask(){
 string EasyScheduleLogic::deletingTask() {
 	if(parser.number == -1) {
 		name = parser.name;
-		return storage.deleteByName(name);
+		return storage.searchByName(name);
 	} else {
 		taskNumber = parser.number;
 		return storage.deleteByNumber(taskNumber);
@@ -275,20 +274,20 @@ string EasyScheduleLogic::searchingTask() {
 string EasyScheduleLogic::markDone() {
 	if (parser.number == -1) {
 		name = parser.name;
-		return storage.markDoneByName(name);
+		return storage.searchByName(name);
 	} else {
 		taskNumber = parser.number;
-		return storage.markDoneByNumber(taskNumber);
+		return storage.markDone(taskNumber);
 	}
 }
 
 string EasyScheduleLogic::markNotDone() {
 	if (parser.number == -1) {
 		name = parser.name;
-		return storage.markDoneByName(name);
+		return storage.searchByName(name);
 	} else {
 		taskNumber = parser.number;
-		return storage.markDoneByNumber(taskNumber);
+		return storage.markDone(taskNumber);
 	}
 }
 
