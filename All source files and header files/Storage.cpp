@@ -165,13 +165,10 @@ void Storage::readFile() {
 void Storage::storeTask(Task task) {
 	if (!isTaskDuplicate(task)) {
 		_taskList.push_back(task);
-<<<<<<< HEAD
 		creatRecordAdd(task);
-=======
 		isSuccess = true;
 	} else {
 		isSuccess = false;
->>>>>>> 73322872014d207b8ed221362092bdc40965d8cf
 	}
 }
 
@@ -591,7 +588,7 @@ string Storage::getCommandList(){
 	return COMMANDLIST;
 }
 
-void Storage::undoingReverseAdd(Task task){
-
+Tracker Storage::getTracker(){
+	return _tracker;
 }
 
