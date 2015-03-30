@@ -1,6 +1,7 @@
 #include "Record.h"
 
 Record::Record(void) { }
+Record::~Record(void) { }
 
 Record::Record(string commandType, Task newTask) {
 	_commandType = commandType;
