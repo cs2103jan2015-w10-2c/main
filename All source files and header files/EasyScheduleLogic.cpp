@@ -98,13 +98,9 @@ void EasyScheduleLogic::executeLogic(string userInput) {
 		returnMessage = addingTask();
 		returnDisplay = displayingTask();//store task is done in tellUI function.
 	} else if (parser.commandType == "delete") {
-<<<<<<< HEAD
 		returnMessage = ""; //not finished
 		returnDisplay = deletingTask();
-=======
-		returnDisplay = deletingTask();
-		returnMessage = ""; //not finished
->>>>>>> eeb19550269673bdf783d300815160d687c833df
+
 	} else if (parser.commandType == "display") {
 		returnMessage = ""; //not finished
 		returnDisplay = displayingTask();
@@ -209,13 +205,12 @@ bool EasyScheduleLogic::undoingAdd(Record recordToUndo){
 void EasyScheduleLogic::creatingTask() {
 	if(taskType == FLOATING_TASK) {
 		task = Task(commandType, name);	
-<<<<<<< HEAD
-=======
+
 		//write into tracker
 		record = Record(commandType, task);
 		tracker.addRecord(record);
 		record.clear(); //no such method
->>>>>>> 73322872014d207b8ed221362092bdc40965d8cf
+
 		
 	} else {
 		
@@ -279,10 +274,10 @@ string EasyScheduleLogic::markDone() {
 string EasyScheduleLogic::markNotDone() {
 	if (parser.number == -1) {
 		name = parser.name;
-		return storage.markDoneByName(name);
+		return storage.searchByName(name);
 	} else {
 		taskNumber = parser.number;
-		return storage.markDoneByNumber(taskNumber);
+		return storage.markDone(taskNumber);
 	}
 }
 
