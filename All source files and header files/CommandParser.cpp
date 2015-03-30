@@ -130,7 +130,7 @@ void CommandParser::identifyTask(string userInput) {
 				return;
 			}	
 			
-			if (stoi(userInput.substr(pos1+1, (posD1-pos1-1))) < 22000){
+			
 				year = stoi(userInput.substr(pos1+1, (posD1-pos1)));
 				month = stoi(userInput.substr(posD1+1, (posD2-posD1)));
 				day =  stoi(userInput.substr(posD2+1, (posD3-posD2)));
@@ -153,7 +153,7 @@ void CommandParser::identifyTask(string userInput) {
 						endTimeMin = stoi(userInput.substr(posD6+1, (posD7-posD6)));
 						name = userInput.substr(posD7+1);
 					}	
-			}
+			
 			
 	}
 		
