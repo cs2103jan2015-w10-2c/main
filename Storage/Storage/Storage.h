@@ -19,8 +19,10 @@ class Storage {
 
 private:
 	static string _fileName;
-
 	
+	static list<Task>_searchResultList;
+	static list<Task>_previousTaskList;
+	static list<Task>::iterator _taskIt;
 
 	static const string LINE_BUFFER;
 	static const string COMMANDLIST;
@@ -29,11 +31,20 @@ public:
 
 	Storage();
 	static list<Task>_taskList;
-	static list<Task>::iterator _taskIt;
 	static ofstream _fWrite;
 	static ifstream _fRead;
 	static char buffer[1000];
+	static bool isTaskFound;
+	static bool isSearched;
 
+	static bool compareTask(Task task);
+	static void storePreviousTask();
+	static void getIterator(int i);
+
+	static void findTaskInList(string searchKeyWord);
+	static string deleteByNumber(int i);
+	static string markDoneByNumber(int i);
+	static string markNotDoneByNumber(int i);
 	static void storeTask(Task task);
 	static bool isTaskDuplicate(Task task);
 	static bool isFloatDuplicate(Task task);
@@ -49,6 +60,7 @@ public:
 	static string getCommandList();
 
 	static void sortList();
+	static void undoingReverseAdd(Task task);
 	static string searchByName(string searchKeyWord);
 	static string markDone(string name);
 	static string markNotDone(string name);
