@@ -46,8 +46,6 @@ bool EasyScheduleLogic::isInvalidTaskType = false;
 CommandParser EasyScheduleLogic::parser;
 Storage EasyScheduleLogic::storage;
 Task EasyScheduleLogic::task;
-Tracker EasyScheduleLogic::tracker;
-Record EasyScheduleLogic::record;
 string EasyScheduleLogic::commandType;
 string EasyScheduleLogic::taskType;
 string EasyScheduleLogic::name;
@@ -100,8 +98,13 @@ void EasyScheduleLogic::executeLogic(string userInput) {
 		returnMessage = addingTask();
 		returnDisplay = displayingTask();//store task is done in tellUI function.
 	} else if (parser.commandType == "delete") {
+<<<<<<< HEAD
+		returnDisplay = deletingTask();
+		returnMessage = ""; //not finished
+=======
 		returnMessage = "";
 		returnDisplay = deletingTask();
+>>>>>>> 73322872014d207b8ed221362092bdc40965d8cf
 	} else if (parser.commandType == "display") {
 		returnMessage = ""; //not finished
 		returnDisplay = displayingTask();
@@ -207,10 +210,13 @@ bool EasyScheduleLogic::undoingAdd(Record recordToUndo){
 void EasyScheduleLogic::creatingTask() {
 	if(taskType == FLOATING_TASK) {
 		task = Task(commandType, name);	
+<<<<<<< HEAD
+=======
 		//write into tracker
 		record = Record(commandType, task);
 		tracker.addRecord(record);
 		record.clear(); //no such method
+>>>>>>> 73322872014d207b8ed221362092bdc40965d8cf
 		
 	} else {
 		
@@ -219,17 +225,11 @@ void EasyScheduleLogic::creatingTask() {
 
 		if (taskType == DEADLINE_TASK) {
 			task = Task(commandType,  name, year, month, day, endTimeHour, endTimeMin);
-			record = Record(commandType, task);
-			tracker.addRecord(record);
-			record.clear();
 		} else if (taskType == TIMED_TASK){
 			startTimeHour = parser.startTimeHour;
 			startTimeMin = parser.startTimeMin;
 			task = Task(commandType, name, year, month, day, startTimeHour, startTimeMin, endTimeHour, endTimeMin);
 			task = Task(commandType,  name, year, month, day, startTimeHour, startTimeMin, endTimeHour, endTimeMin);
-			record = Record(commandType, task);
-			tracker.addRecord(record);
-			record.clear();
 		} else {
 			isInvalidTaskType = true; 
 		}
