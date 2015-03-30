@@ -42,14 +42,17 @@ private:
 	static const string MESSAGE_ADD_FAIL;
 	static const string MESSAGE_DELETE;
 	static const string MESSAGE_DELETE_FAIL;
+	static const string MESSAGE_DELETE_CHOOSE;
 	static const string MESSAGE_CLEAR;
 	static const string MESSAGE_SEARCH_FAIL;
 	static const string MESSAGE_SORT;
 	static const string MESSAGE_MARK_FAIL;
+	static const string MESSAGE_MARK_CHOOSE;
 	static const string MESSAGE_EMPTY;
 	static const string MESSAGE_INVALID_INPUT_COMMAND;
 	static const string MESSAGE_INVALID_INPUT_NAME;
 	static const string MESSAGE_INVALID_DATE;
+	static const string MESSAGE_INVALID_NUMBER;
 	static const string MESSAGE_EXIT;
 	static const string MESSAGE_UNDO_FAIL;
 	static const string MESSAGE_UNDO_SUCCESS;
@@ -101,6 +104,8 @@ public:
 	static string undoingTask();
 	static bool undoingAdd(Record recordToUndo);
 	static bool undoingDelete(Record recordToUndo);
+	static bool undoingDone(Record recordToUndo);
+	static bool undoingNotDone(Record recordToUndo);
 	static string tellUI();
 	static string sortingTask();
 	static string tellUIReturnMessage();
