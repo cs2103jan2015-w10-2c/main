@@ -7,17 +7,18 @@
 using namespace std;
 
 //string CommandParser::userInput;
-string CommandParser::taskType;
-string CommandParser::commandType;
-string CommandParser::name;
-int CommandParser::year=0;
-int CommandParser::month;
-int CommandParser::day;
-int CommandParser::startTimeHour;
-int CommandParser::startTimeMin;
-int CommandParser::endTimeHour;
-int CommandParser::endTimeMin;
+string CommandParser::taskType="";
+string CommandParser::commandType="";
+string CommandParser::name="";
+int CommandParser::year=-1;
+int CommandParser::month=-1;
+int CommandParser::day=-1;
+int CommandParser::startTimeHour=-1;
+int CommandParser::startTimeMin=-1;
+int CommandParser::endTimeHour=-1;
+int CommandParser::endTimeMin=-1;
 string CommandParser::dayOfWeek;
+int CommandParser::number=-1;
 
 
 void CommandParser::identifyTask(string userInput) {
@@ -160,6 +161,11 @@ void CommandParser::identifyTask(string userInput) {
 	}else if(commandType == "delete" || commandType == "search" || commandType == "done" || commandType == "notdone" ){
 		name = userInput.substr(pos1+1);
 	}else if(commandType == "sort" || commandType == "display"){
+		if (isalpha(userInput.at(pos1+1))){
+			name = userInput.substr(pos1+1);
+		} else {
+			number = stoi(userInput.substr(pos1+1));
+		}
 		return;
 	}else if(commandType == "exit"){
 		return;

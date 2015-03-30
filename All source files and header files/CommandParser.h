@@ -16,6 +16,7 @@ public:
 	static string taskType;
 	static string commandType;
 	static string name;
+	static int number;
 	static int year;
 	static int month;
 	static int day;
