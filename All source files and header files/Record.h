@@ -16,6 +16,7 @@ private:
 public:
 	Record();
 	Record(string newCommand, Task newTask);
+	Record(string newCommand, list<Task> newTaskList);
 	~Record();
 	void setCommandTypeRecord(string commandTypeRecord);
 	void setlistTaskRecord(Task taskRecord);

@@ -12,6 +12,8 @@
 #include <list>
 
 #include "Task.h"
+#include "Record.h"
+#include "Tracker.h"
 
 using namespace std;
 
@@ -23,6 +25,8 @@ private:
 	static list<Task>_searchResultList;
 	static list<Task>_previousTaskList;
 	static list<Task>::iterator _taskIt;
+	static Tracker _tracker;
+	static Record _record;
 
 	static const string LINE_BUFFER;
 	static const string COMMANDLIST;
@@ -38,7 +42,7 @@ public:
 	static bool isSearched;
 
 	static bool compareTask(Task task);
-	static void storePreviousTask();
+	static void storePreviousTask(string commandType);
 	static list<Task> getPreviousTaskList();
 	static void getIterator(int i);
 
@@ -59,6 +63,10 @@ public:
 	static void writeToFile();
 	static string toLower(string text);
 	static string getCommandList();
+
+
+	static void creatRecordAdd(Task task);
+	static void addToTracker(Record record1);
 
 	static void sortList();
 	static void undoingReverseAdd(Task task);

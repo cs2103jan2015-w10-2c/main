@@ -19,6 +19,8 @@ ifstream Storage::_fRead;
 string Storage::_fileName;
 bool Storage::isTaskFound;
 bool Storage::isSearched;
+Record Storage::_record;
+Tracker Storage::_tracker;
 
 DIR *dir = NULL;
 struct dirent *ent;
@@ -163,7 +165,18 @@ void Storage::readFile() {
 void Storage::storeTask(Task task) {
 	if (!isTaskDuplicate(task)) {
 		_taskList.push_back(task);
+		creatRecordAdd(task);
 	}
+}
+
+void Storage::creatRecordAdd(Task task) {
+	_record = Record( "add", task);
+	addToTracker(_record);
+	_record.clear();
+}
+
+void Storage::addToTracker(Record record1) {
+		_tracker.addRecord(_record);
 }
 
 bool Storage::isTaskDuplicate(Task task) {
@@ -386,6 +399,8 @@ string Storage::markNotDoneByNumber(int i) {
 
 
 string Storage::deleteByNumber(int i) {
+	string commandType = "delete";
+
 	if (isSearched) {
 		_taskIt= _searchResultList.begin();
 		if (i>_searchResultList.size()) {
@@ -400,7 +415,8 @@ string Storage::deleteByNumber(int i) {
 		_taskIt= _taskList.begin();
 		getIterator(i);
 	}
-	storePreviousTask();
+
+	storePreviousTask(commandType);
 	_taskList.erase(_taskIt);
 	return toStringTaskDetail();
 }		
@@ -411,9 +427,17 @@ string Storage::deleteByName(string searchKeyWord){
 }
 
 //record edited task item for undo function
-void Storage::storePreviousTask() {
+void Storage::storePreviousTask(string commandType) {
+	//creat a list storing tasks being editted
 	_previousTaskList.clear();
 	_previousTaskList.push_back(*(_taskIt));
+
+	//create a record to store commandType and the list of tasks
+	_record = Record(commandType, _previousTaskList);
+	//add the record to the tracker
+	addToTracker(_record);
+	//clear the _record
+	_record.clear();
 }
 
 list<Task> Storage::getPreviousTaskList(){

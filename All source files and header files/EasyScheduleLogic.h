@@ -64,8 +64,6 @@ private:
 	static CommandParser parser;
 	static Storage storage;
 	static Task task;
-	static Tracker tracker;
-	static Record record;
 	static string commandType;
 	static string taskType;
 	static string name;
