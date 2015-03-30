@@ -1,14 +1,13 @@
 #include "Record.h"
 
-Record::Record(void) {}
+Record::Record(void) { }
 
-Record::Record(string newCommand, Task newTask){
-	_commandType = newCommand;
-	_taskRecord.clear();
-	_taskRecord.push_back(newTask);
+Record(string commandType, Task task) {
+	_commandType = commandType;
+	//How about task?
 }
 
-Record::~Record(void) {}
+Record::~Record(void) { }
 
 void Record::setCommandTypeRecord(string commandTypeRecord){
 	_commandType = commandTypeRecord;
@@ -16,6 +15,14 @@ void Record::setCommandTypeRecord(string commandTypeRecord){
 
 void Record::setlistTaskRecord(Task taskRecord){
 	_taskRecord.push_back(taskRecord);
+}
+
+void Record::setIsPrevious(){
+	_isPrevious = true;
+}
+
+void Record::setIsNotPrevious(){
+	_isPrevious = false;
 }
 
 string Record::getCommandType(){
@@ -26,7 +33,6 @@ list<Task> Record::getTaskRecord(){
 	return _taskRecord;
 }
 
-void Record::clear(){
-	_commandType = "";
-	_taskRecord.clear();
+bool Record::getIsPrevious(){
+	return (_isPrevious);
 }

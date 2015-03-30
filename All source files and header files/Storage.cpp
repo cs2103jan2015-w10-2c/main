@@ -200,9 +200,10 @@ bool Storage::isTimedDuplicate(Task task) {
 				&& (task.getYear())==(_taskIt->getYear())
 				&& (task.getMonth())==(_taskIt->getMonth())
 				&& (task.getDay())==(_taskIt->getDay())
-				&& !(_taskIt->isDone())) 
-				return true;
+				&& !(_taskIt->isDone())) {
+					return true;
 			}
+		}
 		_taskIt++;
 	}
 	return false;
@@ -295,16 +296,24 @@ string Storage::searchByName(string searchKeyWord){
 	return toStringTaskDetail(_searchResultList);
 }
 
+<<<<<<< HEAD
+string Storage::markDoneByName(string name){
+=======
 //return and dispay all task items containing the searchKeyWord
 //for further selection of number
 string Storage::markDone(string name){
+>>>>>>> 8dd702aed2642b47b183cbf9caae2e01a931d405
 	findTaskInList(name);
 	return toStringTaskDetail(_searchResultList);
 }
 
+<<<<<<< HEAD
+string Storage::markNotDoneByName(string name){
+=======
 //return and dispay all task items containing the searchKeyWord
 //for further selection of number
 string Storage::markNotDone(string name){
+>>>>>>> 8dd702aed2642b47b183cbf9caae2e01a931d405
 	findTaskInList(name);
 	return toStringTaskDetail(_searchResultList);
 }

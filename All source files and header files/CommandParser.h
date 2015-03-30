@@ -16,7 +16,11 @@ public:
 	static string taskType;
 	static string commandType;
 	static string name;
+<<<<<<< HEAD
 	static int number;
+=======
+	static int number; //for delete
+>>>>>>> a6fc0fec54498484374b791c20c32cf7d8cd9a63
 	static int year;
 	static int month;
 	static int day;
