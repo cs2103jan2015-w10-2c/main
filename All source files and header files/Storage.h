@@ -65,8 +65,11 @@ public:
 	static void addToTracker(Record record1);
 
 	static void sortList();
-	static void undoingReverseAdd(Task task);
-	
+	static void undoingReverseAdd(list<Task> listToUndo);
+	static void undoingReverseDelete(list<Task> listToUndo);
+	static void undoingReverseNotDone(list<Task> listToUndo);
+	static void undoingReverseDone(list<Task> listToUndo);
+
 	static void storeTask(Task task);
 	static string searchByName(string searchKeyWord);
 	static string markDone(int i);

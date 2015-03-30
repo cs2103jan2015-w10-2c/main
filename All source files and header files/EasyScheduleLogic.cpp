@@ -190,38 +190,38 @@ string EasyScheduleLogic::undoingTask(){
 	return message;
 }
 
+bool  EasyScheduleLogic::undoingDone(Record recordToUndo){
+	list <Task> listToUndo;
+	listToUndo = recordToUndo.getTaskRecord();
+	storage.undoingReverseDone(listToUndo);
+	return true;
+}
+
+bool  EasyScheduleLogic::undoingNotDone(Record recordToUndo){
+	list <Task> listToUndo;
+	listToUndo = recordToUndo.getTaskRecord();
+	storage.undoingReverseNotDone(listToUndo);
+	return true;
+}
+
 bool EasyScheduleLogic::undoingDelete(Record recordToUndo){
 	list <Task> listToUndo;
 	listToUndo = recordToUndo.getTaskRecord();
-
-	list<Task>:: iterator it;
-	for(it = listToUndo.begin(); it != listToUndo.end(); it++){
-		storage.storeTask(*it);
-	}
+	storage.undoingReverseDelete(listToUndo);
 	return true;
 }
 
 bool EasyScheduleLogic::undoingAdd(Record recordToUndo){
+	//delete the added tasks
 	list <Task> listToUndo;
 	listToUndo = recordToUndo.getTaskRecord();
-
-	list<Task>:: iterator it;
-	for(it = listToUndo.begin(); it != listToUndo.end(); it++){
-		storage.undoingReverseAdd(*it);
-	}
+	storage.undoingReverseAdd(listToUndo);
 	return true;
 }
 
 void EasyScheduleLogic::creatingTask() {
 	if(taskType == FLOATING_TASK) {
-		task = Task(commandType, name);	
-
-		//write into tracker
-		record = Record(commandType, task);
-		tracker.addRecord(record);
-		record.clear(); //no such method
-
-		
+		task = Task(commandType, name);			
 	} else {
 		
 		endTimeHour = parser.endTimeHour;
