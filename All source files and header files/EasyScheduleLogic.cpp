@@ -68,32 +68,34 @@ int EasyScheduleLogic::localHour;
 int EasyScheduleLogic::localMin;
 
 
+/*
+//here
+int main () {
+	EasyScheduleLogic::main();
+}
 
+void EasyScheduleLogic::main() {
+	storage.showDirectory();
+	string filename;
+	cin >> filename;
+	storage.setFileName(filename);
+	storage.readFile();
+	storage.openFile();
+	string input;
+	cin.ignore();
+	getline(cin, input);
 
-//int main () {
-//	EasyScheduleLogic::main();
-//}
-//
-//void EasyScheduleLogic::main() {
-//	storage.showDirectory();
-//	string filename;
-//	cin >> filename;
-//	storage.setFileName(filename);
-//	storage.readFile();
-//	storage.openFile();
-//	string input;
-//	cin.ignore();
-//	getline(cin, input);
-//
-//	while (input!="exit") {
-//		executeLogic(input);
-//		getline(cin, input);
-//	}
-//	
-//	storage.writeToFile();
-//	exit(0);
-//	
-//}
+	while (input!="exit") {
+		executeLogic(input);
+		getline(cin, input);
+	}
+	
+	storage.writeToFile();
+	exit(0);
+	
+}
+//here
+*/
 
 void EasyScheduleLogic::executeLogic(string userInput) {
 	parsingCommand(userInput);
@@ -166,6 +168,7 @@ string EasyScheduleLogic::undoingTask() {
 	}else{
 		Record recordToUndo;
 		recordToUndo = storage.getTracker().getNewestRecord();
+		storage.deleteLastTrackerEntry();
 		if(recordToUndo.getCommandType() == "add") {
 			if(undoingAdd(recordToUndo)) {
 				message = MESSAGE_UNDO_SUCCESS;

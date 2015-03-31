@@ -20,6 +20,7 @@ public:
 	void addRecord(Record newRecord);
 	bool isEmptyTracker();
 	Record getNewestRecord();
+	void deleteLastTrackerEntry();
 }; 
 
 #endif

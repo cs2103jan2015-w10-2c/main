@@ -17,6 +17,9 @@ bool Tracker:: isEmptyTracker() {
 
 Record Tracker::getNewestRecord() {
 	Record record = _recordTracker.top();
-	_recordTracker.pop();
 	return record;
+}
+
+void Tracker::deleteLastTrackerEntry(){
+	_recordTracker.pop();
 }

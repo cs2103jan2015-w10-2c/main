@@ -12,7 +12,6 @@ class Record {
 private:
 	string _commandType;
 	list <Task> _taskRecord;
-	bool _isPrevious;
 
 public:
 	Record();

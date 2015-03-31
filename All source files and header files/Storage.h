@@ -80,6 +80,7 @@ public:
 	static string toStringTaskDetail();
 	static string toStringTaskDetail(list <Task> listToFormat);
 	static Tracker getTracker();
+	static void deleteLastTrackerEntry();
 
 };
 
