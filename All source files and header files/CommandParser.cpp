@@ -70,7 +70,9 @@ void CommandParser::identifyTask(string userInput) {
 				time_t now = time(0);	
 				struct tm time;
 				localtime_s(&time, &now);
-				day =  time.tm_mday + 1;
+				time.tm_mday += 1;
+				mktime(&time);
+				day =  time.tm_mday;
 				month = time.tm_mon + 1;
 				year = time.tm_year + 1900;
 			} else {
