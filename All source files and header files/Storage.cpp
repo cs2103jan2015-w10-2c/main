@@ -7,7 +7,7 @@
 using namespace std;
 
 const string Storage::LINE_BUFFER = "%s/%s/%s/%s/%s/%s/%s/%s/%s/%s/%s";
-const string Storage::COMMANDLIST = "List of commands:\n1. add\n2. display\n3. delete\n4. search";
+const string Storage::COMMANDLIST = "List of commands:\n1. add\n2. display\n3. delete\n4. search\n5. done\n6. undone";
 
 char Storage::buffer[1000];
 list<Task> Storage::_taskList;

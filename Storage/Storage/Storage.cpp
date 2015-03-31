@@ -7,7 +7,7 @@
 using namespace std;
 
 const string Storage::LINE_BUFFER = "%s/%s/%s/%s/%s/%s/%s/%s/%s/%s/%s";
-const string Storage::COMMANDLIST = "List of commands:\n1. add\n2. display\n3. delete\n4. search";
+const string Storage::COMMANDLIST = "List of commands:\n1. add\n2. display\n3. delete\n4. search\n5. done\n6. undone";
 
 char Storage::buffer[1000];
 list<Task> Storage::_taskList;
@@ -19,6 +19,8 @@ ifstream Storage::_fRead;
 string Storage::_fileName;
 bool Storage::isSuccess;
 bool Storage::isSearched;
+Record Storage::_record;
+Tracker Storage::_tracker;
 
 DIR *dir = NULL;
 struct dirent *ent;
@@ -163,10 +165,21 @@ void Storage::readFile() {
 void Storage::storeTask(Task task) {
 	if (!isTaskDuplicate(task)) {
 		_taskList.push_back(task);
+		creatRecordAdd(task);
 		isSuccess = true;
 	} else {
 		isSuccess = false;
 	}
+}
+
+void Storage::creatRecordAdd(Task task) {
+	_record = Record( "add", task);
+	addToTracker(_record);
+	_record.clear();
+}
+
+void Storage::addToTracker(Record record1) {
+		_tracker.addRecord(_record);
 }
 
 bool Storage::isTaskDuplicate(Task task) {
@@ -336,6 +349,8 @@ void Storage::getIterator(int i) {
 }
 
 string Storage::markDone(int i) {
+	string commandType = "done";
+
 	if (isSearched) {
 		_taskIt= _searchResultList.begin();
 		if (i>_searchResultList.size()||i<=0) {
@@ -357,7 +372,8 @@ string Storage::markDone(int i) {
 			getIterator(i);
 		}
 	}
-	storePreviousTask();
+	//pointer to task in _taskList before mark done
+	storePreviousTask(commandType);
 	_taskIt->markDone();
 	isSuccess = true;
 	return toStringTaskDetail();
@@ -365,6 +381,8 @@ string Storage::markDone(int i) {
 }
 
 string Storage::markNotDone(int i) {
+	string commandType = "notdone";
+
 	if (isSearched) {
 		_taskIt= _searchResultList.begin();
 		if (i>_searchResultList.size()||i<=0) {
@@ -386,16 +404,19 @@ string Storage::markNotDone(int i) {
 			getIterator(i);
 		}
 	}
-	storePreviousTask();
+	//pointer to task in _taskList before mark not done
+	storePreviousTask(commandType);
 	_taskIt->markNotDone();
 	isSuccess = true;
 	return toStringTaskDetail();	
 }
 
 string Storage::deleteByNumber(int i) {
+	string commandType = "delete";
+
 	if (isSearched) {
 		_taskIt= _searchResultList.begin();
-		if (i>_searchResultList.size()) {
+		if (i>_searchResultList.size()||i<=0) {
 			isSuccess = false;
 			return toStringTaskDetail(_searchResultList);
 		} else {
@@ -414,7 +435,8 @@ string Storage::deleteByNumber(int i) {
 			getIterator(i);
 		}
 	}
-	storePreviousTask();
+
+	storePreviousTask(commandType);
 	_taskList.erase(_taskIt);
 	isSuccess = true;
 	return toStringTaskDetail();
@@ -423,9 +445,17 @@ string Storage::deleteByNumber(int i) {
 
 
 //record edited task item for undo function
-void Storage::storePreviousTask() {
+void Storage::storePreviousTask(string commandType) {
+	//creat a list storing tasks being editted
 	_previousTaskList.clear();
 	_previousTaskList.push_back(*(_taskIt));
+
+	//create a record to store commandType and the list of tasks
+	_record = Record(commandType, _previousTaskList);
+	//add the record to the tracker
+	addToTracker(_record);
+	//clear the _record
+	_record.clear();
 }
 
 list<Task> Storage::getPreviousTaskList(){
@@ -560,7 +590,58 @@ string Storage::getCommandList(){
 	return COMMANDLIST;
 }
 
-void Storage::undoingReverseAdd(Task task){
-
+Tracker Storage::getTracker(){
+	return _tracker;
 }
+
+void Storage::undoingReverseAdd(list<Task> listToUndo){
+	//delete the task in the list
+	list<Task>::iterator it1, it2;
+	list<Task> newTaskList;
+
+	for(it1 = listToUndo.begin(); it1 != listToUndo.end(); it1++ ){
+		//compare the tasks in the listToUndo with tasks inside _taskList for exact match
+		if(compareTask(*it1)){
+			//if there is exact match
+			//delete the exact matched task from _taskList
+			for(it2 = _taskList.begin(); it2 != _taskList.end(); it2++){
+				if(it2 != _taskIt){
+					newTaskList.push_back(*it2);
+				}
+			}
+			_taskList = newTaskList;
+		}
+	}
+	
+}
+
+
+void Storage::undoingReverseDelete(list<Task> listToUndo){
+	//add the tasks back into the _taskList
+	list<Task>::iterator it;
+	for(it = listToUndo.begin(); it != listToUndo.end(); it++ ){
+		_taskList.push_back(*it);
+	}
+}
+
+void Storage::undoingReverseDone(list<Task> listToUndo){
+	//mark the task as not done
+	list<Task>::iterator it;
+	for(it = listToUndo.begin(); it != listToUndo.end(); it++ ){
+		if(compareTask(*it)){
+			_taskIt->markNotDone();
+		}
+	}
+}
+
+void Storage::undoingReverseNotDone(list<Task> listToUndo){
+	//mark the task as done
+	list<Task>::iterator it;
+	for(it = listToUndo.begin(); it != listToUndo.end(); it++ ){
+		if(compareTask(*it)){
+			_taskIt->markDone();
+		}
+	}
+}
+
 

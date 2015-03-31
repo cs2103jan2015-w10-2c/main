@@ -21,8 +21,6 @@ class Storage {
 
 private:
 	static string _fileName;
-	static list<Task>_taskList;
-	static list<Task>_searchResultList;
 	static list<Task>_previousTaskList;
 	static list<Task>::iterator _taskIt;
 	static Tracker _tracker;
@@ -35,6 +33,8 @@ public:
 
 	Storage();
 
+	static list<Task>_taskList;
+	static list<Task>_searchResultList;
 	static ofstream _fWrite;
 	static ifstream _fRead;
 	static char buffer[1000];
