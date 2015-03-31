@@ -70,30 +70,30 @@ int EasyScheduleLogic::localMin;
 
 
 
-int main () {
-	EasyScheduleLogic::main();
-}
-
-void EasyScheduleLogic::main() {
-	storage.showDirectory();
-	string filename;
-	cin >> filename;
-	storage.setFileName(filename);
-	storage.readFile();
-	storage.openFile();
-	string input;
-	cin.ignore();
-	getline(cin, input);
-
-	while (input!="exit") {
-		executeLogic(input);
-		getline(cin, input);
-	}
-	
-	storage.writeToFile();
-	exit(0);
-	
-}
+//int main () {
+//	EasyScheduleLogic::main();
+//}
+//
+//void EasyScheduleLogic::main() {
+//	storage.showDirectory();
+//	string filename;
+//	cin >> filename;
+//	storage.setFileName(filename);
+//	storage.readFile();
+//	storage.openFile();
+//	string input;
+//	cin.ignore();
+//	getline(cin, input);
+//
+//	while (input!="exit") {
+//		executeLogic(input);
+//		getline(cin, input);
+//	}
+//	
+//	storage.writeToFile();
+//	exit(0);
+//	
+//}
 
 void EasyScheduleLogic::executeLogic(string userInput) {
 	parsingCommand(userInput);
@@ -104,12 +104,17 @@ void EasyScheduleLogic::executeLogic(string userInput) {
 		returnDisplay = deletingTask();
 
 	} else if (parser.commandType == "display") {
-		returnMessage = "";
-		returnDisplay = displayingTask();
+		if (displayingTask() != "") {
+			returnMessage = "";
+			returnDisplay = displayingTask();
+		} else {
+			returnMessage = MESSAGE_EMPTY;
+			returnDisplay = "";
+		}
 
 	} else if (parser.commandType == "search") {
 		if(searchingTask() == "") {
-			returnMessage = MESSAGE_SEARCH_FAIL;
+			returnMessage = MESSAGE_SEARCH_FAIL; //Bug: not shown in feedbackBox
 			returnDisplay = displayingTask(); //display all the tasks 
 		} else {
 			returnMessage = "";
@@ -134,11 +139,12 @@ void EasyScheduleLogic::executeLogic(string userInput) {
 		else if (parser.commandType == "exit") {
 			returnMessage = MESSAGE_EXIT;
 			returnDisplay = "";
-	} else if (parser.commandType == "undo") {
+	} else if (parser.commandType == "undo") { //Bug: for example, undo delete by add: it'll keep adding if I keep calling undo 
 		returnMessage = undoingTask();
 		returnDisplay = displayingTask();
 	} else {
 		returnMessage = MESSAGE_INVALID_INPUT_COMMAND;
+		returnDisplay = "";
 	}
 }
 
@@ -153,33 +159,33 @@ void EasyScheduleLogic::parsingCommand(string userInput) {
 	day = parser.day;
 }
 
-string EasyScheduleLogic::undoingTask(){
+string EasyScheduleLogic::undoingTask() {
 	string message;
-	if(storage.getTracker().isEmptyTracker()){
+	if(storage.getTracker().isEmptyTracker()) {
 		message = MESSAGE_UNDO_FAIL;
 	}else{
 		Record recordToUndo;
 		recordToUndo = storage.getTracker().getNewestRecord();
-		if(recordToUndo.getCommandType() == "add"){
-			if(undoingAdd(recordToUndo)){
+		if(recordToUndo.getCommandType() == "add") {
+			if(undoingAdd(recordToUndo)) {
 				message = MESSAGE_UNDO_SUCCESS;
 			}else{
 				message = MESSAGE_UNDO_ERROR;
 			}
-		}else if(recordToUndo.getCommandType() == "delete"){
-			if(undoingDelete(recordToUndo)){
+		}else if(recordToUndo.getCommandType() == "delete") {
+			if(undoingDelete(recordToUndo)) {
 				message = MESSAGE_UNDO_SUCCESS;
 			}else{
 				message = MESSAGE_UNDO_ERROR;
 			}
-		}else if(recordToUndo.getCommandType() == "done"){
-			if(undoingDone(recordToUndo)){
+		}else if(recordToUndo.getCommandType() == "done") {
+			if(undoingDone(recordToUndo)) {
 				message = MESSAGE_UNDO_SUCCESS;
 			}else{
 				message = MESSAGE_UNDO_ERROR;
 			}
-		}else if(recordToUndo.getCommandType() == "notdone"){
-			if(undoingNotDone(recordToUndo)){
+		}else if(recordToUndo.getCommandType() == "notdone") {
+			if(undoingNotDone(recordToUndo)) {
 				message = MESSAGE_UNDO_SUCCESS;
 			}else{
 				message = MESSAGE_UNDO_ERROR;
