@@ -161,7 +161,7 @@ void CommandParser::identifyTask(string userInput) {
 			number = stoi(userInput.substr(pos1+1));
 		}
 
-	} else if (commandType == "sort" || commandType == "display") {
+	} else if (commandType == "sort" || commandType == "display" || commandType == "undo") {
 		return;
 	} else if (commandType == "exit") {
 		return;
