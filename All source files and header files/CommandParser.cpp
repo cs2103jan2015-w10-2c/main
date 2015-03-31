@@ -154,7 +154,7 @@ void CommandParser::identifyTask(string userInput) {
 				name = userInput.substr(posD7+1);
 			}	
 		}	
-	} else if (commandType == "delete" || commandType == "done" || commandType == "notdone") {
+	} else if (commandType == "delete" || commandType == "done" || commandType == "notdone" || commandType == "search") {
 		if (isalpha(userInput.at(pos1+1))) {
 			name = userInput.substr(pos1+1);
 		} else {
