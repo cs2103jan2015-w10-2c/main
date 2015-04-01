@@ -99,7 +99,14 @@ void EasyScheduleLogic::main() {
 
 void EasyScheduleLogic::executeLogic(string userInput) {
 	parsingCommand(userInput);
-	if (parser.commandType == "add") {
+	if (parser.commandType == "file") {
+		if (storage._fileName!="") {
+			storage.writeToFile;
+		}
+		storage.setFileName(parser.name);
+		storage.readFile();
+		storage.openFile();
+	} else if (parser.commandType == "add") {
 		returnMessage = addingTask();
 		returnDisplay = displayingTask();//store task is done in tellUI function.
 	} else if (parser.commandType == "delete") {
@@ -141,6 +148,8 @@ void EasyScheduleLogic::executeLogic(string userInput) {
 		else if (parser.commandType == "exit") {
 			returnMessage = MESSAGE_EXIT;
 			returnDisplay = "";
+			storage.writeToFile();
+			exit(0);
 	} else if (parser.commandType == "undo") { //Bug: for example, undo delete by add: it'll keep adding if I keep calling undo 
 		returnMessage = undoingTask();
 		returnDisplay = displayingTask();
