@@ -68,33 +68,33 @@ int EasyScheduleLogic::localHour;
 int EasyScheduleLogic::localMin;
 
 
-//
-////here
-//int main () {
-//	EasyScheduleLogic::main();
-//}
-//
-//void EasyScheduleLogic::main() {
-//	/*storage.showDirectory();*/
-//	string filename;
-//	cin >> filename;
-//	storage.setFileName(filename);
-//	storage.readFile();
-//	storage.openFile();
-//	string input;
-//	cin.ignore();
-//	getline(cin, input);
-//
-//	while (input!="exit") {
-//		executeLogic(input);
-//		getline(cin, input);
-//	}
-//	
-//	storage.writeToFile();
-//	exit(0);
-//	
-//}
-////here
+
+//here
+int main () {
+	EasyScheduleLogic::main();
+}
+
+void EasyScheduleLogic::main() {
+	/*storage.showDirectory();*/
+	string filename;
+	cin >> filename;
+	storage.setFileName(filename);
+	storage.readFile();
+	storage.openFile();
+	string input;
+	cin.ignore();
+	getline(cin, input);
+
+	while (input!="exit") {
+		executeLogic(input);
+		getline(cin, input);
+	}
+	
+	storage.writeToFile();
+	exit(0);
+	
+}
+//here
 
 
 void EasyScheduleLogic::executeLogic(string userInput) {
@@ -133,19 +133,16 @@ void EasyScheduleLogic::executeLogic(string userInput) {
 		returnMessage = sortingTask();
 		returnDisplay = displayingTask();
 	} else if (parser.commandType == "done") { //mark done/notdone doesn't work.
-			if(markDone() != "") {
-				returnDisplay = markDone();
-			} else {
+		returnDisplay = markDone();
+		if ((parser.name!="")&&((storage._searchResultList).size()==0)) {
 				returnDisplay = displayingTask();
 			}
 		} else if (commandType == "notdone") {
-			if(markNotDone() != "") {
-				returnDisplay = markNotDone();
-			} else {
+			returnDisplay = markNotDone();
+			if ((parser.name!="")&&((storage._searchResultList).size()==0)) {
 				returnDisplay = displayingTask();
-			}
-		} 
-		else if (parser.commandType == "exit") {
+			} 
+	} else if (parser.commandType == "exit") {
 			returnMessage = MESSAGE_EXIT;
 			returnDisplay = "";
 			storage.writeToFile();
