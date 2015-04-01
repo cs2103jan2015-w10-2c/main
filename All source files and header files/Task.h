@@ -19,6 +19,9 @@ private:
 	double _endTimeMin;
 	bool _isDone;
 
+	static const string NAME_OF_MONTH[12];
+
+
 public:
 	Task();
 	Task(string commandType, string taskType, string name, int year, int month, int day, double startTimeHour, double startTimeMin, double endTimeHour, double endTimeMin, bool isDone);
@@ -42,8 +45,10 @@ public:
 	string getName();
 	int getYear();
 	int getMonth();
+	string getAlphaMonth(int month);
 	int getDay();
 	string getDate();
+	string getAlphabetDate();
 	double getStartTimeHour();
 	double getStartTimeMin();
 	double getEndTimeHour();
