@@ -358,8 +358,8 @@ string Storage::markDone(int i) {
 			return toStringTaskDetail(_searchResultList);
 		} else {
 			getIterator(i);
-			if (!compareTask(*(_taskIt))) {
-				isSuccess = false;
+			isSuccess = compareTask(*(_taskIt));
+			if (!isSuccess) {
 				return toStringTaskDetail(_searchResultList);
 			}
 		}

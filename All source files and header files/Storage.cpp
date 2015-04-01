@@ -7,7 +7,7 @@
 using namespace std;
 
 const string Storage::LINE_BUFFER = "%s/%s/%s/%s/%s/%s/%s/%s/%s/%s/%s";
-const string Storage::COMMANDLIST = "List of commands:\n1. add\n2. display\n3. delete\n4. search";
+const string Storage::COMMANDLIST = "List of commands:\n1. add\n2. display\n3. delete\n4. search\n5. done\n6. undone";
 
 char Storage::buffer[1000];
 list<Task> Storage::_taskList;
@@ -358,8 +358,8 @@ string Storage::markDone(int i) {
 			return toStringTaskDetail(_searchResultList);
 		} else {
 			getIterator(i);
-			if (!compareTask(*(_taskIt))) {
-				isSuccess = false;
+			isSuccess = compareTask(*(_taskIt));
+			if (!isSuccess) {
 				return toStringTaskDetail(_searchResultList);
 			}
 		}
@@ -416,7 +416,7 @@ string Storage::deleteByNumber(int i) {
 
 	if (isSearched) {
 		_taskIt= _searchResultList.begin();
-		if (i>_searchResultList.size()) {
+		if (i>_searchResultList.size()||i<=0) {
 			isSuccess = false;
 			return toStringTaskDetail(_searchResultList);
 		} else {
@@ -592,10 +592,6 @@ string Storage::getCommandList(){
 
 Tracker Storage::getTracker(){
 	return _tracker;
-}
-
-void Storage::deleteLastTrackerEntry(){
-	_tracker.deleteLastTrackerEntry();
 }
 
 void Storage::undoingReverseAdd(list<Task> listToUndo){
