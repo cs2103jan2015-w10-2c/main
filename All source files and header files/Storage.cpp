@@ -69,7 +69,7 @@ bool Storage::isExistingFile() {
 //i have folder called databank which is where all text files will be saved into
 //pathName can be respecified if you wish to save it in another EXISTING folder
 void Storage::openFile() {
-	string pathName = "./";
+	string pathName = "./Databank/";
 	string combined = pathName + _fileName;
 	_fWrite.open(combined);
 }
@@ -93,7 +93,7 @@ void Storage::writeToFile() {
 //this is extremely inefficient but sigh
 void Storage::readFile() {
 	
-	string pathName = "./";
+	string pathName = "./Databank/";
 	string combined = pathName + _fileName;
 	_fRead.open(combined);
 
