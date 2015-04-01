@@ -101,7 +101,7 @@ void EasyScheduleLogic::executeLogic(string userInput) {
 	parsingCommand(userInput);
 	if (parser.commandType == "file") {
 		if (storage._fileName!="") {
-			storage.writeToFile;
+			storage.writeToFile();
 		}
 		storage.setFileName(parser.name);
 		storage.readFile();

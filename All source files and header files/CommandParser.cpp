@@ -26,7 +26,6 @@ void CommandParser::identifyTask(string userInput) {
 
 	//get the first word before the first white space
 	size_t pos1 = userInput.find_first_of(' ');
-
 	commandType = userInput.substr(0, pos1);
 	//convert all letters in the commandType to lower case
 	transform(commandType.begin(), commandType.end(), commandType.begin(), ::tolower);
@@ -159,6 +158,7 @@ void CommandParser::identifyTask(string userInput) {
 	} else if (commandType == "delete" || commandType == "done" || commandType == "notdone" || commandType == "search") {
 		if (isalpha(userInput.at(pos1+1))) {
 			name = userInput.substr(pos1+1);
+			number = -1;
 		} else {
 			number = stoi(userInput.substr(pos1+1));
 		}
