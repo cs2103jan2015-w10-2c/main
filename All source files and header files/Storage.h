@@ -20,7 +20,6 @@ using namespace std;
 class Storage {
 
 private:
-	static string _fileName;
 	static list<Task>_previousTaskList;
 	static list<Task>::iterator _taskIt;
 	static Tracker _tracker;
@@ -32,7 +31,7 @@ private:
 public:
 
 	Storage();
-
+	static string _fileName;
 	static list<Task>_taskList;
 	static list<Task>_searchResultList;
 	static ofstream _fWrite;
