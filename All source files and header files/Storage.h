@@ -41,9 +41,10 @@ public:
 	static bool isSuccess;
 	static bool isSearched;
 	static bool compareTask(Task task);
+	static void getTask(Task task);
 	static void storePreviousTask(string commandType);
 	static list<Task> getPreviousTaskList();
-	static void getIterator(int i);
+	static void getPosition(int i);
 
 	static void findTaskInList(string searchKeyWord);
 	static bool isTaskDuplicate(Task task);
@@ -74,7 +75,7 @@ public:
 	static string markDone(int i);
 	static string markNotDone(int i);
 	static string deleteByNumber(int i);
-	static int returnIndex();
+	static int getIndex();
 
 
 	static string toStringTaskDetail();

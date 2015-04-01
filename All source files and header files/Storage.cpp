@@ -159,7 +159,7 @@ void Storage::readFile() {
 		
 }
 
-int Storage::returnIndex() {
+int Storage::getIndex() {
 	int index=1;
 	list<Task>::iterator i = _taskList.begin();
 	while (i!=_taskIt) {
@@ -173,7 +173,7 @@ void Storage::storeTask(Task task) {
 	if (!isTaskDuplicate(task)) {
 		_taskList.push_back(task);
 		creatRecordAdd(task);
-		_taskIt = _taskList.end();
+		getTask(task);
 		sortList();
 		isSuccess = true;
 	} else {
@@ -327,6 +327,29 @@ string Storage::toLower(string text) {
 	return text;
 }
 
+void Storage::getTask(Task task) {
+	list<Task>::iterator i;
+	for (i=_taskList.begin();i!=_taskList.end();i++) {
+		
+		if ((i->getCommandType() == task.getCommandType()) 
+			&& (i->getTaskType() == task.getTaskType()) 
+			&& (i->getName() == task.getName())
+			&& (i->getYear() == task.getYear())
+			&& (i->getMonth() == task.getMonth())
+			&& (i->getDay() == task.getDay())
+			&& (i->getStartTimeHour() == task.getStartTimeHour())
+			&& (i->getStartTimeMin() == task.getStartTimeMin())
+			&& (i->getEndTimeHour() == task.getEndTimeHour())
+			&& (i->getEndTimeMin() == task.getEndTimeMin())
+			&& (!task.isDone())) {
+				_taskIt = i;
+				return;
+		}
+	}
+	return;
+}
+
+
 //search task in the _taskList for exact matches
 bool Storage::compareTask(Task task) {
 	list<Task>::iterator i;
@@ -350,7 +373,7 @@ bool Storage::compareTask(Task task) {
 }
 
 
-void Storage::getIterator(int i) {
+void Storage::getPosition(int i) {
 			while (i>1) {
 				_taskIt++;
 				i--;
@@ -366,7 +389,7 @@ string Storage::markDone(int i) {
 			isSuccess = false;
 			return toStringTaskDetail(_searchResultList);
 		} else {
-			getIterator(i);
+			getPosition(i);
 			isSuccess = compareTask(*(_taskIt));
 			if (!isSuccess) {
 				return toStringTaskDetail(_searchResultList);
@@ -378,7 +401,7 @@ string Storage::markDone(int i) {
 			return toStringTaskDetail(_searchResultList);
 		} else {
 			_taskIt= _taskList.begin();
-			getIterator(i);
+			getPosition(i);
 		}
 	}
 	//pointer to task in _taskList before mark done
@@ -398,7 +421,7 @@ string Storage::markNotDone(int i) {
 			isSuccess = false;
 			return toStringTaskDetail(_searchResultList);
 		} else {
-			getIterator(i);
+			getPosition(i);
 			if (!compareTask(*(_taskIt))) {
 				isSuccess = false;
 				return toStringTaskDetail(_searchResultList);
@@ -410,7 +433,7 @@ string Storage::markNotDone(int i) {
 			return toStringTaskDetail(_searchResultList);
 		} else {
 			_taskIt= _taskList.begin();
-			getIterator(i);
+			getPosition(i);
 		}
 	}
 	//pointer to task in _taskList before mark not done
@@ -429,7 +452,7 @@ string Storage::deleteByNumber(int i) {
 			isSuccess = false;
 			return toStringTaskDetail(_searchResultList);
 		} else {
-			getIterator(i);
+			getPosition(i);
 			if (!compareTask(*(_taskIt))) {
 				isSuccess = false;
 				return toStringTaskDetail(_searchResultList);
@@ -441,7 +464,7 @@ string Storage::deleteByNumber(int i) {
 			return toStringTaskDetail(_searchResultList);
 		} else {
 			_taskIt= _taskList.begin();
-			getIterator(i);
+			getPosition(i);
 		}
 	}
 

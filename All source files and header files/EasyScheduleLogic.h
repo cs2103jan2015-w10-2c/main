@@ -62,6 +62,7 @@ private:
 private:
 	static string returnMessage;
 	static string returnDisplay;
+	static int returnIndex;
 	static char buffer[1000];
 	//static bool isInvalidCommandType;
 	static bool isInvalidTaskType;

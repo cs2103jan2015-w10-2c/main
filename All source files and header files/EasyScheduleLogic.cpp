@@ -43,6 +43,7 @@ const string EasyScheduleLogic::MESSAGE_UNDO_ERROR = "Error occured within undo 
 
 string EasyScheduleLogic::returnMessage;
 string EasyScheduleLogic::returnDisplay;
+int EasyScheduleLogic::returnIndex;
 char EasyScheduleLogic::buffer[1000];
 //bool EasyScheduleLogic::isInvalidCommandType = false;
 bool EasyScheduleLogic::isInvalidTaskType = false;
@@ -68,33 +69,33 @@ int EasyScheduleLogic::localHour;
 int EasyScheduleLogic::localMin;
 
 
-
-//here
-int main () {
-	EasyScheduleLogic::main();
-}
-
-void EasyScheduleLogic::main() {
-	/*storage.showDirectory();*/
-	string filename;
-	cin >> filename;
-	storage.setFileName(filename);
-	storage.readFile();
-	storage.openFile();
-	string input;
-	cin.ignore();
-	getline(cin, input);
-
-	while (input!="exit") {
-		executeLogic(input);
-		getline(cin, input);
-	}
-	
-	storage.writeToFile();
-	exit(0);
-	
-}
-//here
+//
+////here
+//int main () {
+//	EasyScheduleLogic::main();
+//}
+//
+//void EasyScheduleLogic::main() {
+//	/*storage.showDirectory();*/
+//	string filename;
+//	cin >> filename;
+//	storage.setFileName(filename);
+//	storage.readFile();
+//	storage.openFile();
+//	string input;
+//	cin.ignore();
+//	getline(cin, input);
+//
+//	while (input!="exit") {
+//		executeLogic(input);
+//		getline(cin, input);
+//	}
+//	
+//	storage.writeToFile();
+//	exit(0);
+//	
+//}
+////here
 
 
 void EasyScheduleLogic::executeLogic(string userInput) {
@@ -108,10 +109,15 @@ void EasyScheduleLogic::executeLogic(string userInput) {
 		storage.openFile();
 	} else if (parser.commandType == "add") {
 		returnMessage = addingTask();
-		returnDisplay = displayingTask();//store task is done in tellUI function.
+		returnDisplay = displayingTask();
+		if (storage.isSuccess) {
+			returnIndex = storage.getIndex();
+		} else {
+			returnIndex = 0;
+		}
 	} else if (parser.commandType == "delete") {
 		returnDisplay = deletingTask();
-
+		returnIndex = 0;
 	} else if (parser.commandType == "display") {
 		if (displayingTask() != "") {
 			returnMessage = "";
@@ -120,7 +126,7 @@ void EasyScheduleLogic::executeLogic(string userInput) {
 			returnMessage = MESSAGE_EMPTY;
 			returnDisplay = "";
 		}
-
+		returnIndex = 0;
 	} else if (parser.commandType == "search") {
 		if(searchingTask() == "") {
 			returnMessage = MESSAGE_SEARCH_FAIL; //Bug: not shown in feedbackBox
@@ -129,11 +135,16 @@ void EasyScheduleLogic::executeLogic(string userInput) {
 			returnMessage = "";
 			returnDisplay = searchingTask();
 		}
+		returnIndex = 0;
 	} else if (parser.commandType == "sort") {
 		returnMessage = sortingTask();
 		returnDisplay = displayingTask();
+		returnIndex = 0;
 	} else if (parser.commandType == "done") { //mark done/notdone doesn't work.
 		returnDisplay = markDone();
+		if (storage.isSuccess) {
+			returnIndex = storage.getIndex();
+		}
 		if (parser.name!="") {
 			if ((storage._searchResultList).size()==0) {
 				returnDisplay = displayingTask();
@@ -141,10 +152,16 @@ void EasyScheduleLogic::executeLogic(string userInput) {
 			if ((storage._searchResultList).size()==1) {
 				parser.number=1;
 				returnDisplay = markDone();
+				returnIndex = storage.getIndex();
+			} else {
+				returnIndex = 0;
 			}
 		}
 		} else if (commandType == "notdone") {
 		returnDisplay = markNotDone();
+		if (storage.isSuccess) {
+			returnIndex = storage.getIndex();
+		}
 		if (parser.name!="") {
 			if ((storage._searchResultList).size()==0) {
 				returnDisplay = displayingTask();
@@ -152,6 +169,9 @@ void EasyScheduleLogic::executeLogic(string userInput) {
 			if ((storage._searchResultList).size()==1) {
 				parser.number=1;
 				returnDisplay = markNotDone();
+				returnIndex = storage.getIndex();
+			} else {
+				returnIndex = 0;
 			}
 		} 
 	} else if (parser.commandType == "exit") {
@@ -166,6 +186,7 @@ void EasyScheduleLogic::executeLogic(string userInput) {
 		returnMessage = MESSAGE_INVALID_INPUT_COMMAND;
 		returnDisplay = "";
 	}
+	returnIndex = 0;
 }
 
 void EasyScheduleLogic::parsingCommand(string userInput) {
