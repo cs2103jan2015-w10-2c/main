@@ -30,6 +30,7 @@ public:
 	CommandParser(void);
 	~CommandParser(void);
 	void identifyTask(string userInput);
+	void easyAddDate(string userInput);
 	string getCommandType();
 	string getTaskType();
 	string getName();
@@ -41,6 +42,8 @@ public:
 	int getStartTimeMin();
 	int getEndTimeHour();
 	int getEndTimeMin();
+
+	void setDevider(string userInput);
 	
 };
 

@@ -21,42 +21,21 @@ int CommandParser::endTimeHour=-1;
 int CommandParser::endTimeMin=-1;
 string CommandParser::dayOfWeek;
 int CommandParser::number=-1;
+string devider = "/";
+size_t pos1;
+size_t pos2;
+size_t pos3;
+size_t pos4;
+size_t posD1;
+size_t posD2;
+size_t posD3;
+size_t posD4;
+size_t posD5;
+size_t posD6;
 
-void CommandParser::identifyTask(string userInput) {
 
-	//get the first word before the first white space
-	size_t pos1 = userInput.find_first_of(' ');
-	commandType = userInput.substr(0, pos1);
-	//convert all letters in the commandType to lower case
-	transform(commandType.begin(), commandType.end(), commandType.begin(), ::tolower);
-	assert(commandType != "");
-
-	if(commandType == "add"){
-	//check the number of devider "//"
-	//no devider -> floating: description
-	//one devider -> deadline: endTime//description
-	//two devider -> timed: startTime//endTime//description
-	
-		string devider = "/";
-		size_t posD1 = userInput.find(devider);
-
-		if(posD1 == string::npos) {
-			taskType = "FloatingTask";
-			name = userInput.substr(pos1+1);
-			return;
-
-		} else {
-			//add 2015//01//02//8//0//meeting
-			//add 2015//01//02//8//0//11//0//meeting
-			//NOTE: doesn't cover the case where the task type is invalid.
-
-			size_t posD2 = userInput.find(devider, posD1+1);
-			size_t posD3 = userInput.find(devider, posD2+1);
-			size_t posD4 = userInput.find(devider, posD3+1);
-			size_t posD5 = userInput.find(devider, posD4+1);
-			size_t posD6 = userInput.find(devider, posD5+1);
-
-			if (userInput.substr(pos1+1, (posD1-pos1-1)) == "today"){
+void CommandParser::easyAddDate(string userInput){
+	if (userInput.substr(pos1+1, (posD1-pos1-1)) == "today"){
 
 				time_t now = time(0);	
 				struct tm time;
@@ -113,6 +92,49 @@ void CommandParser::identifyTask(string userInput) {
 				month = time.tm_mon + 1;
 				year = time.tm_year + 1900;
 			}
+}
+
+void CommandParser::setDevider(string userInput){
+	pos1 = userInput.find_first_of(' ');
+	pos2 = (userInput.substr(pos1+1)).find_first_of(" ");
+	pos3 = (userInput.substr(pos2+1)).find_first_of(" ");
+	pos4 = (userInput.substr(pos3+1)).find_first_of(" ");
+
+	posD1 = userInput.find(devider);
+	posD2 = userInput.find(devider, posD1+1);
+	posD3 = userInput.find(devider, posD2+1);
+	posD4 = userInput.find(devider, posD3+1);
+	posD5 = userInput.find(devider, posD4+1);
+	posD6 = userInput.find(devider, posD5+1);
+}
+
+void CommandParser::identifyTask(string userInput) {
+
+	setDevider(userInput);
+
+	commandType = userInput.substr(0, pos1);
+
+	//convert all letters in the commandType to lower case
+	transform(commandType.begin(), commandType.end(), commandType.begin(), ::tolower);
+	assert(commandType != "");
+
+	if(commandType == "add"){
+	//check the number of devider "//"
+	//no devider -> floating: description
+	//one devider -> deadline: endTime//description
+	//two devider -> timed: startTime//endTime//description
+
+		if(posD1 == string::npos) {
+			taskType = "FloatingTask";
+			name = userInput.substr(pos1+1);
+			return;
+
+		} else {
+			//add 2015//01//02//8//0//meeting
+			//add 2015//01//02//8//0//11//0//meeting
+			//NOTE: doesn't cover the case where the task type is invalid.
+
+			easyAddDate(userInput);
 
 			if(posD4 == string::npos) {
 				taskType = "DeadlineTask";
@@ -165,6 +187,26 @@ void CommandParser::identifyTask(string userInput) {
 
 	} else if (commandType == "sort" || commandType == "display" || commandType == "undo") {
 		return;
+	} else if (commandType == "edit"){
+
+		number = stoi(userInput.substr(pos1+1, pos2-pos1-1));
+		string attribute = userInput.substr(pos2+1, pos3-pos2-1);
+
+		if (attribute == "name"){
+			name = userInput.substr(pos3+1);
+		} else if (attribute == "date"){
+			if (taskType == "FloatingTask"){
+				
+			} else {
+				
+			}
+
+		} else if (attribute == "time"){
+		
+		} else if (attribute == "all"){
+		
+		}
+
 	} else if (commandType == "exit") {
 		return;
 	} else {
