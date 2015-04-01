@@ -32,7 +32,27 @@ size_t posD3;
 size_t posD4;
 size_t posD5;
 size_t posD6;
+size_t posD7;
 
+void CommandParser::addTimeDeadline(string userInput){
+	taskType = "DeadlineTask";
+	endTimeHour = stoi(userInput.substr(posD1+1, (posD2-posD1)));
+	endTimeMin = stoi(userInput.substr(posD2+1, (posD3-posD2)));
+}
+
+void CommandParser::addTimeTimedTask(string userInput){
+	taskType = "TimedTask";
+	startTimeHour = stoi(userInput.substr(posD1+1, (posD2-posD1)));
+	startTimeMin = stoi(userInput.substr(posD2+1, (posD3-posD2)));
+	endTimeHour = stoi(userInput.substr(posD3+1, (posD4-posD3)));
+	endTimeMin = stoi(userInput.substr(posD4+1, (posD5-posD4)));
+}
+
+void CommandParser::normalAddDate(string userInput){
+	year = stoi(userInput.substr(pos1+1, (posD1-pos1)));
+	month = stoi(userInput.substr(posD1+1, (posD2-posD1)));
+	day =  stoi(userInput.substr(posD2+1, (posD3-posD2)));
+}
 
 void CommandParser::easyAddDate(string userInput){
 	if (userInput.substr(pos1+1, (posD1-pos1-1)) == "today"){
@@ -106,6 +126,7 @@ void CommandParser::setDevider(string userInput){
 	posD4 = userInput.find(devider, posD3+1);
 	posD5 = userInput.find(devider, posD4+1);
 	posD6 = userInput.find(devider, posD5+1);
+	posD7 = userInput.find(devider, posD6+1);
 }
 
 void CommandParser::identifyTask(string userInput) {
@@ -119,10 +140,6 @@ void CommandParser::identifyTask(string userInput) {
 	assert(commandType != "");
 
 	if(commandType == "add"){
-	//check the number of devider "//"
-	//no devider -> floating: description
-	//one devider -> deadline: endTime//description
-	//two devider -> timed: startTime//endTime//description
 
 		if(posD1 == string::npos) {
 			taskType = "FloatingTask";
@@ -130,51 +147,37 @@ void CommandParser::identifyTask(string userInput) {
 			return;
 
 		} else {
-			//add 2015//01//02//8//0//meeting
-			//add 2015//01//02//8//0//11//0//meeting
+			//add tomorrow/9/30/meeting
+			//add Friday/19/0/21/30/CCA
 			//NOTE: doesn't cover the case where the task type is invalid.
+			if (isalpha(userInput.at(pos1+1))){
+				easyAddDate(userInput);
 
-			easyAddDate(userInput);
-
-			if(posD4 == string::npos) {
-				taskType = "DeadlineTask";
-				endTimeHour = stoi(userInput.substr(posD1+1, (posD2-posD1)));
-				endTimeMin = stoi(userInput.substr(posD2+1, (posD3-posD2)));
-				name = userInput.substr(posD3+1);
-				return;
-			} else if ((userInput.substr(pos1+1, (posD1-pos1-1)))[0] != '2') {
-				taskType = "TimedTask";
-				startTimeHour = stoi(userInput.substr(posD1+1, (posD2-posD1)));
-				startTimeMin = stoi(userInput.substr(posD2+1, (posD3-posD2)));
-				endTimeHour = stoi(userInput.substr(posD3+1, (posD4-posD3)));
-				endTimeMin = stoi(userInput.substr(posD4+1, (posD5-posD4)));
-				name = userInput.substr(posD5+1);
-				return;
-			}	
-			
-			year = stoi(userInput.substr(pos1+1, (posD1-pos1)));
-			month = stoi(userInput.substr(posD1+1, (posD2-posD1)));
-			day =  stoi(userInput.substr(posD2+1, (posD3-posD2)));
-
-			if(posD6 == string::npos) {
-				taskType = "DeadlineTask";
-				startTimeHour = 0;
-				startTimeMin = 0;
-				endTimeHour = stoi(userInput.substr(posD3+1, (posD4-posD3)));
-				endTimeMin = stoi(userInput.substr(posD4+1, (posD5-posD4)));
-				name = userInput.substr(posD5+1);
-
+				if(posD4 == string::npos) {
+					addTimeDeadline(userInput);
+					name = userInput.substr(posD3+1);
+					return;
+				} else {
+					addTimeTimedTask(userInput);
+					name = userInput.substr(posD5+1);
+					return;
+				}	
 			} else {
-				size_t posD7 = userInput.find(devider, posD6+1);
-
-				taskType = "TimedTask";
-				startTimeHour = stoi(userInput.substr(posD3+1, (posD4-posD3)));
-				startTimeMin = stoi(userInput.substr(posD4+1, (posD5-posD4)));
-				endTimeHour = stoi(userInput.substr(posD5+1, (posD6-posD5)));
-				endTimeMin = stoi(userInput.substr(posD6+1, (posD7-posD6)));
-				name = userInput.substr(posD7+1);
+				//add 2015/01/02/8/0/meeting
+				//add 2015/01/02/8/0/11/0/meeting
+				
+				normalAddDate(userInput);
+				string cutInput = userInput.substr(posD3);
+				setDevider(cutInput);
+				if(posD4 == string::npos) {
+					addTimeDeadline(cutInput);
+					name = cutInput.substr(posD3+1);
+				} else {
+					addTimeTimedTask(cutInput);
+					name = cutInput.substr(posD5+1);
+				}	
 			}	
-		}	
+		}
 	} else if (commandType == "file") {
 		name = userInput.substr(pos1+1);
 	} else if (commandType == "delete" || commandType == "done" || commandType == "notdone" || commandType == "search") {
@@ -195,10 +198,33 @@ void CommandParser::identifyTask(string userInput) {
 		if (attribute == "name"){
 			name = userInput.substr(pos3+1);
 		} else if (attribute == "date"){
-			if (taskType == "FloatingTask"){
+			string cutInput = userInput.substr(pos2+1);
+			setDevider(cutInput);
+
+			if (posD1 == string::npos){
+				//FloatingTask, need to add both date and time
+				if(isalpha(cutInput.at(pos1+1))){
+					easyAddDate(cutInput);
+					if(posD4 == string::npos) {
+						addTimeDeadline(cutInput);
+						return;
+					} else {
+						addTimeTimedTask(cutInput);
+						return;
+					}	
+
+				} else{
+					normalAddDate(cutInput);
+				}
 				
+
 			} else {
-				
+				//DeadlineTask or TimedTask
+				if(isalpha(cutInput.at(pos1+1))){
+					easyAddDate(cutInput);
+				} else{
+					normalAddDate(cutInput);
+				}
 			}
 
 		} else if (attribute == "time"){

@@ -31,6 +31,9 @@ public:
 	~CommandParser(void);
 	void identifyTask(string userInput);
 	void easyAddDate(string userInput);
+	void normalAddDate(string userInput);
+	void addTimeDeadline(string userInput);
+	void addTimeTimedTask(string userInput);
 	string getCommandType();
 	string getTaskType();
 	string getName();
