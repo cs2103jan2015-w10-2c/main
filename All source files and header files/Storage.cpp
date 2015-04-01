@@ -488,7 +488,7 @@ string Storage::toStringTaskDetail(list <Task> listToFormat){
 					s << "Deadline]";
 				}
 				/****Task name and date****/
-				s << iter->getName() << "]" << iter->getDate() << "]";
+				s << iter->getName() << "]" << iter->getAlphabetDate() << "]";
 				/****start and end time****/
 				if (iter->getTaskType() == "TimedTask") {
 					if(iter->getStartTimeHour() < 10) {
@@ -549,7 +549,7 @@ string Storage::toStringTaskDetail() {
 					s << "Deadline]";
 				}
 				/****Task name and date****/
-				s << _taskIt->getName() << "]" << _taskIt->getDate() << "]";
+				s << _taskIt->getName() << "]" << _taskIt->getAlphabetDate() << "]";
 				/****start and end time****/
 				if (_taskIt->getTaskType() == "TimedTask") {
 					if(_taskIt->getStartTimeHour() < 10) {

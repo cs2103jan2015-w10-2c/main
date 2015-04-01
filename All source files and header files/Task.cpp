@@ -1,6 +1,8 @@
 #include "Task.h"
 #include<sstream>
 
+const string Task::NAME_OF_MONTH[12] = {"Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"};
+
 Task::Task() { };
 
 Task::Task(string commandType, string taskType, string name, int year, int month, int day, double startTimeHour, double startTimeMin, double endTimeHour, double endTimeMin, bool isDone) {
@@ -114,6 +116,16 @@ string Task::getTaskType() {
 string Task::getDate() {
 	stringstream s;
 	s << _year << "/" << _month << "/" << _day;
+	return s.str();
+}
+
+string Task::getAlphaMonth(int monthNumber){
+	return NAME_OF_MONTH[monthNumber - 1];
+}
+
+string Task::getAlphabetDate(){
+	stringstream s;
+	s << _day << " " << getAlphaMonth(_month) << " " << _year;
 	return s.str();
 }
 
