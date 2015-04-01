@@ -76,23 +76,27 @@ void CommandParser::easyAddDate(string userInput){
 			} else {
 				dayOfWeek = userInput.substr(pos1+1, (posD1-pos1-1));
 				int dayOfWeekNo = 0;
-				if (dayOfWeek == "Monday"){
+				transform(dayOfWeek.begin(), dayOfWeek.end(), dayOfWeek.begin(), ::tolower);
+				if (dayOfWeek == "monday" || "mon"){
 					dayOfWeekNo = 1;
 				}
-				else if (dayOfWeek == "Tuesday"){
+				else if (dayOfWeek == "tuesday" || "tue"){
 					dayOfWeekNo = 2;
 				}
-				else if (dayOfWeek == "Wednesday"){
+				else if (dayOfWeek == "wednesday" || "wed"){
 					dayOfWeekNo = 3;
 				}
-				else if (dayOfWeek == "Thursday"){
+				else if (dayOfWeek == "thursday" || "thu"){
 					dayOfWeekNo = 4;
 				}
-				else if (dayOfWeek == "Friday"){
+				else if (dayOfWeek == "friday" || "fri"){
 					dayOfWeekNo = 5;
 				}
-				else if (dayOfWeek == "Saturday"){
+				else if (dayOfWeek == "saturday" || "sat"){
 					dayOfWeekNo = 6;
+				}
+				else if (dayOfWeek == "sunday" || "sun"){
+					dayOfWeekNo = 0;
 				}
 
 				time_t now = time(0);	
@@ -217,7 +221,6 @@ void CommandParser::identifyTask(string userInput) {
 					normalAddDate(cutInput);
 				}
 				
-
 			} else {
 				//DeadlineTask or TimedTask
 				if(isalpha(cutInput.at(pos1+1))){
