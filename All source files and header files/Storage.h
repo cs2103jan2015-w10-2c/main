@@ -74,6 +74,7 @@ public:
 	static string markDone(int i);
 	static string markNotDone(int i);
 	static string deleteByNumber(int i);
+	static int returnIndex();
 
 
 	static string toStringTaskDetail();

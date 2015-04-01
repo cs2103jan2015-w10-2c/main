@@ -159,10 +159,22 @@ void Storage::readFile() {
 		
 }
 
+int Storage::returnIndex() {
+	int index=1;
+	list<Task>::iterator i = _taskList.begin();
+	while (i!=_taskIt) {
+		index++;
+		i++;
+	}
+	return index;
+}
+
 void Storage::storeTask(Task task) {
 	if (!isTaskDuplicate(task)) {
 		_taskList.push_back(task);
 		creatRecordAdd(task);
+		_taskIt = _taskList.end();
+		sortList();
 		isSuccess = true;
 	} else {
 		isSuccess = false;
