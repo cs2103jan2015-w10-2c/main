@@ -134,14 +134,26 @@ void EasyScheduleLogic::executeLogic(string userInput) {
 		returnDisplay = displayingTask();
 	} else if (parser.commandType == "done") { //mark done/notdone doesn't work.
 		returnDisplay = markDone();
-		if ((parser.name!="")&&((storage._searchResultList).size()==0)) {
+		if (parser.name!="") {
+			if ((storage._searchResultList).size()==0) {
 				returnDisplay = displayingTask();
 			}
+			if ((storage._searchResultList).size()==1) {
+				parser.number=1;
+				returnDisplay = markDone();
+			}
+		}
 		} else if (commandType == "notdone") {
-			returnDisplay = markNotDone();
-			if ((parser.name!="")&&((storage._searchResultList).size()==0)) {
+		returnDisplay = markNotDone();
+		if (parser.name!="") {
+			if ((storage._searchResultList).size()==0) {
 				returnDisplay = displayingTask();
-			} 
+			}
+			if ((storage._searchResultList).size()==1) {
+				parser.number=1;
+				returnDisplay = markNotDone();
+			}
+		} 
 	} else if (parser.commandType == "exit") {
 			returnMessage = MESSAGE_EXIT;
 			returnDisplay = "";
