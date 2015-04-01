@@ -594,6 +594,10 @@ Tracker Storage::getTracker(){
 	return _tracker;
 }
 
+void Storage::deleteLastTrackerEntry(){
+	_tracker.deleteLastTrackerEntry();
+}
+
 void Storage::undoingReverseAdd(list<Task> listToUndo){
 	//delete the task in the list
 	list<Task>::iterator it1, it2;
