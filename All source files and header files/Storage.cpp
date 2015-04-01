@@ -75,7 +75,6 @@ void Storage::openFile() {
 }
 
 void Storage::writeToFile() {
-	cout << _taskList.size(); 
 	int i;
 	_taskIt = _taskList.begin();
 	for (i=1;i<=_taskList.size();i++) {
@@ -85,8 +84,6 @@ void Storage::writeToFile() {
 			, to_string(_taskIt->getDay()).c_str(), to_string(_taskIt->getStartTimeHour()).c_str()
 			, to_string(_taskIt->getStartTimeMin()).c_str(), to_string(_taskIt->getEndTimeHour()).c_str()
 			, to_string(_taskIt->getEndTimeMin()).c_str(), to_string(_taskIt->isDone()).c_str());
-		cout << buffer;
-		cout << _taskIt->getName();
 		_fWrite << buffer << "\r\n";
 		_taskIt++;
 	}
