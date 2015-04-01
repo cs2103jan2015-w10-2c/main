@@ -36,6 +36,7 @@ public:
 	void setStartTimeMin(int newStartTimeMin);
 	void setEndTimeHour(int newEndTimeHour);
 	void setEndTimeMin(int newEndTimeMin);
+	void setCommandType(string commandType);
 
 	string getCommandType();
 	string getTaskType();

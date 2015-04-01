@@ -35,6 +35,7 @@ Task::Task(string commandType, string name, int year, int month, int day, double
 Task::Task(string commandType, string name, int year, int month, int day, double endTimeHour, double endTimeMin) {
 	_isDone = false;
 	_taskType = "DeadlineTask";
+	_commandType = commandType;
 	_name = name;
 	_year = year;
 	_month = month;
@@ -96,6 +97,10 @@ void Task::setEndTimeHour(int newEndTimeHour){
 
 void Task::setEndTimeMin(int newEndTimeMin){
 	_endTimeMin = newEndTimeMin;
+}
+
+void Task::setCommandType(string commandType) {
+	_commandType = commandType;
 }
 
 string Task::getCommandType() {
