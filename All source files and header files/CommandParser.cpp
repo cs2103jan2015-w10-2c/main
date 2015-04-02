@@ -284,12 +284,8 @@ void CommandParser::identifyTask(string userInput) {
 				} else {
 					addTimeTimedTask(cutInput2);
 				}
-			}
-			
-		} else if (attribute == "all"){
-		
+			}	
 		}
-
 	} else if (commandType == "exit") {
 		return;
 	} else {

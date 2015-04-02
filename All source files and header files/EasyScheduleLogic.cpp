@@ -26,6 +26,8 @@ const string EasyScheduleLogic::MESSAGE_ADD_FAIL = "Sorry, the task is already i
 const string EasyScheduleLogic::MESSAGE_DELETE = "The task has been deleted.";
 const string EasyScheduleLogic::MESSAGE_DELETE_FAIL = "There is no task \"%s\" in the schedule.";
 const string EasyScheduleLogic::MESSAGE_DELETE_CHOOSE = "Please type 'delete [number]' to delete the task.";
+const string EasyScheduleLogic::MESSAGE_EDIT = "The task has been edited";
+const string EasyScheduleLogic::MESSAGE_EDIT_FAIL = "There is no such task. Please check from display of all tasks.";
 const string EasyScheduleLogic::MESSAGE_CLEAR = "All tasks have been deleted.";
 const string EasyScheduleLogic::MESSAGE_SEARCH_FAIL = "There is no task containing the keyword. Please check from display of all tasks.";
 const string EasyScheduleLogic::MESSAGE_SORT = "All tasks have been sorted by task type.";
@@ -174,6 +176,9 @@ void EasyScheduleLogic::executeLogic(string userInput) {
 				returnIndex = 0;
 			}
 		} 
+	} else if(parser.commandType == "edit"){
+		returnDisplay = editingTask();
+		returnIndex = 0;
 	} else if (parser.commandType == "exit") {
 			returnMessage = MESSAGE_EXIT;
 			returnDisplay = "";
@@ -361,6 +366,18 @@ string EasyScheduleLogic::markNotDone() {
 			}
 		return s;
 	}
+}
+
+string EasyScheduleLogic::editingTask(){
+	taskNumber = parser.number;
+	string s;
+	//string s = storage.editTask()
+	if (storage.isSuccess){
+		returnMessage = MESSAGE_EDIT;
+	}else{
+		returnMessage = MESSAGE_EDIT_FAIL;
+	}
+	return s;
 }
 
 string EasyScheduleLogic::displayingTask() {
