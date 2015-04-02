@@ -203,11 +203,13 @@ void CommandParser::identifyTask(string userInput) {
 			name = userInput.substr(pos3+1);
 		} else if (attribute == "date"){
 			string cutInput = userInput.substr(pos2+1);
+			//cutInput == date .....
 			setDevider(cutInput);
 
 			if (posD1 == string::npos){
 				//FloatingTask, need to add both date and time
 				if(isalpha(cutInput.at(pos1+1))){
+					//cutInput == date today/9/30/eat
 					easyAddDate(cutInput);
 					if(posD4 == string::npos) {
 						addTimeDeadline(cutInput);
@@ -219,6 +221,15 @@ void CommandParser::identifyTask(string userInput) {
 
 				} else{
 					normalAddDate(cutInput);
+					string cutInput2 = cutInput.substr(posD3);
+					//cutInput2 == /9/30/10/30/eat
+					//cutInput2 == /9/30/eat
+					setDevider(cutInput2);
+					if(posD4 == string::npos) {
+						addTimeDeadline(cutInput2);
+					} else {
+						addTimeTimedTask(cutInput2);
+					}	
 				}
 				
 			} else {
@@ -231,7 +242,50 @@ void CommandParser::identifyTask(string userInput) {
 			}
 
 		} else if (attribute == "time"){
-		
+			string cutInput = userInput.substr(pos2+1);
+			//cutInput == time .....
+			setDevider(cutInput);
+
+			if (posD1 == string::npos){
+				//FloatingTask, need to add both date and time
+
+				if(isalpha(cutInput.at(pos1+1))){
+					//cutInput == date today/9/30/eat
+					easyAddDate(cutInput);
+					if(posD4 == string::npos) {
+						addTimeDeadline(cutInput);
+						return;
+					} else {
+						addTimeTimedTask(cutInput);
+						return;
+					}	
+
+				} else{
+					normalAddDate(cutInput);
+					string cutInput2 = cutInput.substr(posD3);
+					//cutInput2 == /9/30/10/30/eat
+					//cutInput2 == /9/30/eat
+					setDevider(cutInput2);
+					if(posD4 == string::npos) {
+						addTimeDeadline(cutInput2);
+					} else {
+						addTimeTimedTask(cutInput2);
+					}	
+				}
+			}else{
+				//DeadlineTask or TimedTask
+				//cutInput == time 17/30 || cutInput == time 17/30/18/30
+				string cutInput2 = cutInput.substr(pos1+1);
+				cutInput2 = '/' + cutInput2; // so we can use the addTimeDeadline or addTimeTimedTask
+				//cutInput2 == /17/30 || /17/30/18/30
+				setDevider(cutInput2);
+				if(posD3 == string::npos){
+					addTimeDeadline(cutInput2);
+				} else {
+					addTimeTimedTask(cutInput2);
+				}
+			}
+			
 		} else if (attribute == "all"){
 		
 		}
