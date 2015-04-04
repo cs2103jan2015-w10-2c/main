@@ -181,6 +181,39 @@ void Storage::storeTask(Task task) {
 	}
 }
 
+string Storage::editTask(int i, string s) {
+	string commandType = "edit";
+
+	if (isSearched) {
+		_taskIt= _searchResultList.begin();
+		if (i>_searchResultList.size()||i<=0) {
+			isSuccess = false;
+			return toStringTaskDetail(_searchResultList);
+		} else {
+			getPosition(i);
+			isSuccess = compareTask(*(_taskIt));
+			if (!isSuccess) {
+				return toStringTaskDetail(_searchResultList);
+			}
+		}
+	} else {
+		if (i>_taskList.size()||i<=0) {
+			isSuccess = false;
+			return toStringTaskDetail(_searchResultList);
+		} else {
+			_taskIt= _taskList.begin();
+			getPosition(i);
+		}
+	}
+	//pointer to task in _taskList before mark done
+	storePreviousTask(commandType);
+	_taskIt->setName(s);
+	isSuccess = true;
+	return toStringTaskDetail();
+	
+}
+	
+
 void Storage::creatRecordAdd(Task task) {
 	_record = Record( "add", task);
 	addToTracker(_record);
