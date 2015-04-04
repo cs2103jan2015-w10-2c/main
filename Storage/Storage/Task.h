@@ -1,7 +1,7 @@
 #pragma once
 #ifndef TASK_H
 #define TASK_H
-#include<string>
+#include <string>
 
 using namespace std;
 
@@ -18,6 +18,9 @@ private:
 	double _endTimeHour;
 	double _endTimeMin;
 	bool _isDone;
+
+	static const string NAME_OF_MONTH[12];
+
 
 public:
 	Task();
@@ -36,14 +39,17 @@ public:
 	void setStartTimeMin(int newStartTimeMin);
 	void setEndTimeHour(int newEndTimeHour);
 	void setEndTimeMin(int newEndTimeMin);
+	void setCommandType(string commandType);
 
 	string getCommandType();
 	string getTaskType();
 	string getName();
 	int getYear();
 	int getMonth();
+	string getAlphaMonth(int month);
 	int getDay();
 	string getDate();
+	string getAlphabetDate();
 	double getStartTimeHour();
 	double getStartTimeMin();
 	double getEndTimeHour();

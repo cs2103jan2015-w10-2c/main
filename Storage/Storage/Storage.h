@@ -20,7 +20,6 @@ using namespace std;
 class Storage {
 
 private:
-	static string _fileName;
 	static list<Task>_previousTaskList;
 	static list<Task>::iterator _taskIt;
 	static Tracker _tracker;
@@ -32,7 +31,7 @@ private:
 public:
 
 	Storage();
-
+	static string _fileName;
 	static list<Task>_taskList;
 	static list<Task>_searchResultList;
 	static ofstream _fWrite;
@@ -42,9 +41,10 @@ public:
 	static bool isSuccess;
 	static bool isSearched;
 	static bool compareTask(Task task);
+	static void getTask(Task task);
 	static void storePreviousTask(string commandType);
 	static list<Task> getPreviousTaskList();
-	static void getIterator(int i);
+	static void getPosition(int i);
 
 	static void findTaskInList(string searchKeyWord);
 	static bool isTaskDuplicate(Task task);
@@ -71,10 +71,12 @@ public:
 	static void undoingReverseDone(list<Task> listToUndo);
 
 	static void storeTask(Task task);
+	static string editTask(int i, string s);
 	static string searchByName(string searchKeyWord);
 	static string markDone(int i);
 	static string markNotDone(int i);
 	static string deleteByNumber(int i);
+	static int getIndex();
 
 
 	static string toStringTaskDetail();
