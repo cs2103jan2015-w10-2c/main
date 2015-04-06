@@ -208,6 +208,7 @@ string Storage::editTask(int i, string s) {
 	//pointer to task in _taskList before mark done
 	storePreviousTask(commandType);
 	_taskIt->setName(s);
+	storePreviousTask(commandType);
 	isSuccess = true;
 	return toStringTaskDetail();
 	
