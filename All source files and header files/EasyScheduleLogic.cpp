@@ -370,8 +370,7 @@ string EasyScheduleLogic::markNotDone() {
 
 string EasyScheduleLogic::editingTask(){
 	taskNumber = parser.number;
-	string s;
-	//string s = storage.editTask()
+	string s = storage.editTask(taskNumber, parser.name);
 	if (storage.isSuccess){
 		returnMessage = MESSAGE_EDIT;
 	}else{

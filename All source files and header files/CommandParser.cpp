@@ -200,8 +200,10 @@ void CommandParser::identifyTask(string userInput) {
 		string attribute = userInput.substr(pos2+1, pos3-pos2-1);
 
 		if (attribute == "name"){
+			//userInput == edit 4 name XXXXX
 			name = userInput.substr(pos3+1);
 		} else if (attribute == "date"){
+			//userInpur == edit 3 date ......
 			string cutInput = userInput.substr(pos2+1);
 			//cutInput == date .....
 			setDevider(cutInput);
