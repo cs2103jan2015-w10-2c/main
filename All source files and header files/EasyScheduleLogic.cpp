@@ -78,7 +78,9 @@ int EasyScheduleLogic::localMin;
 //}
 //
 //void EasyScheduleLogic::main() {
-//	/*storage.showDirectory();*/
+//	string pathName;
+//	cin >> pathName;
+//	storage.setPathName(pathName);
 //	string filename;
 //	cin >> filename;
 //	storage.setFileName(filename);
@@ -98,7 +100,7 @@ int EasyScheduleLogic::localMin;
 //	
 //}
 ////here
-
+//
 
 void EasyScheduleLogic::executeLogic(string userInput) {
 	parsingCommand(userInput);
