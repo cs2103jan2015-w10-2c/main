@@ -143,7 +143,13 @@ void CommandParser::identifyTask(string userInput) {
 	transform(commandType.begin(), commandType.end(), commandType.begin(), ::tolower);
 	assert(commandType != "");
 
-	if(commandType == "add"){
+	if(commandType == "filepath"){
+		name = userInput.substr(pos1+1);
+		return;
+	}else if(commandType == "filename"){
+		name = userInput.substr(pos1+1);
+		return;
+	}else if(commandType == "add"){
 
 		if(posD1 == string::npos) {
 			taskType = "FloatingTask";
@@ -182,8 +188,6 @@ void CommandParser::identifyTask(string userInput) {
 				}	
 			}	
 		}
-	} else if (commandType == "file") {
-		name = userInput.substr(pos1+1);
 	} else if (commandType == "delete" || commandType == "done" || commandType == "notdone" || commandType == "search") {
 		if (isalpha(userInput.at(pos1+1))) {
 			name = userInput.substr(pos1+1);

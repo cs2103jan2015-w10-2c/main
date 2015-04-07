@@ -102,7 +102,9 @@ int EasyScheduleLogic::localMin;
 
 void EasyScheduleLogic::executeLogic(string userInput) {
 	parsingCommand(userInput);
-	if (parser.commandType == "file") {
+	if(parser.commandType == "filepath"){
+		//path = parser.name;
+	}else if(parser.commandType == "filename"){
 		if (storage._fileName!="") {
 			storage.writeToFile();
 		}
