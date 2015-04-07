@@ -3,6 +3,11 @@
 #include <algorithm>
 #include <sstream>
 
+#include <atltime.h>
+#include <math.h>
+#include <locale>
+#include <ctime>
+
 using namespace std;
 
 const string Storage::LINE_BUFFER = "%s/%s/%s/%s/%s/%s/%s/%s/%s/%s/%s";
@@ -209,7 +214,7 @@ string Storage::editTask(int i, string s) {
 	
 }
 	
-
+//@author A0115131B
 void Storage::creatRecordAdd(Task task) {
 	_record = Record( "add", task);
 	addToTracker(_record);
@@ -504,7 +509,7 @@ string Storage::deleteByNumber(int i) {
 }
 
 
-
+//@author A0115131B
 //record edited task item for undo function
 void Storage::storePreviousTask(string commandType) {
 	//creat a list storing tasks being editted
@@ -521,6 +526,50 @@ void Storage::storePreviousTask(string commandType) {
 
 list<Task> Storage::getPreviousTaskList(){
 	return _previousTaskList;
+}
+
+list<Task> Storage::autoInitialDisplay(){
+	//set year, month, day as system's today time
+	time_t now = time(0);	
+	struct tm time;
+	localtime_s(&time, &now);
+	int day =  time.tm_mday;
+	int month = time.tm_mon + 1;
+	int year = time.tm_year + 1900;
+
+	//search for all tasks happening in today
+	//store today's tasks in a list
+	searchTodayTask(day, month, year);
+	searchUpcomingDeadline(day, month, year);
+	return _searchResultList;
+}
+
+//return tasks happening in today into _searchResultList
+void Storage::searchTodayTask(int day, int month, int year){
+	_searchResultList.clear();
+
+	for(_taskIt = _taskList.begin(); _taskIt != _taskList.end(); _taskIt++){
+		if( (*_taskIt).getYear() == year 
+			&& (*_taskIt).getMonth() == month 
+			&& (*_taskIt).getDay() == day){
+				_searchResultList.push_back(*_taskIt);
+		}
+	}
+}
+
+void Storage::searchUpcomingDeadline(int day, int month, int year){
+	for(_taskIt = _taskList.begin(); _taskIt != _taskList.end(); _taskIt++){
+		if( (*_taskIt).getTaskType() == "DeadlineTask"
+			&& ((*_taskIt).getYear() > year || (*_taskIt).getYear() == year)
+			&& ((*_taskIt).getMonth() > month || (*_taskIt).getMonth() == month)
+			&& ((*_taskIt).getDay() > day)){
+				_searchResultList.push_back(*_taskIt);
+		}
+	}
+
+	if(!_searchResultList.empty()){
+		isSearched = true;
+	}
 }
 
 string Storage::toStringTaskDetail(list <Task> listToFormat){
@@ -651,6 +700,7 @@ string Storage::getCommandList(){
 	return COMMANDLIST;
 }
 
+//@author A0115131B
 Tracker Storage::getTracker(){
 	return _tracker;
 }

@@ -1,3 +1,4 @@
+//@author A0115131B
 #include "Record.h"
 
 Record::Record(void) { }

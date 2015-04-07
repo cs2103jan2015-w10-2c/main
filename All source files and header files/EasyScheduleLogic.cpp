@@ -116,7 +116,8 @@ void EasyScheduleLogic::executeLogic(string userInput) {
 		storage.setFileName(parser.name);
 		storage.readFile();
 		storage.openFile();
-		returnMessage = "File has been created, the program is now ready to be used"; 
+		returnDisplay = autoDisplay();
+		returnMessage = "Program is now ready to be used"; 
 		returnIndex = 0;
 	} else if (parser.commandType == "add") {
 		returnMessage = addingTask();
@@ -251,6 +252,7 @@ string EasyScheduleLogic::undoingTask() {
 	return message;
 }
 
+//@author A0115131B
 bool  EasyScheduleLogic::undoingDone(Record recordToUndo){
 	list <Task> listToUndo;
 	listToUndo = recordToUndo.getTaskRecord();
@@ -386,6 +388,10 @@ string EasyScheduleLogic::editingTask(){
 		returnMessage = MESSAGE_EDIT_FAIL;
 	}
 	return s;
+}
+
+string EasyScheduleLogic::autoDisplay(){
+	return storage.toStringTaskDetail(storage.autoInitialDisplay());
 }
 
 string EasyScheduleLogic::displayingTask() {

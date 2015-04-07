@@ -46,6 +46,9 @@ public:
 	static void getTask(Task task);
 	static void storePreviousTask(string commandType);
 	static list<Task> getPreviousTaskList();
+	static list<Task> autoInitialDisplay();
+	static void searchTodayTask(int day, int month, int year);
+	static void searchUpcomingDeadline(int day, int month, int year);
 	static void getPosition(int i);
 
 	static void findTaskInList(string searchKeyWord);

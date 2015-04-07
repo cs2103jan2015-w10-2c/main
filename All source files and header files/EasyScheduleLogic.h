@@ -102,6 +102,7 @@ public:
 	static string deletingTask();
 	static string searchingTask();
 	static string displayingTask();
+	static string autoDisplay();
 	static string markDone();
 	static string markNotDone();
 	static string editingTask();
