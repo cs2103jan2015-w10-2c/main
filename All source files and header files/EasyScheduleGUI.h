@@ -7,10 +7,6 @@
 #using <mscorlib.dll>
 
 //change to exception: because it is user's fault.
-//void checkUserInput (string userInput) {
-//	
-//	assert(isalpha(userInput[0]));
-//}
 
 namespace UI {
 
@@ -294,7 +290,7 @@ namespace UI {
 
 	//User press "Enter" key after typing to replace clicking "Enter" button
 	//Debug: Now it doesn't work. Why???
-	private: System::Void inputBox_KeyDown(System::Object^  sender, System::Windows::Forms::KeyEventArgs^  e) {
+	private: System::Void inputBox_KeyUp(System::Object^  sender, System::Windows::Forms::KeyEventArgs^  e) {
 				if(e->KeyCode == Keys::Enter) {
 					enterButton->PerformClick();
 				}
@@ -303,7 +299,6 @@ namespace UI {
 	//Actions happen after user clicks the "Enter" button 
 	private: System::Void enterButton_Click(System::Object^  sender, System::EventArgs^  e) {
 				
-				//allUserInputs.push_back(this->inputBox->Text);
 				userInput = this->inputBox->Text;
 				
 				//convert from System::String to std::string and pass to logic
@@ -315,8 +310,6 @@ namespace UI {
 				//clear the previous input and output for future uses.
 				listOutput->Items->Clear();
 				this->inputBox->Clear();
-				
-			//	checkUserInput(userInputString); //assertion
 
 				EasyScheduleLogic::executeLogic(userInputString);
 				string feedbackMessage = EasyScheduleLogic::tellUIReturnMessage();
@@ -326,73 +319,75 @@ namespace UI {
 				string feedbackTasks = EasyScheduleLogic::tellUIDisplay();
 				String^ stringFeedbackTasks = gcnew String(feedbackTasks.c_str());
 				
-				//if(isalpha(feedbackTasks[0])) {
-				//	String^ feedback = gcnew String(feedbackTasks.c_str()); //convert from std::string to System::String to print as feedback.
-				////	Console::WriteLine(tempString);
-				////	System::Windows::Forms::MessageBox::Show(feedback); //"failed" feedback message
-				//	this->feedbackBox->Text = feedback;
-				//} else {
-					string componentInfo;
-					String^ stringComponentInfo;
-					size_t tempStart;
-					size_t tempEnd=-1;
+				int feedbackIndex = EasyScheduleLogic::tellUIReturnIndex();
+			//	String^ stringFeedbackIndex = System::Convert::ToString(feedbackIndex);
 
-					//why algorithm count() doesn't work
-					int count = 0;
-					for(int i=0; i<int(feedbackTasks.size());i++) {
-						if (feedbackTasks.at(i) == ']') {
-							count++;
-						}
-					}
+				string componentInfo;
+				String^ stringComponentInfo;
+				size_t tempStart;
+				size_t tempEnd=-1;
 
-					while(count > 0) {
-						/****Index****/
-						tempStart = tempEnd+1;
-						tempEnd = feedbackTasks.find_first_of("]", tempStart);
-						componentInfo = feedbackTasks.substr(tempStart, tempEnd-tempStart);
-						stringComponentInfo = gcnew String(componentInfo.c_str());
-						listViewItems = gcnew Windows::Forms::ListViewItem(stringComponentInfo);
-						/****Mark****/
-						tempStart = tempEnd+1;
-						tempEnd = feedbackTasks.find_first_of("]", tempStart);
-						componentInfo = feedbackTasks.substr(tempStart, tempEnd-tempStart);
-						stringComponentInfo = gcnew String(componentInfo.c_str());
-						listViewItems->SubItems->Add(stringComponentInfo); 
-						/****Task type****/
-						tempStart = tempEnd+1;
-						tempEnd = feedbackTasks.find_first_of("]", tempStart);
-						componentInfo = feedbackTasks.substr(tempStart, tempEnd-tempStart);
-						stringComponentInfo = gcnew String(componentInfo.c_str());
-						listViewItems->SubItems->Add(stringComponentInfo); 
-						/****Task name****/
-						tempStart = tempEnd+1;
-						tempEnd = feedbackTasks.find_first_of("]", tempStart);
-						componentInfo = feedbackTasks.substr(tempStart, tempEnd-tempStart);
-						stringComponentInfo = gcnew String(componentInfo.c_str());
-						listViewItems->SubItems->Add(stringComponentInfo); 
-						/****Date****/
-						tempStart = tempEnd+1;
-						tempEnd = feedbackTasks.find_first_of("]", tempStart);
-						componentInfo = feedbackTasks.substr(tempStart, tempEnd-tempStart);
-						stringComponentInfo = gcnew String(componentInfo.c_str());
-						listViewItems->SubItems->Add(stringComponentInfo); 
-						/****Start time****/
-						tempStart = tempEnd+1;
-						tempEnd = feedbackTasks.find_first_of("]", tempStart);
-						componentInfo = feedbackTasks.substr(tempStart, tempEnd-tempStart);
-						stringComponentInfo = gcnew String(componentInfo.c_str());
-						listViewItems->SubItems->Add(stringComponentInfo); 
-						/****End time****/
-						tempStart = tempEnd+1;
-						tempEnd = feedbackTasks.find_first_of("]", tempStart);
-						componentInfo = feedbackTasks.substr(tempStart, tempEnd-tempStart);
-						stringComponentInfo = gcnew String(componentInfo.c_str());
-						listViewItems->SubItems->Add(stringComponentInfo); 
-					
-						listOutput->Items->Add(this->listViewItems);
-						count -= 7; //each task has seven dividers "]"
+				//why algorithm count() doesn't work
+				int count = 0;
+				for(int i=0; i<int(feedbackTasks.size());i++) {
+					if (feedbackTasks.at(i) == ']') {
+						count++;
 					}
-			//	}
+				}
+
+				while(count > 0) {
+					feedbackIndex--;
+					/****Index****/
+					tempStart = tempEnd+1;
+					tempEnd = feedbackTasks.find_first_of("]", tempStart);
+					componentInfo = feedbackTasks.substr(tempStart, tempEnd-tempStart);
+					stringComponentInfo = gcnew String(componentInfo.c_str());
+					listViewItems = gcnew Windows::Forms::ListViewItem(stringComponentInfo);
+					/****Mark****/
+					tempStart = tempEnd+1;
+					tempEnd = feedbackTasks.find_first_of("]", tempStart);
+					componentInfo = feedbackTasks.substr(tempStart, tempEnd-tempStart);
+					stringComponentInfo = gcnew String(componentInfo.c_str());
+					listViewItems->SubItems->Add(stringComponentInfo); 
+					/****Task type****/
+					tempStart = tempEnd+1;
+					tempEnd = feedbackTasks.find_first_of("]", tempStart);
+					componentInfo = feedbackTasks.substr(tempStart, tempEnd-tempStart);
+					stringComponentInfo = gcnew String(componentInfo.c_str());
+					listViewItems->SubItems->Add(stringComponentInfo); 
+					/****Task name****/
+					tempStart = tempEnd+1;
+					tempEnd = feedbackTasks.find_first_of("]", tempStart);
+					componentInfo = feedbackTasks.substr(tempStart, tempEnd-tempStart);
+					stringComponentInfo = gcnew String(componentInfo.c_str());
+					listViewItems->SubItems->Add(stringComponentInfo); 
+					/****Date****/
+					tempStart = tempEnd+1;
+					tempEnd = feedbackTasks.find_first_of("]", tempStart);
+					componentInfo = feedbackTasks.substr(tempStart, tempEnd-tempStart);
+					stringComponentInfo = gcnew String(componentInfo.c_str());
+					listViewItems->SubItems->Add(stringComponentInfo); 
+					/****Start time****/
+					tempStart = tempEnd+1;
+					tempEnd = feedbackTasks.find_first_of("]", tempStart);
+					componentInfo = feedbackTasks.substr(tempStart, tempEnd-tempStart);
+					stringComponentInfo = gcnew String(componentInfo.c_str());
+					listViewItems->SubItems->Add(stringComponentInfo); 
+					/****End time****/
+					tempStart = tempEnd+1;
+					tempEnd = feedbackTasks.find_first_of("]", tempStart);
+					componentInfo = feedbackTasks.substr(tempStart, tempEnd-tempStart);
+					stringComponentInfo = gcnew String(componentInfo.c_str());
+					listViewItems->SubItems->Add(stringComponentInfo); 
+
+					//listViewItems change colour
+					this->inputBox->Text = System::Convert::ToString(feedbackIndex);
+					if(feedbackIndex == 0) {
+						listViewItems->ForeColor = System::Drawing::SystemColors::HotTrack;
+					}
+					listOutput->Items->Add(this->listViewItems);
+					count -= 7; //each task has seven dividers "]"
+				}
 		 }
 
 	private: System::Void inputBox_TextChanged(System::Object^  sender, System::EventArgs^  e) {
