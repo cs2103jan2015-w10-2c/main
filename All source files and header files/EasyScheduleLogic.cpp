@@ -412,6 +412,10 @@ string EasyScheduleLogic::tellUIDisplay() {
 	return returnDisplay;
 }
 
+int EasyScheduleLogic::tellUIReturnIndex() {
+	return returnIndex;
+}
+
 bool EasyScheduleLogic::isDuplicate() {
 	return storage.isTaskDuplicate(task);
 }
