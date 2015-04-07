@@ -21,6 +21,7 @@ int CommandParser::endTimeHour=-1;
 int CommandParser::endTimeMin=-1;
 string CommandParser::dayOfWeek;
 int CommandParser::number=-1;
+string CommandParser::attribute="";
 string devider = "/";
 size_t pos1;
 size_t pos2;
@@ -197,7 +198,7 @@ void CommandParser::identifyTask(string userInput) {
 	} else if (commandType == "edit"){
 
 		number = stoi(userInput.substr(pos1+1, pos2-pos1-1));
-		string attribute = userInput.substr(pos2+1, pos3-pos2-1);
+		attribute = userInput.substr(pos2+1, pos3-pos2-1);
 
 		if (attribute == "name"){
 			//userInput == edit 4 name XXXXX

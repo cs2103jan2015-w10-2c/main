@@ -381,7 +381,15 @@ string EasyScheduleLogic::markNotDone() {
 
 string EasyScheduleLogic::editingTask(){
 	taskNumber = parser.number;
-	string s = storage.editTask(taskNumber, parser.name);
+	string s;
+	if (parser.attribute == "name"){
+		s = storage.editTaskName(taskNumber, parser.name);
+	} else if (parser.attribute == "date"){
+		s = storage.editTaskDate(taskNumber, parser.year, parser.month, parser.day);
+	} else if (parser.attribute == "time"){
+		s = storage.editTaskTime(taskNumber,parser.startTimeHour, parser.startTimeMin, parser.endTimeHour, parser.endTimeMin);
+	}
+
 	if (storage.isSuccess){
 		returnMessage = MESSAGE_EDIT;
 	}else{
