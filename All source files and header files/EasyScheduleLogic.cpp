@@ -103,14 +103,20 @@ int EasyScheduleLogic::localMin;
 void EasyScheduleLogic::executeLogic(string userInput) {
 	parsingCommand(userInput);
 	if(parser.commandType == "filepath"){
-		//path = parser.name;
-	}else if(parser.commandType == "filename"){
+		storage.setPathName(parser.name);
+		if (storage.showDirectory()) {
+			returnMessage = "Directory opened";
+		} else {
+			returnMessage = "Directory is not found, please respecify file storage location";
+		}
+	} else if(parser.commandType == "filename"){
 		if (storage._fileName!="") {
 			storage.writeToFile();
 		}
 		storage.setFileName(parser.name);
 		storage.readFile();
 		storage.openFile();
+		returnMessage = "File has been created, the program is now ready to be used"; 
 		returnIndex = 0;
 	} else if (parser.commandType == "add") {
 		returnMessage = addingTask();
