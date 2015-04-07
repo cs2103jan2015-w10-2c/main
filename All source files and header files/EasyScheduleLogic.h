@@ -115,6 +115,7 @@ public:
 	static string sortingTask();
 	static string tellUIReturnMessage();
 	static string tellUIDisplay();
+	static int tellUIReturnIndex();
 	static bool isDuplicate();
 	static bool isValidDate();
 	static void getLocalDateTime();
