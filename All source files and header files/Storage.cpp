@@ -22,11 +22,12 @@ list<Task>::iterator Storage::_taskIt;
 ofstream Storage::_fWrite;
 ifstream Storage::_fRead;
 string Storage::_fileName;
-char Storage::_pathName[1000];
+string Storage::_pathName;
 bool Storage::isSuccess;
 bool Storage::isSearched;
 Record Storage::_record;
 Tracker Storage::_tracker;
+int Storage::_index;
 
 DIR *dir = NULL;
 struct dirent *ent;
@@ -47,11 +48,11 @@ void Storage::setFileName(string name) {
 }
 
 void Storage::setPathName(string name) {
-	sprintf_s(_pathName, PATH_NAME_BUFFER.c_str(), name.c_str());
+	_pathName =name;
 }
 
 bool Storage::showDirectory() {
-	if ((dir = opendir (_pathName)) != NULL) {
+	if ((dir = opendir (_pathName.c_str())) != NULL) {
 		///* print all the files and directories within directory */
 		//while ((ent = readdir (dir)) != NULL) {
 		//	printf ("%s\r\n", ent->d_name);
@@ -67,7 +68,7 @@ bool Storage::showDirectory() {
 //pathName can be respecified if you wish to save it in another EXISTING folder
 void Storage::openFile() {
 	string pathName = _pathName;
-	string combined = pathName + _fileName;
+	string combined = pathName + "/" + _fileName;
 	_fWrite.open(combined);
 }
 
@@ -156,22 +157,13 @@ void Storage::readFile() {
 		
 }
 
-int Storage::getIndex() {
-	int index=1;
-	list<Task>::iterator i = _taskList.begin();
-	while (i!=_taskIt) {
-		index++;
-		i++;
-	}
-	return index;
-}
 
 void Storage::storeTask(Task task) {
 	if (!isTaskDuplicate(task)) {
 		_taskList.push_back(task);
 		creatRecordAdd(task);
-		getTask(task);
 		sortList();
+		getIndex(task);
 		isSuccess = true;
 	} else {
 		isSuccess = false;
@@ -441,24 +433,23 @@ string Storage::toLower(string text) {
 	return text;
 }
 
-void Storage::getTask(Task task) {
-	list<Task>::iterator i;
-	for (i=_taskList.begin();i!=_taskList.end();i++) {
-		
-		if ((i->getCommandType() == task.getCommandType()) 
-			&& (i->getTaskType() == task.getTaskType()) 
-			&& (i->getName() == task.getName())
-			&& (i->getYear() == task.getYear())
-			&& (i->getMonth() == task.getMonth())
-			&& (i->getDay() == task.getDay())
-			&& (i->getStartTimeHour() == task.getStartTimeHour())
-			&& (i->getStartTimeMin() == task.getStartTimeMin())
-			&& (i->getEndTimeHour() == task.getEndTimeHour())
-			&& (i->getEndTimeMin() == task.getEndTimeMin())
+void Storage::getIndex(Task task) {
+	_index = 1;
+	for (_taskIt=_taskList.begin();_taskIt!=_taskList.end();_taskIt++) {
+		if ((_taskIt->getCommandType() == task.getCommandType()) 
+			&& (_taskIt->getTaskType() == task.getTaskType()) 
+			&& (_taskIt->getName() == task.getName())
+			&& (_taskIt->getYear() == task.getYear())
+			&& (_taskIt->getMonth() == task.getMonth())
+			&& (_taskIt->getDay() == task.getDay())
+			&& (_taskIt->getStartTimeHour() == task.getStartTimeHour())
+			&& (_taskIt->getStartTimeMin() == task.getStartTimeMin())
+			&& (_taskIt->getEndTimeHour() == task.getEndTimeHour())
+			&& (_taskIt->getEndTimeMin() == task.getEndTimeMin())
 			&& (!task.isDone())) {
-				_taskIt = i;
 				return;
 		}
+		_index++;
 	}
 	return;
 }
@@ -467,6 +458,7 @@ void Storage::getTask(Task task) {
 //search task in the _taskList for exact matches
 bool Storage::compareTask(Task task) {
 	list<Task>::iterator i;
+	_index=1;
 	for (i=_taskList.begin();i!=_taskList.end();i++) {
 		
 		if ((i->getCommandType() == task.getCommandType()) 
@@ -482,16 +474,19 @@ bool Storage::compareTask(Task task) {
 				_taskIt = i;
 				return true;
 		}
+		_index++;
 	}
 	return false;
 }
 
 
 void Storage::getPosition(int i) {
-			while (i>1) {
-				_taskIt++;
-				i--;
-			}
+	_index = 1;
+	while (i>1) {
+		_taskIt++;
+		i--;
+		_index++;
+	}
 }
 
 string Storage::markDone(int i) {

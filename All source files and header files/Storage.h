@@ -33,12 +33,13 @@ public:
 
 	Storage();
 	static string _fileName;
-	static char _pathName[1000];
+	static string _pathName;
 	static list<Task>_taskList;
 	static list<Task>_searchResultList;
 	static ofstream _fWrite;
 	static ifstream _fRead;
 	static char buffer[1000];
+	static int _index;
 
 	static bool isSuccess;
 	static bool isSearched;
@@ -83,7 +84,7 @@ public:
 	static string markDone(int i);
 	static string markNotDone(int i);
 	static string deleteByNumber(int i);
-	static int getIndex();
+	static void getIndex(Task task);
 
 
 	static string toStringTaskDetail();

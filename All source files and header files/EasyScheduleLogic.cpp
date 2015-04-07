@@ -72,22 +72,12 @@ int EasyScheduleLogic::localMin;
 
 
 //
-////here
 //int main () {
 //	EasyScheduleLogic::main();
 //}
 //
 //void EasyScheduleLogic::main() {
-//	string pathName;
-//	cin >> pathName;
-//	storage.setPathName(pathName);
-//	string filename;
-//	cin >> filename;
-//	storage.setFileName(filename);
-//	storage.readFile();
-//	storage.openFile();
 //	string input;
-//	cin.ignore();
 //	getline(cin, input);
 //
 //	while (input!="exit") {
@@ -99,7 +89,6 @@ int EasyScheduleLogic::localMin;
 //	exit(0);
 //	
 //}
-////here
 //
 
 void EasyScheduleLogic::executeLogic(string userInput) {
@@ -125,7 +114,7 @@ void EasyScheduleLogic::executeLogic(string userInput) {
 		returnMessage = addingTask();
 		returnDisplay = displayingTask();
 		if (storage.isSuccess) {
-			returnIndex = storage.getIndex();
+			returnIndex = storage._index;
 		} else {
 			returnIndex = 0;
 		}
@@ -157,7 +146,7 @@ void EasyScheduleLogic::executeLogic(string userInput) {
 	} else if (parser.commandType == "done") { //mark done/notdone doesn't work.
 		returnDisplay = markDone();
 		if (storage.isSuccess) {
-			returnIndex = storage.getIndex();
+			returnIndex = storage._index;
 		}
 		if (parser.name!="") {
 			if ((storage._searchResultList).size()==0) {
@@ -166,7 +155,7 @@ void EasyScheduleLogic::executeLogic(string userInput) {
 			if ((storage._searchResultList).size()==1) {
 				parser.number=1;
 				returnDisplay = markDone();
-				returnIndex = storage.getIndex();
+				returnIndex = storage._index;
 			} else {
 				returnIndex = 0;
 			}
@@ -174,7 +163,7 @@ void EasyScheduleLogic::executeLogic(string userInput) {
 		} else if (commandType == "notdone") {
 		returnDisplay = markNotDone();
 		if (storage.isSuccess) {
-			returnIndex = storage.getIndex();
+			returnIndex = storage._index;
 		}
 		if (parser.name!="") {
 			if ((storage._searchResultList).size()==0) {
@@ -183,7 +172,7 @@ void EasyScheduleLogic::executeLogic(string userInput) {
 			if ((storage._searchResultList).size()==1) {
 				parser.number=1;
 				returnDisplay = markNotDone();
-				returnIndex = storage.getIndex();
+				returnIndex = storage._index;
 			} else {
 				returnIndex = 0;
 			}
