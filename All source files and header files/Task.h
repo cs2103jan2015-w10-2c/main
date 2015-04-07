@@ -35,10 +35,10 @@ public:
 	void setYear(int newYear);
 	void setMonth(int newMonth);
 	void setDay(int newDay);
-	void setStartTimeHour(int newStartTimeHour);
-	void setStartTimeMin(int newStartTimeMin);
-	void setEndTimeHour(int newEndTimeHour);
-	void setEndTimeMin(int newEndTimeMin);
+	void setStartTimeHour(double newStartTimeHour);
+	void setStartTimeMin(double newStartTimeMin);
+	void setEndTimeHour(double newEndTimeHour);
+	void setEndTimeMin(double newEndTimeMin);
 	void setCommandType(string commandType);
 
 	string getCommandType();

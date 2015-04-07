@@ -76,7 +76,9 @@ public:
 	static void undoingReverseDone(list<Task> listToUndo);
 
 	static void storeTask(Task task);
-	static string editTask(int i, string s);
+	static string editTaskName(int i, string s);
+	static string editTaskTime(int i, double sth, double stm, double eth, double etm);
+	static string editTaskDate(int i, int year, int month, int day);
 	static string searchByName(string searchKeyWord);
 	static string markDone(int i);
 	static string markNotDone(int i);

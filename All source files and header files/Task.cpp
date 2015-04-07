@@ -85,19 +85,19 @@ void Task::setDay(int newDay){
 	_day = newDay;
 }
 
-void Task::setStartTimeHour(int newStartTimeHour){
+void Task::setStartTimeHour(double newStartTimeHour){
 	_startTimeHour = newStartTimeHour;
 }
 
-void Task::setStartTimeMin(int newStartTimeMin){
+void Task::setStartTimeMin(double newStartTimeMin){
 	_startTimeMin = newStartTimeMin;
 }
 
-void Task::setEndTimeHour(int newEndTimeHour){
+void Task::setEndTimeHour(double newEndTimeHour){
 	_endTimeHour = newEndTimeHour;
 }
 
-void Task::setEndTimeMin(int newEndTimeMin){
+void Task::setEndTimeMin(double newEndTimeMin){
 	_endTimeMin = newEndTimeMin;
 }
 

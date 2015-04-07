@@ -178,7 +178,7 @@ void Storage::storeTask(Task task) {
 	}
 }
 
-string Storage::editTask(int i, string s) {
+string Storage::editTaskName(int i, string s) {
 	string commandType = "edit";
 
 	if (isSearched) {
@@ -205,6 +205,86 @@ string Storage::editTask(int i, string s) {
 	_previousTaskList.clear();
 	_previousTaskList.push_back(*(_taskIt));
 	_taskIt->setName(s);
+	_previousTaskList.push_back(*(_taskIt));
+	_record = Record(commandType, _previousTaskList);
+	addToTracker(_record);
+	_record.clear();
+	isSuccess = true;
+	return toStringTaskDetail();
+	
+}
+
+
+string Storage::editTaskTime(int i, double sth, double stm, double eth, double etm) {
+	string commandType = "edit";
+
+	if (isSearched) {
+		_taskIt= _searchResultList.begin();
+		if (i>_searchResultList.size()||i<=0) {
+			isSuccess = false;
+			return toStringTaskDetail(_searchResultList);
+		} else {
+			getPosition(i);
+			isSuccess = compareTask(*(_taskIt));
+			if (!isSuccess) {
+				return toStringTaskDetail(_searchResultList);
+			}
+		}
+	} else {
+		if (i>_taskList.size()||i<=0) {
+			isSuccess = false;
+			return toStringTaskDetail(_searchResultList);
+		} else {
+			_taskIt= _taskList.begin();
+			getPosition(i);
+		}
+	}
+	_previousTaskList.clear();
+	_previousTaskList.push_back(*(_taskIt));
+	_taskIt->setStartTimeHour(sth);
+	_taskIt->setStartTimeMin(stm);
+	_taskIt->setEndTimeHour(eth);
+	_taskIt->setEndTimeMin(etm);
+
+	_previousTaskList.push_back(*(_taskIt));
+	_record = Record(commandType, _previousTaskList);
+	addToTracker(_record);
+	_record.clear();
+	isSuccess = true;
+	return toStringTaskDetail();
+	
+}
+
+
+string Storage::editTaskDate(int i, int year, int month, int day) {
+	string commandType = "edit";
+
+	if (isSearched) {
+		_taskIt= _searchResultList.begin();
+		if (i>_searchResultList.size()||i<=0) {
+			isSuccess = false;
+			return toStringTaskDetail(_searchResultList);
+		} else {
+			getPosition(i);
+			isSuccess = compareTask(*(_taskIt));
+			if (!isSuccess) {
+				return toStringTaskDetail(_searchResultList);
+			}
+		}
+	} else {
+		if (i>_taskList.size()||i<=0) {
+			isSuccess = false;
+			return toStringTaskDetail(_searchResultList);
+		} else {
+			_taskIt= _taskList.begin();
+			getPosition(i);
+		}
+	}
+	_previousTaskList.clear();
+	_previousTaskList.push_back(*(_taskIt));
+	_taskIt->setYear(year);
+	_taskIt->setMonth(month);
+	_taskIt->setDay(day);
 	_previousTaskList.push_back(*(_taskIt));
 	_record = Record(commandType, _previousTaskList);
 	addToTracker(_record);
