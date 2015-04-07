@@ -205,10 +205,13 @@ string Storage::editTask(int i, string s) {
 			getPosition(i);
 		}
 	}
-	//pointer to task in _taskList before mark done
-	storePreviousTask(commandType);
+	_previousTaskList.clear();
+	_previousTaskList.push_back(*(_taskIt));
 	_taskIt->setName(s);
-	storePreviousTask(commandType);
+	_previousTaskList.push_back(*(_taskIt));
+	_record = Record(commandType, _previousTaskList);
+	addToTracker(_record);
+	_record.clear();
 	isSuccess = true;
 	return toStringTaskDetail();
 	

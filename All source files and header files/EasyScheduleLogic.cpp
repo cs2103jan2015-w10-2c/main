@@ -109,6 +109,7 @@ void EasyScheduleLogic::executeLogic(string userInput) {
 		storage.setFileName(parser.name);
 		storage.readFile();
 		storage.openFile();
+		returnIndex = 0;
 	} else if (parser.commandType == "add") {
 		returnMessage = addingTask();
 		returnDisplay = displayingTask();
