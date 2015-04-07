@@ -112,7 +112,7 @@ void EasyScheduleLogic::executeLogic(string userInput) {
 			returnMessage = "Directory is not found, please respecify file storage location";
 		}
 	} else if(parser.commandType == "filename"){
-		if (storage._fileName!="") {
+		if (storage._fileName!=""/*possible problem here?*/) {
 			storage.writeToFile();
 		}
 		storage.setFileName(parser.name);
@@ -383,7 +383,15 @@ string EasyScheduleLogic::markNotDone() {
 
 string EasyScheduleLogic::editingTask(){
 	taskNumber = parser.number;
-	string s = storage.editTask(taskNumber, parser.name);
+	string s;
+	if (parser.attribute == "name"){
+		s = storage.editTaskName(taskNumber, parser.name);
+	} else if (parser.attribute == "date"){
+		s = storage.editTaskDate(taskNumber, parser.year, parser.month, parser.day);
+	} else if (parser.attribute == "time"){
+		s = storage.editTaskTime(taskNumber,parser.startTimeHour, parser.startTimeMin, parser.endTimeHour, parser.endTimeMin);
+	}
+
 	if (storage.isSuccess){
 		returnMessage = MESSAGE_EDIT;
 	}else{

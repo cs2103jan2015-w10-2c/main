@@ -25,6 +25,7 @@ public:
 	static int startTimeHour;
 	static int endTimeHour;
 	static string dayOfWeek;
+	static string attribute; //for edit
 
 public:
 	CommandParser(void);

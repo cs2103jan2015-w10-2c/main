@@ -21,6 +21,7 @@ int CommandParser::endTimeHour=-1;
 int CommandParser::endTimeMin=-1;
 string CommandParser::dayOfWeek;
 int CommandParser::number=-1;
+string CommandParser::attribute="";
 string devider = "/";
 size_t pos1;
 size_t pos2;
@@ -77,25 +78,20 @@ void CommandParser::easyAddDate(string userInput){
 				dayOfWeek = userInput.substr(pos1+1, (posD1-pos1-1));
 				int dayOfWeekNo = 0;
 				transform(dayOfWeek.begin(), dayOfWeek.end(), dayOfWeek.begin(), ::tolower);
-				if (dayOfWeek == "monday" || "mon"){
+			
+				if (dayOfWeek == "monday" || dayOfWeek == "mon"){
 					dayOfWeekNo = 1;
-				}
-				else if (dayOfWeek == "tuesday" || "tue"){
+				} else if (dayOfWeek == "tuesday" || dayOfWeek == "tue"){
 					dayOfWeekNo = 2;
-				}
-				else if (dayOfWeek == "wednesday" || "wed"){
+				} else if (dayOfWeek == "wednesday" || dayOfWeek =="wed"){
 					dayOfWeekNo = 3;
-				}
-				else if (dayOfWeek == "thursday" || "thu"){
+				} else if (dayOfWeek == "thursday" || dayOfWeek =="thu"){
 					dayOfWeekNo = 4;
-				}
-				else if (dayOfWeek == "friday" || "fri"){
+				} else if (dayOfWeek == "friday" || dayOfWeek =="fri"){
 					dayOfWeekNo = 5;
-				}
-				else if (dayOfWeek == "saturday" || "sat"){
+				} else if (dayOfWeek == "saturday" || dayOfWeek =="sat"){
 					dayOfWeekNo = 6;
-				}
-				else if (dayOfWeek == "sunday" || "sun"){
+				} else if (dayOfWeek == "sunday" || dayOfWeek =="sun"){
 					dayOfWeekNo = 0;
 				}
 
@@ -107,10 +103,11 @@ void CommandParser::easyAddDate(string userInput){
 				if (time.tm_wday > dayOfWeekNo){
 					dayToAdd = 7 - abs(dayOfWeekNo - time.tm_wday);
 				} else {
-						dayToAdd = dayOfWeekNo - time.tm_wday;
+					dayToAdd = dayOfWeekNo - time.tm_wday;
 				}
-
+				
 				time.tm_mday =  time.tm_mday + dayToAdd;
+				
 				mktime(&time);
 				day = time.tm_mday;
 				month = time.tm_mon + 1;
@@ -201,7 +198,7 @@ void CommandParser::identifyTask(string userInput) {
 	} else if (commandType == "edit"){
 
 		number = stoi(userInput.substr(pos1+1, pos2-pos1-1));
-		string attribute = userInput.substr(pos2+1, pos3-pos2-1);
+		attribute = userInput.substr(pos2+1, pos3-pos2-1);
 
 		if (attribute == "name"){
 			//userInput == edit 4 name XXXXX
