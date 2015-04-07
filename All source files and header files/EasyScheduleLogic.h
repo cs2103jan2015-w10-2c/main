@@ -117,6 +117,19 @@ public:
 	static bool isDuplicate();
 	static bool isValidDate();
 	static void getLocalDateTime();
+
+	static Task getTask();
+	static string getCommandType();
+	static string getTaskType();
+	static string getName();
+	static int getTaskNumber();
+	static int getYear();
+	static int getMonth();
+	static int getDay();
+	static int getStartTimeHour();
+	static int getStartTimeMin();
+	static int getEndTimeHour();
+	static int getEndTimeMin();
 	EasyScheduleLogic(void);
 	~EasyScheduleLogic(void);
 };

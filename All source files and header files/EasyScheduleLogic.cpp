@@ -452,6 +452,52 @@ void EasyScheduleLogic::getLocalDateTime(){
 	localMin  = time.tm_min;
 }
 
+#ifndef LOGICTEST
+Task EasyScheduleLogic::getTask(){
+	return task;
+}
+
+string EasyScheduleLogic::getCommandType(){
+	return commandType;
+}
+string EasyScheduleLogic::getTaskType(){
+	return taskType;
+}
+
+string EasyScheduleLogic::getName(){
+	return name;
+}
+
+int EasyScheduleLogic::getYear(){
+	return year;
+}
+
+int EasyScheduleLogic::getMonth(){
+	return month;
+}
+
+int EasyScheduleLogic::getDay(){
+	return day;
+}
+
+int EasyScheduleLogic::getStartTimeHour(){
+	return startTimeHour;
+}
+
+int EasyScheduleLogic::getStartTimeMin(){
+	return startTimeMin;
+}
+
+int EasyScheduleLogic::getEndTimeHour(){
+	return endTimeHour;
+}
+
+int EasyScheduleLogic::getEndTimeMin(){
+	return endTimeMin;
+}
+
+#endif
+
 EasyScheduleLogic::EasyScheduleLogic(void) { }
 
 EasyScheduleLogic::~EasyScheduleLogic(void) { }
