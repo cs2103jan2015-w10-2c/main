@@ -9,8 +9,8 @@ Record::Record(string commandType, Task newTask) {
 	_taskRecord.push_back(newTask);
 }
 
-Record::Record(string newCommand, list<Task> newTaskList){
-	_commandType = newCommand;
+Record::Record(string commandType, list<Task> newTaskList){
+	_commandType = commandType;
 	_taskRecord.clear();
 	_taskRecord = newTaskList;
 }

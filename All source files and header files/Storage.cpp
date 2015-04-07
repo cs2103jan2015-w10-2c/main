@@ -210,7 +210,7 @@ string Storage::editTask(int i, string s) {
 	_taskIt->setName(s);
 	_previousTaskList.push_back(*(_taskIt));
 	_record = Record(commandType, _previousTaskList);
-	addToTracker(_record);
+	addToTracker();
 	_record.clear();
 	isSuccess = true;
 	return toStringTaskDetail();
@@ -220,11 +220,11 @@ string Storage::editTask(int i, string s) {
 
 void Storage::creatRecordAdd(Task task) {
 	_record = Record( "add", task);
-	addToTracker(_record);
+	addToTracker();
 	_record.clear();
 }
 
-void Storage::addToTracker(Record record1) {
+void Storage::addToTracker() {
 		_tracker.addRecord(_record);
 }
 
@@ -522,7 +522,7 @@ void Storage::storePreviousTask(string commandType) {
 	//create a record to store commandType and the list of tasks
 	_record = Record(commandType, _previousTaskList);
 	//add the record to the tracker
-	addToTracker(_record);
+	addToTracker();
 	//clear the _record
 	_record.clear();
 }

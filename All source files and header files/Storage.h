@@ -62,7 +62,7 @@ public:
 
 
 	static void creatRecordAdd(Task task);
-	static void addToTracker(Record record1);
+	static void addToTracker();
 
 	static void sortList();
 	static void undoingReverseAdd(list<Task> listToUndo);
