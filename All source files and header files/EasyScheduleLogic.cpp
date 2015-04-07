@@ -110,7 +110,7 @@ void EasyScheduleLogic::executeLogic(string userInput) {
 			returnMessage = "Directory is not found, please respecify file storage location";
 		}
 	} else if(parser.commandType == "filename"){
-		if (storage._fileName!="") {
+		if (storage._fileName!=""/*possible problem here?*/) {
 			storage.writeToFile();
 		}
 		storage.setFileName(parser.name);
