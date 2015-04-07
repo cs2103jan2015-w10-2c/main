@@ -27,11 +27,13 @@ private:
 
 	static const string LINE_BUFFER;
 	static const string COMMANDLIST;
+	static const string PATH_NAME_BUFFER;
 
 public:
 
 	Storage();
 	static string _fileName;
+	static char _pathName[1000];
 	static list<Task>_taskList;
 	static list<Task>_searchResultList;
 	static ofstream _fWrite;
@@ -51,18 +53,18 @@ public:
 	static bool isFloatDuplicate(Task task);
 	static bool isTimedDuplicate(Task task);
 	static bool isDeadlineDuplicate(Task task);
-	static void showDirectory();
-	static bool isExistingFile();
+	static bool showDirectory();
 	static void openFile();
 	static void readFile();
 	static void setFileName(string name);
+	static void setPathName(string name);
 	static void writeToFile();
 	static string toLower(string text);
 	static string getCommandList();
 
 
 	static void creatRecordAdd(Task task);
-	static void addToTracker();
+	static void addToTracker(Record record1);
 
 	static void sortList();
 	static void undoingReverseAdd(list<Task> listToUndo);

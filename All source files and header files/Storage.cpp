@@ -2,12 +2,12 @@
 #include "dirent.h"
 #include <algorithm>
 #include <sstream>
-#include <assert.h>
 
 using namespace std;
 
 const string Storage::LINE_BUFFER = "%s/%s/%s/%s/%s/%s/%s/%s/%s/%s/%s";
 const string Storage::COMMANDLIST = "List of commands:\n1. add\n2. display\n3. delete\n4. search\n5. done\n6. undone";
+const string Storage::PATH_NAME_BUFFER ="%s";
 
 char Storage::buffer[1000];
 list<Task> Storage::_taskList;
@@ -17,6 +17,7 @@ list<Task>::iterator Storage::_taskIt;
 ofstream Storage::_fWrite;
 ifstream Storage::_fRead;
 string Storage::_fileName;
+char Storage::_pathName[1000];
 bool Storage::isSuccess;
 bool Storage::isSearched;
 Record Storage::_record;
@@ -40,36 +41,27 @@ void Storage::setFileName(string name) {
 	}
 }
 
-void Storage::showDirectory() {
-	if ((dir = opendir ("./")) != NULL) {
-		/* print all the files and directories within directory */
-		while ((ent = readdir (dir)) != NULL) {
-			printf ("%s\r\n", ent->d_name);
-		}
-		closedir (dir);
-		cout << "Type in name of file to open existing files" << "\n";
-		cout << "Enter a new name to create a new file" << "\n";
-	} else {
-		cout << "Could not find directory" << "\r\n";
-	}
+void Storage::setPathName(string name) {
+	sprintf_s(_pathName, PATH_NAME_BUFFER.c_str(), name.c_str());
 }
 
-bool Storage::isExistingFile() {
-	dir = opendir ("./");
-	while ((ent = readdir (dir)) != NULL) {
-		if (_fileName==ent->d_name) {
-			closedir (dir);
-			return true;
-		}
+bool Storage::showDirectory() {
+	if ((dir = opendir (_pathName)) != NULL) {
+		///* print all the files and directories within directory */
+		//while ((ent = readdir (dir)) != NULL) {
+		//	printf ("%s\r\n", ent->d_name);
+		//}
+		//closedir (dir);
+		return true;
+	} else {
+		return false;
 	}
-	closedir (dir);
-	return false;
 }
 
 //i have folder called databank which is where all text files will be saved into
 //pathName can be respecified if you wish to save it in another EXISTING folder
 void Storage::openFile() {
-	string pathName = "./Databank/";
+	string pathName = _pathName;
 	string combined = pathName + _fileName;
 	_fWrite.open(combined);
 }
@@ -93,7 +85,7 @@ void Storage::writeToFile() {
 //this is extremely inefficient but sigh
 void Storage::readFile() {
 	
-	string pathName = "./Databank/";
+	string pathName = _pathName;
 	string combined = pathName + _fileName;
 	_fRead.open(combined);
 
@@ -210,7 +202,7 @@ string Storage::editTask(int i, string s) {
 	_taskIt->setName(s);
 	_previousTaskList.push_back(*(_taskIt));
 	_record = Record(commandType, _previousTaskList);
-	addToTracker();
+	addToTracker(_record);
 	_record.clear();
 	isSuccess = true;
 	return toStringTaskDetail();
@@ -220,11 +212,11 @@ string Storage::editTask(int i, string s) {
 
 void Storage::creatRecordAdd(Task task) {
 	_record = Record( "add", task);
-	addToTracker();
+	addToTracker(_record);
 	_record.clear();
 }
 
-void Storage::addToTracker() {
+void Storage::addToTracker(Record record1) {
 		_tracker.addRecord(_record);
 }
 
@@ -522,7 +514,7 @@ void Storage::storePreviousTask(string commandType) {
 	//create a record to store commandType and the list of tasks
 	_record = Record(commandType, _previousTaskList);
 	//add the record to the tracker
-	addToTracker();
+	addToTracker(_record);
 	//clear the _record
 	_record.clear();
 }
