@@ -295,9 +295,7 @@ void CommandParser::identifyTask(string userInput) {
 		transform(name.begin(), name.end(), name.begin(), ::tolower);
 	} else if (commandType == "exit") {
 		return;
-	} else {
-		cout << "invalid command" << endl;
-	}
+	} 
 	return;
 }
 
