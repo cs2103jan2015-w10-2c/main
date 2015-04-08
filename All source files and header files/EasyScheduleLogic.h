@@ -94,6 +94,12 @@ public:
 	static string searchingTask();
 	static string displayingTask();
 	static string autoDisplay();
+	static string displayAllDeadline();
+	static string displayAllFloating();
+	static string displayAllTimed();
+	static string displayAllToday();
+	static string displayAllTomorrow();
+	static string displayAllYesterday();
 	static string markDone();
 	static string markNotDone();
 	static string editingTask();

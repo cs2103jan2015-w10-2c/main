@@ -110,15 +110,22 @@ void EasyScheduleLogic::executeLogic(string userInput) {
 	} else if (parser.commandType == "view"){
 		//code not finished here
 		if(parser.name == "deadline"){
+			returnDisplay = displayAllDeadline();
 
 		} else if(parser.name == "floating"){
+			returnDisplay = displayAllFloating();
 		
 		} else if(parser.name == "timed"){
+			returnDisplay = displayAllTimed();
 		
 		} else if(parser.name == "today"){
+			returnDisplay = displayAllToday();
 		
 		} else if(parser.name == "tomorrow"){
+			returnDisplay = displayAllTomorrow();
 
+		} else if(parser.name == "yesterday"){
+			returnDisplay = displayAllYesterday();
 		}
 
 	} else if (parser.commandType == "delete") {
@@ -394,6 +401,10 @@ string EasyScheduleLogic::editingTask(){
 		returnMessage = MESSAGE_EDIT_FAIL;
 	}
 	return s;
+}
+
+string EasyScheduleLogic::displayAllDeadline(){
+
 }
 
 string EasyScheduleLogic::autoDisplay(){
