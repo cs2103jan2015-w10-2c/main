@@ -40,6 +40,7 @@ public:
 	void setEndTimeHour(double newEndTimeHour);
 	void setEndTimeMin(double newEndTimeMin);
 	void setCommandType(string commandType);
+	void setTaskType(string taskType);
 
 	string getCommandType();
 	string getTaskType();

@@ -73,6 +73,10 @@ void Task::setName(string newName) {
 	_name = newName;
 }
 
+void Task::setTaskType(string taskType) {
+	_taskType = taskType;
+}
+
 void Task::setYear(int newYear){
 	_year = newYear;
 }
