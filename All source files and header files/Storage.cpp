@@ -698,12 +698,13 @@ list<Task> Storage::allToday(){
 }
 
 list<Task> Storage::allTomorrow(){
-	//??need to check for valid date??
 	//set year, month, day as tomorrow
 	time_t now = time(0);	
 	struct tm time;
 	localtime_s(&time, &now);
-	int day =  time.tm_mday + 1;
+	time.tm_mday += 1;
+	mktime(&time);
+	int day =  time.tm_mday;
 	int month = time.tm_mon + 1;
 	int year = time.tm_year + 1900;
 
@@ -716,12 +717,13 @@ list<Task> Storage::allTomorrow(){
 }
 
 list<Task> Storage::allYesterday(){
-	//??need to check for valid date??
 	//set year, month, day as yesterday
 	time_t now = time(0);	
 	struct tm time;
 	localtime_s(&time, &now);
-	int day =  time.tm_mday - 1 ;
+	time.tm_mday -= 1;
+	mktime(&time);
+	int day =  time.tm_mday;
 	int month = time.tm_mon + 1;
 	int year = time.tm_year + 1900;
 
