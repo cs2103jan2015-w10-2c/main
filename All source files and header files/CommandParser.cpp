@@ -56,8 +56,10 @@ void CommandParser::normalAddDate(string userInput){
 }
 
 void CommandParser::easyAddDate(string userInput){
-	if (userInput.substr(pos1+1, (posD1-pos1-1)) == "today"){
-
+	string todayOrTomorrow = userInput.substr(pos1+1, (posD1-pos1-1));
+	transform(todayOrTomorrow.begin(), todayOrTomorrow.end(), todayOrTomorrow.begin(), ::tolower);
+	
+	if (todayOrTomorrow == "today"){
 				time_t now = time(0);	
 				struct tm time;
 				localtime_s(&time, &now);
@@ -65,7 +67,7 @@ void CommandParser::easyAddDate(string userInput){
 				month = time.tm_mon + 1;
 				year = time.tm_year + 1900;
 			}	
-			else if (userInput.substr(pos1+1, (posD1-pos1-1)) == "tomorrow"){
+		else if (todayOrTomorrow == "tomorrow"){
 				time_t now = time(0);	
 				struct tm time;
 				localtime_s(&time, &now);
@@ -292,6 +294,9 @@ void CommandParser::identifyTask(string userInput) {
 				}
 			}	
 		}
+	} else if (commandType == "view"){
+		name = userInput.substr(pos1+1);
+		transform(name.begin(), name.end(), name.begin(), ::tolower);
 	} else if (commandType == "exit") {
 		return;
 	} else {
