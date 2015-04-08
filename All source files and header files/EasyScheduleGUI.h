@@ -38,7 +38,7 @@ namespace UI {
 			InitializeComponent();
 			void decomposeTaskString(string feedbackTasks, int feedbackIndex);
 			bool determineMultilineNeeded(string taskInfo);
-			void displayMultilineTask(string remainingPieces);
+			void displayMultilineTask(ListView^  listOutput, string remainingPieces);
 		}
 
 	protected:
@@ -208,7 +208,7 @@ namespace UI {
 			// 
 			this->TaskHeaderT->Text = L"Task";
 			this->TaskHeaderT->TextAlign = System::Windows::Forms::HorizontalAlignment::Center;
-			this->TaskHeaderT->Width = 229;
+			this->TaskHeaderT->Width = 230;
 			// 
 			// DateHeaderT
 			// 
@@ -303,7 +303,7 @@ namespace UI {
 			// 
 			this->TaskHeaderF->Text = L"Task";
 			this->TaskHeaderF->TextAlign = System::Windows::Forms::HorizontalAlignment::Center;
-			this->TaskHeaderF->Width = 181;
+			this->TaskHeaderF->Width = 180;
 			// 
 			// FloatTaskLabel
 			// 
@@ -509,11 +509,8 @@ namespace UI {
 						componentInfo = feedbackTasks.substr(start, end-start);
 						stringComponentInfo = gcnew String(componentInfo.c_str());
 						listViewItems->SubItems->Add(stringComponentInfo); 
-					}
-					//bug: doesnt display now
-					if(isMultilineNeeded) {
-						displayMultilineTask(remainingLongTask);
-					}
+					}					
+
 					//listViewItems change colour
 					//this->inputBox->Text = System::Convert::ToString(feedbackIndex);
 					if(feedbackIndex == 0) {
@@ -522,21 +519,31 @@ namespace UI {
 					
 					if(taskType == "Float") {
 						listOutputFloat->Items->Add(this->listViewItems);
+						/****Check for multiline task****/
+						if(isMultilineNeeded) {
+							displayMultilineTask(listOutputFloat, remainingLongTask);
+						}
 						for(int i=0; i<3; i++) {
 							start = end+1;
 							end = feedbackTasks.find_first_of("]", start);
 						}
-					} else {				
+					} else {			
+						listOutputMain->Items->Add(this->listViewItems);
+						/****Check for multiline task****/
+						if(isMultilineNeeded) {
+							displayMultilineTask(listOutputMain, remainingLongTask);
+						}
 						/****Adding a blank line between tasks with different dates****/
 						if(isDifferentDate) {
 							string emptyToken = " ";
 							String^ stringEmptyToken = gcnew String(emptyToken.c_str());
-							for(int i=0; i<7; i++) {
+							listViewItems = gcnew Windows::Forms::ListViewItem(stringEmptyToken);
+							for(int i=0; i<6; i++) {
 								listViewItems->SubItems->Add(stringEmptyToken);
 							}
+							listOutputMain->Items->Add(this->listViewItems);
 						}
 						isDifferentDate = false; //for future use
-						listOutputMain->Items->Add(this->listViewItems);
 					}
 
 					count -= 7; //each task has seven dividers "]"
@@ -549,23 +556,25 @@ namespace UI {
 				 }
 				 return false;
 		 }
-	private: void displayMultilineTask(string remainingPieces) {
+	private: void displayMultilineTask(ListView^  listOutput, string remainingPieces) {
 				 String^ stringRemainingPieces = gcnew String(remainingPieces.c_str()); 
 				 int lineLength = TaskHeaderT/*temporary*/->Width / widthToCharacterDisplayRatio;
 				 int numberOfExtraLines = stringRemainingPieces->Length / lineLength;
+
 				 int startingPos = 0;
 				 
-				 for(int i=0; i<numberOfExtraLines; i++) {
+				 for(int i=0; i<=numberOfExtraLines; i++) { //equivalent to numberOfExtraLines++
 					 String^ stringEachLine = stringRemainingPieces->Substring(startingPos, lineLength);
 					 string emptyToken = " ";
 					 String^ stringEmptyToken = gcnew String(emptyToken.c_str());
-					 listViewItems->SubItems->Add(stringEmptyToken); //empty index
+					 listViewItems = gcnew Windows::Forms::ListViewItem(stringEmptyToken); //empty index
 					 listViewItems->SubItems->Add(stringEmptyToken); //empty mark
 					 listViewItems->SubItems->Add(stringEmptyToken); //empty task typw
 					 listViewItems->SubItems->Add(stringEachLine);
 					 listViewItems->SubItems->Add(stringEmptyToken); //empty date
 					 listViewItems->SubItems->Add(stringEmptyToken); //empty start time
 					 listViewItems->SubItems->Add(stringEmptyToken); //empty end time
+					 listOutput->Items->Add(this->listViewItems);
 					 startingPos = startingPos + lineLength;
 				 }
 		 }
