@@ -92,7 +92,7 @@ void Storage::writeToFile() {
 void Storage::readFile() {
 
 	string pathName = _pathName;
-	string combined = pathName + _fileName;
+	string combined = pathName + "/" + _fileName;
 	_fRead.open(combined);
 
 	size_t posStart;
@@ -237,7 +237,11 @@ string Storage::editTaskTime(int i, double sth, double stm, double eth, double e
 	_taskIt->setStartTimeMin(stm);
 	_taskIt->setEndTimeHour(eth);
 	_taskIt->setEndTimeMin(etm);
-
+	if (sth==0&&stm==0) {
+		_taskIt->setTaskType("DeadlineTask");
+	} else {
+		_taskIt->setTaskType("TimedTask");
+	}
 	_previousTaskList.push_back(*(_taskIt));
 	_record = Record(commandType, _previousTaskList);
 	addToTracker(_record);
