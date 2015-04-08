@@ -21,16 +21,6 @@ using namespace std;
 class EasyScheduleLogic {
 
 private:
-	static const int MIN_MONTHS_IN_A_YEAR;
-	static const int MAX_MONTHS_IN_A_YEAR;
-	static const int MIN_DAY_IN_A_MONTH;
-	static const int MAX_DAYS_IN_A_MONTH[12];
-	static const int MIN_HOURS_IN_A_DAY;
-	static const int MAX_HOURS_IN_A_DAY;
-	static const int MIN_MINUTES_IN_AN_HOUR;
-	static const int MAX_MINUTES_IN_AN_HOUR;
-
-	static const int SHIFT_BY_ONE;
 
 	static const string FLOATING_TASK;
 	static const string DEADLINE_TASK;
@@ -54,6 +44,7 @@ private:
 	static const string MESSAGE_INVALID_INPUT_COMMAND;
 	static const string MESSAGE_INVALID_INPUT_NAME;
 	static const string MESSAGE_INVALID_DATE;
+	static const string MESSAGE_INVALID_TIME;
 	static const string MESSAGE_INVALID_NUMBER;
 	static const string MESSAGE_EXIT;
 	static const string MESSAGE_UNDO_FAIL;
@@ -117,7 +108,6 @@ public:
 	static string tellUIDisplay();
 	static int tellUIReturnIndex();
 	static bool isDuplicate();
-	static bool isValidDate();
 	static void getLocalDateTime();
 
 	static Task getTask();

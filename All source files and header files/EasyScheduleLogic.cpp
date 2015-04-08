@@ -4,18 +4,6 @@
 #include <assert.h>
 #include <ctime>
 
-
-const int EasyScheduleLogic::MIN_MONTHS_IN_A_YEAR = 1;
-const int EasyScheduleLogic::MAX_MONTHS_IN_A_YEAR = 12;
-const int EasyScheduleLogic::MIN_DAY_IN_A_MONTH = 1;
-const int EasyScheduleLogic::MAX_DAYS_IN_A_MONTH[12] = {31,28,31,30,31,30,31,31,30,31,30,31};
-const int EasyScheduleLogic::MIN_HOURS_IN_A_DAY = 0;
-const int EasyScheduleLogic::MAX_HOURS_IN_A_DAY = 23;
-const int EasyScheduleLogic::MIN_MINUTES_IN_AN_HOUR = 0;
-const int EasyScheduleLogic::MAX_MINUTES_IN_AN_HOUR = 59;
-
-const int EasyScheduleLogic::SHIFT_BY_ONE = 1;
-
 const string EasyScheduleLogic::FLOATING_TASK = "FloatingTask";
 const string EasyScheduleLogic::DEADLINE_TASK = "DeadlineTask";
 const string EasyScheduleLogic::TIMED_TASK = "TimedTask";
@@ -37,6 +25,7 @@ const string EasyScheduleLogic::MESSAGE_EMPTY = "The schedule is empty.";
 const string EasyScheduleLogic::MESSAGE_INVALID_INPUT_COMMAND = "Invalid command type.";
 const string EasyScheduleLogic::MESSAGE_INVALID_INPUT_NAME = "Invalid task.";
 const string EasyScheduleLogic::MESSAGE_INVALID_DATE = "Invalid date.";
+const string EasyScheduleLogic::MESSAGE_INVALID_TIME = "Invalid time.";
 const string EasyScheduleLogic::MESSAGE_INVALID_NUMBER = "Invalid number, please select from the display.";
 const string EasyScheduleLogic::MESSAGE_EXIT = "Program exiting now.";
 const string EasyScheduleLogic::MESSAGE_UNDO_FAIL = "Undo fail. End of command history reached.";
@@ -320,10 +309,14 @@ string EasyScheduleLogic::addingTask(){
 		return MESSAGE_INVALID_INPUT_NAME;
 	} else {
 		storingTask();
-		if (storage.isSuccess) {
-			return MESSAGE_ADD;
-		} else { 
+		if (!storage.isDateValid){
+			return MESSAGE_INVALID_DATE;
+		} else if(!storage.isTimeValid){
+			return MESSAGE_INVALID_TIME;
+		} else if (!storage.isSuccess){
 			return MESSAGE_ADD_FAIL;
+		} else {
+			return MESSAGE_ADD;
 		}
 	}
 }
@@ -433,45 +426,6 @@ bool EasyScheduleLogic::isDuplicate() {
 	return storage.isTaskDuplicate(task);
 }
 
-bool EasyScheduleLogic::isValidDate(){
-	if (taskType == FLOATING_TASK){
-		return true;
-	}
-	else if(taskType == TIMED_TASK){
-		if(month < MIN_MONTHS_IN_A_YEAR || month > MAX_MONTHS_IN_A_YEAR){
-			return false;	
-		}
-		else if(day < MIN_DAY_IN_A_MONTH || day > MAX_DAYS_IN_A_MONTH[month - SHIFT_BY_ONE]){
-			return false;
-		}
-		else if(startTimeHour < MIN_HOURS_IN_A_DAY || startTimeHour > MAX_HOURS_IN_A_DAY){
-			return false;
-		}
-		else if(startTimeMin < MIN_MINUTES_IN_AN_HOUR || startTimeMin > MAX_MINUTES_IN_AN_HOUR){
-			return false;
-		}
-		else if(endTimeHour < MIN_HOURS_IN_A_DAY || endTimeHour > MAX_HOURS_IN_A_DAY){
-			return false;
-		}
-		else if(endTimeMin < MIN_MINUTES_IN_AN_HOUR || endTimeMin > MAX_MINUTES_IN_AN_HOUR){
-			return false;
-		}
-	}
-	else if(taskType == DEADLINE_TASK){
-		if(month < MIN_MONTHS_IN_A_YEAR || month > MAX_MONTHS_IN_A_YEAR){
-			return false;	
-		}
-		else if(day < MIN_DAY_IN_A_MONTH || day > MAX_DAYS_IN_A_MONTH[month - SHIFT_BY_ONE]){
-			return false;
-		}
-		else if(endTimeHour < MIN_HOURS_IN_A_DAY || endTimeHour > MAX_HOURS_IN_A_DAY){
-			return false;
-		}
-		else if(endTimeMin < MIN_MINUTES_IN_AN_HOUR || endTimeMin > MAX_MINUTES_IN_AN_HOUR){
-			return false;
-		}
-	}
-}
 
 //void EasyScheduleLogic::getLocalDateTime(){
 //	time_t now = time(0);

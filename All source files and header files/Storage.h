@@ -29,6 +29,21 @@ private:
 	static const string COMMANDLIST;
 	static const string PATH_NAME_BUFFER;
 
+	static const int MIN_MONTHS_IN_A_YEAR;
+	static const int MAX_MONTHS_IN_A_YEAR;
+	static const int MIN_DAY_IN_A_MONTH;
+	static const int MAX_DAYS_IN_A_MONTH[12];
+	static const int MIN_HOURS_IN_A_DAY;
+	static const int MAX_HOURS_IN_A_DAY;
+	static const int MIN_MINUTES_IN_AN_HOUR;
+	static const int MAX_MINUTES_IN_AN_HOUR;
+
+	static const int SHIFT_BY_ONE;
+
+	static const string FLOATING_TASK;
+	static const string DEADLINE_TASK;
+	static const string TIMED_TASK;
+
 public:
 
 	Storage();
@@ -43,6 +58,8 @@ public:
 
 	static bool isSuccess;
 	static bool isSearched;
+	static bool isDateValid;
+	static bool isTimeValid;
 	static bool compareTask(Task task);
 	static void getTask(Task task);
 	static void storePreviousTask(string commandType);
@@ -57,6 +74,8 @@ public:
 	static bool isFloatDuplicate(Task task);
 	static bool isTimedDuplicate(Task task);
 	static bool isDeadlineDuplicate(Task task);
+	static bool isValidDate(Task task);
+	static bool isValidTime(Task task);
 	static bool showDirectory();
 	static void openFile();
 	static void readFile();

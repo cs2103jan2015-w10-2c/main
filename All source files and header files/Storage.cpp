@@ -10,6 +10,21 @@
 
 using namespace std;
 
+const int Storage::MIN_MONTHS_IN_A_YEAR = 1;
+const int Storage::MAX_MONTHS_IN_A_YEAR = 12;
+const int Storage::MIN_DAY_IN_A_MONTH = 1;
+const int Storage::MAX_DAYS_IN_A_MONTH[12] = {31,28,31,30,31,30,31,31,30,31,30,31};
+const int Storage::MIN_HOURS_IN_A_DAY = 0;
+const int Storage::MAX_HOURS_IN_A_DAY = 23;
+const int Storage::MIN_MINUTES_IN_AN_HOUR = 0;
+const int Storage::MAX_MINUTES_IN_AN_HOUR = 59;
+
+const int Storage::SHIFT_BY_ONE = 1;
+
+const string Storage::FLOATING_TASK = "FloatingTask";
+const string Storage::DEADLINE_TASK = "DeadlineTask";
+const string Storage::TIMED_TASK = "TimedTask";
+
 const string Storage::LINE_BUFFER = "%s/%s/%s/%s/%s/%s/%s/%s/%s/%s/%s";
 const string Storage::COMMANDLIST = "List of commands:\n1. add\n2. display\n3. delete\n4. search\n5. done\n6. undone";
 const string Storage::PATH_NAME_BUFFER ="%s";
@@ -25,6 +40,8 @@ string Storage::_fileName;
 string Storage::_pathName;
 bool Storage::isSuccess;
 bool Storage::isSearched;
+bool Storage::isDateValid;
+bool Storage::isTimeValid;
 Record Storage::_record;
 Tracker Storage::_tracker;
 int Storage::_index;
@@ -159,11 +176,19 @@ void Storage::readFile() {
 
 
 void Storage::storeTask(Task task) {
-	if (!isTaskDuplicate(task)) {
+	if (!isValidDate(task)) {
+		isDateValid = false;
+		isSuccess = false;
+	} else if(!isValidTime(task)){
+		isTimeValid = false;
+		isSuccess = false;
+	} else if (!isTaskDuplicate(task)){
 		_taskList.push_back(task);
 		creatRecordAdd(task);
 		sortList();
 		getIndex(task);
+		isDateValid = true;
+		isTimeValid = true;
 		isSuccess = true;
 	} else {
 		isSuccess = false;
@@ -836,6 +861,37 @@ void Storage::undoingReverseNotDone(list<Task> listToUndo){
 		if(compareTask(*it)){
 			_taskIt->markDone();
 		}
+	}
+}
+
+bool Storage::isValidDate(Task task){
+	if (task.getTaskType() == FLOATING_TASK){
+		return true;
+	}
+	else if(task.getMonth() < MIN_MONTHS_IN_A_YEAR || task.getMonth() > MAX_MONTHS_IN_A_YEAR){
+			return false;	
+		} 
+}
+
+bool Storage::isValidTime(Task task){
+	if (task.getTaskType() == FLOATING_TASK){
+		return true;
+	} else if(task.getDay() < MIN_DAY_IN_A_MONTH || task.getDay() > MAX_DAYS_IN_A_MONTH[task.getMonth() - SHIFT_BY_ONE]){
+		return false;
+	} else if(task.getStartTimeHour() < MIN_HOURS_IN_A_DAY || task.getStartTimeHour() > MAX_HOURS_IN_A_DAY){
+		return false;
+	} else if(task.getStartTimeMin() < MIN_MINUTES_IN_AN_HOUR || task.getStartTimeMin() > MAX_MINUTES_IN_AN_HOUR){
+		return false;
+	} else if(task.getEndTimeHour() < MIN_HOURS_IN_A_DAY || task.getEndTimeHour() > MAX_HOURS_IN_A_DAY){
+		return false;
+	} else if(task.getEndTimeMin() < MIN_MINUTES_IN_AN_HOUR || task.getEndTimeMin() > MAX_MINUTES_IN_AN_HOUR){
+		return false;
+	} else if(task.getStartTimeHour() == task.getEndTimeHour() && task.getStartTimeMin() > task.getEndTimeMin()){
+		return false;
+	} else if(task.getStartTimeHour() > task.getEndTimeHour()){
+		return false;
+	} else {
+		return true;
 	}
 }
 
