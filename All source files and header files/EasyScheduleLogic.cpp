@@ -118,6 +118,20 @@ void EasyScheduleLogic::executeLogic(string userInput) {
 		} else {
 			returnIndex = 0;
 		}
+	} else if (parser.commandType == "view"){
+		//code not finished here
+		if(parser.name == "deadline"){
+
+		} else if(parser.name == "floating"){
+		
+		} else if(parser.name == "timed"){
+		
+		} else if(parser.name == "today"){
+		
+		} else if(parser.name == "tomorrow"){
+
+		}
+
 	} else if (parser.commandType == "delete") {
 		returnDisplay = deletingTask();
 		returnIndex = 0;
