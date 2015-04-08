@@ -135,14 +135,10 @@ void CommandParser::setDevider(string userInput){
 }
 
 void CommandParser::identifyTask(string userInput) {
-
 	setDevider(userInput);
-
 	commandType = userInput.substr(0, pos1);
-
 	//convert all letters in the commandType to lower case
 	transform(commandType.begin(), commandType.end(), commandType.begin(), ::tolower);
-	assert(commandType != "");
 
 	if(commandType == "filepath"){
 		name = userInput.substr(pos1+1);

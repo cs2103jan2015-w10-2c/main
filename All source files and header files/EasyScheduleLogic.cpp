@@ -64,11 +64,11 @@ int EasyScheduleLogic::startTimeMin;
 int EasyScheduleLogic::endTimeHour;
 int EasyScheduleLogic::endTimeMin;
 
-int EasyScheduleLogic::localYear;
-int EasyScheduleLogic::localMonth;
-int EasyScheduleLogic::localDay;
-int EasyScheduleLogic::localHour;
-int EasyScheduleLogic::localMin;
+//int EasyScheduleLogic::localYear;
+//int EasyScheduleLogic::localMonth;
+//int EasyScheduleLogic::localDay;
+//int EasyScheduleLogic::localHour;
+//int EasyScheduleLogic::localMin;
 
 
 //
@@ -473,16 +473,16 @@ bool EasyScheduleLogic::isValidDate(){
 	}
 }
 
-void EasyScheduleLogic::getLocalDateTime(){
-	time_t now = time(0);
-	struct tm time;
-	localtime_s(&time, &now);
-	localDay = time.tm_mday;
-	localMonth  = time.tm_mon + 1;
-	localYear = time.tm_year + 1900;
-	localHour = time.tm_hour;
-	localMin  = time.tm_min;
-}
+//void EasyScheduleLogic::getLocalDateTime(){
+//	time_t now = time(0);
+//	struct tm time;
+//	localtime_s(&time, &now);
+//	localDay = time.tm_mday;
+//	localMonth  = time.tm_mon + 1;
+//	localYear = time.tm_year + 1900;
+//	localHour = time.tm_hour;
+//	localMin  = time.tm_min;
+//}
 
 #ifndef LOGICTEST
 Task EasyScheduleLogic::getTask(){
