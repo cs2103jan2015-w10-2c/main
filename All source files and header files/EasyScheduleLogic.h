@@ -108,6 +108,7 @@ public:
 	static bool undoingDelete(Record recordToUndo);
 	static bool undoingDone(Record recordToUndo);
 	static bool undoingNotDone(Record recordToUndo);
+	static bool undoingEdit(Record recordToUndo);
 	static string tellUI();
 	static string sortingTask();
 	static string tellUIReturnMessage();

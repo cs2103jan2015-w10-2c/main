@@ -215,6 +215,7 @@ void EasyScheduleLogic::parsingCommand(string userInput) {
 	day = parser.day;
 }
 
+//@author A0115131B
 string EasyScheduleLogic::undoingTask() {
 	string message;
 	if(storage.getTracker().isEmptyTracker()) {
@@ -243,6 +244,12 @@ string EasyScheduleLogic::undoingTask() {
 			}
 		}else if(recordToUndo.getCommandType() == "notdone") {
 			if(undoingNotDone(recordToUndo)) {
+				message = MESSAGE_UNDO_SUCCESS;
+			}else{
+				message = MESSAGE_UNDO_ERROR;
+			}
+		}else if(recordToUndo.getCommandType() == "edit"){
+			if(undoingEdit(recordToUndo)){
 				message = MESSAGE_UNDO_SUCCESS;
 			}else{
 				message = MESSAGE_UNDO_ERROR;
@@ -282,6 +289,15 @@ bool EasyScheduleLogic::undoingAdd(Record recordToUndo){
 	return true;
 }
 
+bool EasyScheduleLogic::undoingEdit(Record recordToUndo){
+	//undo the edit action
+	list <Task> listToUndo;
+	listToUndo = recordToUndo.getTaskRecord();
+	storage.undoingReverseEdit(listToUndo);
+	return true;
+}
+
+//@author A0115131B
 void EasyScheduleLogic::creatingTask() {
 	if(taskType == FLOATING_TASK) {
 		task = Task(commandType, name);			

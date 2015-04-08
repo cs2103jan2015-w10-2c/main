@@ -224,8 +224,8 @@ string Storage::editTaskName(int i, string s) {
 	_taskIt->setName(s);
 	_previousTaskList.push_back(*(_taskIt));
 	_record = Record(commandType, _previousTaskList);
-	addToTracker(_record);
-	_record.clear();
+	addToTracker();
+
 	isSuccess = true;
 	return toStringTaskDetail();
 	
@@ -269,8 +269,8 @@ string Storage::editTaskTime(int i, double sth, double stm, double eth, double e
 	}
 	_previousTaskList.push_back(*(_taskIt));
 	_record = Record(commandType, _previousTaskList);
-	addToTracker(_record);
-	_record.clear();
+	addToTracker();
+
 	isSuccess = true;
 	return toStringTaskDetail();
 	
@@ -308,8 +308,8 @@ string Storage::editTaskDate(int i, int year, int month, int day) {
 	_taskIt->setDay(day);
 	_previousTaskList.push_back(*(_taskIt));
 	_record = Record(commandType, _previousTaskList);
-	addToTracker(_record);
-	_record.clear();
+	addToTracker();
+
 	isSuccess = true;
 	return toStringTaskDetail();
 	
@@ -318,12 +318,12 @@ string Storage::editTaskDate(int i, int year, int month, int day) {
 //@author A0115131B
 void Storage::creatRecordAdd(Task task) {
 	_record = Record( "add", task);
-	addToTracker(_record);
-	_record.clear();
+	addToTracker();
 }
 
-void Storage::addToTracker(Record record1) {
+void Storage::addToTracker() {
 		_tracker.addRecord(_record);
+		_record.clear();
 }
 
 bool Storage::isTaskDuplicate(Task task) {
@@ -613,7 +613,7 @@ string Storage::deleteByNumber(int i) {
 }
 
 
-//@author A0115131B
+//@author A0115131B    
 //record edited task item for undo function
 void Storage::storePreviousTask(string commandType) {
 	//creat a list storing tasks being editted
@@ -621,11 +621,9 @@ void Storage::storePreviousTask(string commandType) {
 	_previousTaskList.push_back(*(_taskIt));
 
 	//create a record to store commandType and the list of tasks
+	//add the record to tracker
 	_record = Record(commandType, _previousTaskList);
-	//add the record to the tracker
-	addToTracker(_record);
-	//clear the _record
-	_record.clear();
+	addToTracker();
 }
 
 list<Task> Storage::getPreviousTaskList(){
@@ -964,6 +962,25 @@ void Storage::undoingReverseNotDone(list<Task> listToUndo){
 		if(compareTask(*it)){
 			_taskIt->markDone();
 		}
+	}
+}
+
+void Storage::undoingReverseEdit(list<Task> listToUndo){
+	//undo the edit action
+	list<Task>::iterator it;
+	list<Task> newTaskList;
+
+	Task taskAfterEdit = listToUndo.back();
+	if(compareTask(taskAfterEdit)){
+		//delete the editted copy
+		for (it = _taskList.begin(); it != _taskList.end(); it++){
+			if(it != _taskIt){
+				newTaskList.push_back(*it);
+			}
+		}
+		//add the before edit copy back
+		newTaskList.push_back(*(listToUndo.begin()));
+		_taskList = newTaskList;
 	}
 }
 

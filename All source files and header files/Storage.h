@@ -93,13 +93,14 @@ public:
 
 
 	static void creatRecordAdd(Task task);
-	static void addToTracker(Record record1);
+	static void addToTracker();
 
 	static void sortList();
 	static void undoingReverseAdd(list<Task> listToUndo);
 	static void undoingReverseDelete(list<Task> listToUndo);
 	static void undoingReverseNotDone(list<Task> listToUndo);
 	static void undoingReverseDone(list<Task> listToUndo);
+	static void undoingReverseEdit(list<Task> listToUndo);
 
 	static void storeTask(Task task);
 	static string editTaskName(int i, string s);
