@@ -607,6 +607,107 @@ list<Task> Storage::getPreviousTaskList(){
 	return _previousTaskList;
 }
 
+list<Task> Storage::allDeadline(){
+	_searchResultList.clear();
+
+	for(_taskIt = _taskList.begin(); _taskIt != _taskList.end(); _taskIt++){
+		if( (*_taskIt).getTaskType() == "DeadlineTask"){
+				_searchResultList.push_back(*_taskIt);
+		}
+	}
+
+	if(!_searchResultList.empty()){
+		isSearched = true;
+	}
+	
+	return _searchResultList;
+}
+	
+list<Task> Storage::allFloating(){
+	_searchResultList.clear();
+
+	for(_taskIt = _taskList.begin(); _taskIt != _taskList.end(); _taskIt++){
+		if( (*_taskIt).getTaskType() == "FloatingTask"){
+				_searchResultList.push_back(*_taskIt);
+		}
+	}
+
+	if(!_searchResultList.empty()){
+		isSearched = true;
+	}
+	
+	return _searchResultList;
+}
+
+list<Task> Storage::allTimed(){
+	_searchResultList.clear();
+
+	for(_taskIt = _taskList.begin(); _taskIt != _taskList.end(); _taskIt++){
+		if( (*_taskIt).getTaskType() == "TimedTask"){
+				_searchResultList.push_back(*_taskIt);
+		}
+	}
+
+	if(!_searchResultList.empty()){
+		isSearched = true;
+	}
+	
+	return _searchResultList;
+}
+
+list<Task> Storage::allToday(){
+	//set year, month, day as today
+	time_t now = time(0);	
+	struct tm time;
+	localtime_s(&time, &now);
+	int day =  time.tm_mday;
+	int month = time.tm_mon + 1;
+	int year = time.tm_year + 1900;
+
+	searchTodayTask(year, month, day);
+
+	if(!_searchResultList.empty()){
+		isSearched = true;
+	}
+	return _searchResultList;
+}
+
+list<Task> Storage::allTomorrow(){
+	//??need to check for valid date??
+	//set year, month, day as tomorrow
+	time_t now = time(0);	
+	struct tm time;
+	localtime_s(&time, &now);
+	int day =  time.tm_mday + 1;
+	int month = time.tm_mon + 1;
+	int year = time.tm_year + 1900;
+
+	searchTodayTask(year, month, day);
+
+	if(!_searchResultList.empty()){
+		isSearched = true;
+	}
+	return _searchResultList;
+}
+
+list<Task> Storage::allYesterday(){
+	//??need to check for valid date??
+	//set year, month, day as yesterday
+	time_t now = time(0);	
+	struct tm time;
+	localtime_s(&time, &now);
+	int day =  time.tm_mday - 1 ;
+	int month = time.tm_mon + 1;
+	int year = time.tm_year + 1900;
+
+	searchTodayTask(year, month, day);
+
+	if(!_searchResultList.empty()){
+		isSearched = true;
+	}
+	return _searchResultList;
+}
+
 list<Task> Storage::autoInitialDisplay(){
 	//set year, month, day as system's today time
 	time_t now = time(0);	

@@ -48,6 +48,12 @@ public:
 	static void storePreviousTask(string commandType);
 	static list<Task> getPreviousTaskList();
 	static list<Task> autoInitialDisplay();
+	static list<Task> allDeadline();
+	static list<Task> allFloating();
+	static list<Task> allTimed();
+	static list<Task> allToday();
+	static list<Task> allTomorrow();
+	static list<Task> allYesterday();
 	static void searchTodayTask(int day, int month, int year);
 	static void searchUpcomingDeadline(int day, int month, int year);
 	static void getPosition(int i);

@@ -119,7 +119,6 @@ void EasyScheduleLogic::executeLogic(string userInput) {
 			returnIndex = 0;
 		}
 	} else if (parser.commandType == "view"){
-		//code not finished here
 		if(parser.name == "deadline"){
 			returnDisplay = displayAllDeadline();
 
@@ -410,8 +409,30 @@ string EasyScheduleLogic::editingTask(){
 	return s;
 }
 
-string EasyScheduleLogic::displayAllDeadline(){
 
+//@author A0115131B
+string EasyScheduleLogic::displayAllDeadline(){
+	return storage.toStringTaskDetail(storage.allDeadline());
+}
+
+string EasyScheduleLogic::displayAllFloating(){
+	return storage.toStringTaskDetail(storage.allFloating());
+}
+
+string EasyScheduleLogic::displayAllTimed(){
+	return storage.toStringTaskDetail(storage.allTimed());
+}
+
+string EasyScheduleLogic::displayAllToday(){
+	return storage.toStringTaskDetail(storage.allToday());
+}
+
+string EasyScheduleLogic::displayAllTomorrow(){
+	return storage.toStringTaskDetail(storage.allTomorrow());
+}
+
+string EasyScheduleLogic::displayAllYesterday(){
+	return storage.toStringTaskDetail(storage.allYesterday());
 }
 
 string EasyScheduleLogic::autoDisplay(){
