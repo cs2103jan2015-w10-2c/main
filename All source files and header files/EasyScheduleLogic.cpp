@@ -71,25 +71,25 @@ int EasyScheduleLogic::localHour;
 int EasyScheduleLogic::localMin;
 
 
-//
-//int main () {
-//	EasyScheduleLogic::main();
-//}
-//
-//void EasyScheduleLogic::main() {
-//	string input;
-//	getline(cin, input);
-//
-//	while (input!="exit") {
-//		executeLogic(input);
-//		getline(cin, input);
-//	}
-//	
-//	storage.writeToFile();
-//	exit(0);
-//	
-//}
-//
+
+int main () {
+	EasyScheduleLogic::main();
+}
+
+void EasyScheduleLogic::main() {
+	string input;
+	getline(cin, input);
+
+	while (input!="exit") {
+		executeLogic(input);
+		getline(cin, input);
+	}
+	
+	storage.writeToFile();
+	exit(0);
+	
+}
+
 
 void EasyScheduleLogic::executeLogic(string userInput) {
 	parsingCommand(userInput);
@@ -179,7 +179,7 @@ void EasyScheduleLogic::executeLogic(string userInput) {
 		} 
 	} else if(parser.commandType == "edit"){
 		returnDisplay = editingTask();
-		returnIndex = 0;
+		returnIndex = storage._index;
 	} else if (parser.commandType == "exit") {
 			returnMessage = MESSAGE_EXIT;
 			returnDisplay = "";
