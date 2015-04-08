@@ -90,7 +90,8 @@ void Storage::writeToFile() {
 
 //this is extremely inefficient but sigh
 void Storage::readFile() {
-	
+
+	_taskList.clear();
 	string pathName = _pathName;
 	string combined = pathName + _fileName;
 	_fRead.open(combined);
@@ -711,6 +712,7 @@ string Storage::toStringTaskDetail(list <Task> listToFormat){
 
 string Storage::toStringTaskDetail() {
 	isSearched = false;
+	sortList();
 	stringstream s;
 	if(_taskList.empty()) {
 		s << "The schedule is empty.";

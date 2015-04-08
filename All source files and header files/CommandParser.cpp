@@ -201,19 +201,18 @@ void CommandParser::identifyTask(string userInput) {
 		setDevider(userInput);
 		number = stoi(userInput.substr(pos1+1, pos2-pos1-1));
 		attribute = userInput.substr(pos2+1, pos3-pos2-1);
-		cout << number;
-		cout << attribute;
 		
 		if (attribute == "name"){
 			//userInput == edit 4 name XXXXX
 			name = userInput.substr(pos3+1);
 		} else if (attribute == "date"){
-			//userInpur == edit 3 date ......
+			//userInput == edit 3 date ......
 			string cutInput = userInput.substr(pos2+1);
+
 			//cutInput == date .....
 			setDevider(cutInput);
 
-			if (posD1 == string::npos){
+			if (taskType == "FloatingTask"){
 				//FloatingTask, need to add both date and time
 				if(isalpha(cutInput.at(pos1+1))){
 					//cutInput == date today/9/30/eat
@@ -253,7 +252,7 @@ void CommandParser::identifyTask(string userInput) {
 			//cutInput == time .....
 			setDevider(cutInput);
 
-			if (posD1 == string::npos){
+			if (taskType == "FloatingTask"){
 				//FloatingTask, need to add both date and time
 
 				if(isalpha(cutInput.at(pos1+1))){

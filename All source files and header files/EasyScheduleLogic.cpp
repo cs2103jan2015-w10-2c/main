@@ -71,24 +71,24 @@ int EasyScheduleLogic::localHour;
 int EasyScheduleLogic::localMin;
 
 
-
-int main () {
-	EasyScheduleLogic::main();
-}
-
-void EasyScheduleLogic::main() {
-	string input;
-	getline(cin, input);
-
-	while (input!="exit") {
-		executeLogic(input);
-		getline(cin, input);
-	}
-	
-	storage.writeToFile();
-	exit(0);
-	
-}
+//
+//int main () {
+//	EasyScheduleLogic::main();
+//}
+//
+//void EasyScheduleLogic::main() {
+//	string input;
+//	getline(cin, input);
+//
+//	while (input!="exit") {
+//		executeLogic(input);
+//		getline(cin, input);
+//	}
+//	
+//	storage.writeToFile();
+//	exit(0);
+//	
+//}
 
 
 void EasyScheduleLogic::executeLogic(string userInput) {
