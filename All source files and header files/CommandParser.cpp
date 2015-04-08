@@ -116,11 +116,13 @@ void CommandParser::easyAddDate(string userInput){
 }
 
 void CommandParser::setDevider(string userInput){
-	pos1 = userInput.find_first_of(' ');
-	pos2 = (userInput.substr(pos1+1)).find_first_of(" ");
-	pos3 = (userInput.substr(pos2+1)).find_first_of(" ");
-	pos4 = (userInput.substr(pos3+1)).find_first_of(" ");
-
+	devider = ' ';
+	pos1 = userInput.find(devider);
+	pos2 = userInput.find(devider, pos1+1);
+	pos3 = userInput.find(devider, pos2+1);
+	pos4 = userInput.find(devider, pos3+1);
+	
+	devider = '/';
 	posD1 = userInput.find(devider);
 	posD2 = userInput.find(devider, posD1+1);
 	posD3 = userInput.find(devider, posD2+1);
