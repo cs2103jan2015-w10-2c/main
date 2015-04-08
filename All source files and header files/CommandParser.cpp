@@ -121,7 +121,7 @@ void CommandParser::setDevider(string userInput){
 	pos2 = userInput.find(devider, pos1+1);
 	pos3 = userInput.find(devider, pos2+1);
 	pos4 = userInput.find(devider, pos3+1);
-	
+
 	devider = '/';
 	posD1 = userInput.find(devider);
 	posD2 = userInput.find(devider, posD1+1);
@@ -198,10 +198,12 @@ void CommandParser::identifyTask(string userInput) {
 	} else if (commandType == "sort" || commandType == "display" || commandType == "undo") {
 		return;
 	} else if (commandType == "edit"){
-
+		setDevider(userInput);
 		number = stoi(userInput.substr(pos1+1, pos2-pos1-1));
 		attribute = userInput.substr(pos2+1, pos3-pos2-1);
-
+		cout << number;
+		cout << attribute;
+		
 		if (attribute == "name"){
 			//userInput == edit 4 name XXXXX
 			name = userInput.substr(pos3+1);
