@@ -37,12 +37,14 @@ namespace UI {
 		EasyScheduleGUI(void) {
 			InitializeComponent();
 			void displayTaskString(string feedbackTasks, int feedbackIndex);
+			void displayInitial(string feedbackTasks);
+			void decomposeInitial(string feedbackTasks);
 			void decomposeTaskString(string feedbackTasks, int feedbackIndex);
 			void changeDoneTaskColor(bool isDone);
 			bool determineMultilineNeeded(string taskInfo);
 			void displayMultilineTaskString(ListView^  listOutput, string remainingPieces, int feedbackIndex, bool isDone);
 			void changeEditedRowColor(int feedbackIndex);
-			void iterateTaskComponentInfo(string feedbackTasks, size_t start, size_t end, string componentInfo);
+			void  iterateTaskComponentInfo(string feedbackTasks, size_t start, size_t end, string componentInfo);
 			void skipRow(string feedbackTasks, size_t start, size_t end, int NumberOfIter);
 		}
 
@@ -356,7 +358,7 @@ namespace UI {
 				//show today's agenda and upcoming deadlines
 				string allFeedbackTasks = EasyScheduleLogic::autoDisplay();
 				//temporary: display in dealine listView box
-				displayTaskString(allFeedbackTasks, 0); 
+				displayInitial(allFeedbackTasks); 
 
 				this->feedbackBox->Text = "Hello Jim. Welcome to EasySchedule!\r\nPlease enter the file name to open: ";
 		}
@@ -390,11 +392,7 @@ namespace UI {
 					this->previousCommandBox->Text = stringUserInput;
 				}
 
-				/*String^ stringFeedbackIndex = Convert::ToString(feedbackIndex);
-				this->inputBox->Text = stringFeedbackIndex;*/
-
 				displayTaskString(allFeedbackTasks, feedbackIndex);
-
 		}
 
 	private: System::Void inputBox_TextChanged(System::Object^  sender, System::EventArgs^  e) {
@@ -409,12 +407,153 @@ namespace UI {
 
 				decomposeTaskString(feedbackTasks, feedbackIndex);
 		}
+	private: void displayInitial(string feedbackTasks) {
+				listOutputMain->Items->Clear();
+				listOutputFloat->Items->Clear();
+
+				decomposeInitial(feedbackTasks);
+		}
+
+	private: void decomposeInitial(string feedbackTasks) {
+				
+				string componentInfo;
+				String^ stringComponentInfo;
+				string nextTaskDate;
+				size_t start;
+				size_t end=-1;
+				bool isMultilineNeeded = false;
+				int differentDate = 0;
+
+				string emptyToken = " ";
+				string MESSAGE_TODAY_AGENDA = "Today's Agenda:";
+				String^ stringEmptyToken = gcnew String(emptyToken.c_str());
+				String^ STRING_MESSAGE_TODAY_AGENDA = gcnew String(MESSAGE_TODAY_AGENDA.c_str());
+
+				/****Adding a message line before today/s agenda****/
+				listViewItems = gcnew Windows::Forms::ListViewItem(stringEmptyToken); //empty index
+				listViewItems->SubItems->Add(stringEmptyToken); //empty mark
+				listViewItems->SubItems->Add(stringEmptyToken); //empty task typw
+				listViewItems->SubItems->Add(STRING_MESSAGE_TODAY_AGENDA);
+				listViewItems->SubItems->Add(stringEmptyToken); //empty date
+				listViewItems->SubItems->Add(stringEmptyToken); //empty start time
+				listViewItems->SubItems->Add(stringEmptyToken); //empty end time
+				listViewItems->ForeColor = System::Drawing::SystemColors::HotTrack;
+				listOutputMain->Items->Add(this->listViewItems);
+
+				//why algorithm count() doesn't work
+				int count = 0;
+				for(int i=0; i<int(feedbackTasks.size());i++) {
+					if (feedbackTasks.at(i) == ']') {
+						count++;
+					}
+				}
+
+				while(count > 0) {
+					
+					/****Index****/
+					start = end+1;
+					end = feedbackTasks.find_first_of("]", start);
+					componentInfo = feedbackTasks.substr(start, end-start);
+					stringComponentInfo = gcnew String(componentInfo.c_str());
+					listViewItems = gcnew Windows::Forms::ListViewItem(stringComponentInfo);
+
+					/****Mark****/
+					start = end+1;
+					end = feedbackTasks.find_first_of("]", start);
+					componentInfo = feedbackTasks.substr(start, end-start);
+					stringComponentInfo = gcnew String(componentInfo.c_str());
+					listViewItems->SubItems->Add(stringComponentInfo); 
+
+					/****Task type****/
+					start = end+1;
+					end = feedbackTasks.find_first_of("]", start);
+					componentInfo = feedbackTasks.substr(start, end-start);
+					stringComponentInfo = gcnew String(componentInfo.c_str());
+					listViewItems->SubItems->Add(stringComponentInfo); 
+
+					/****Task name****/
+					start = end+1;
+					end = feedbackTasks.find_first_of("]", start);
+					componentInfo = feedbackTasks.substr(start, end-start);
+					/****Multiline for long task name****/
+					isMultilineNeeded = determineMultilineNeeded(componentInfo);
+					string remainingLongTask;
+					if(isMultilineNeeded) {
+						int remainingStartingPos = (TaskHeaderT->Width / widthToCharacterDisplayRatio);
+						string firstPiece = componentInfo.substr(0, remainingStartingPos);
+						remainingLongTask = componentInfo.substr(remainingStartingPos);
+						stringComponentInfo = gcnew String(firstPiece.c_str());
+					} else {
+						stringComponentInfo = gcnew String(componentInfo.c_str());
+					}
+					listViewItems->SubItems->Add(stringComponentInfo); 
+
+					/****Date****/
+					start = end+1;
+					end = feedbackTasks.find_first_of("]", start);
+					componentInfo = feedbackTasks.substr(start, end-start);
+					stringComponentInfo = gcnew String(componentInfo.c_str());
+					listViewItems->SubItems->Add(stringComponentInfo); 
+
+					/****check for date of the next task****/
+					size_t tempStart = start;
+					size_t tempEnd = end;
+				//	skipRow(feedbackTasks, tempStart, tempEnd, 7);
+					for(int i=0; i<7; i++) {
+						tempStart = end + 1;
+						tempEnd = feedbackTasks.find_first_of("]", start);
+					}
+					nextTaskDate = feedbackTasks.substr(tempStart, tempEnd-tempStart);
+					if(componentInfo != nextTaskDate) {
+						differentDate++;
+					} 
+
+					/****Start time****/
+					start = end+1;
+					end = feedbackTasks.find_first_of("]", start);
+					componentInfo = feedbackTasks.substr(start, end-start);
+					stringComponentInfo = gcnew String(componentInfo.c_str());
+					listViewItems->SubItems->Add(stringComponentInfo); 
+
+					/****End time****/
+					start = end+1;
+					end = feedbackTasks.find_first_of("]", start);
+					componentInfo = feedbackTasks.substr(start, end-start);
+					stringComponentInfo = gcnew String(componentInfo.c_str());
+					listViewItems->SubItems->Add(stringComponentInfo); 
+	
+					listOutputMain->Items->Add(this->listViewItems);
+
+					/****Check for multiline non-floating task****/
+					if(isMultilineNeeded) {
+						displayMultilineTaskString(listOutputMain, remainingLongTask, 0, false);
+					}
+
+					/****Adding a message line before upcoming deadline tasks****/
+					if(differentDate == 1) {
+						string MESSAGE_UPCOMING_DEADLINES = "Upcoming Deadlines:";
+						String^ STRING_MESSAGE_UPCOMING_DEADLINES = gcnew String(MESSAGE_UPCOMING_DEADLINES.c_str());
+						
+						listViewItems = gcnew Windows::Forms::ListViewItem(stringEmptyToken); //empty index
+						listViewItems->SubItems->Add(stringEmptyToken); //empty mark
+						listViewItems->SubItems->Add(stringEmptyToken); //empty task typw
+						listViewItems->SubItems->Add(STRING_MESSAGE_UPCOMING_DEADLINES);
+						listViewItems->SubItems->Add(stringEmptyToken); //empty date
+						listViewItems->SubItems->Add(stringEmptyToken); //empty start time
+						listViewItems->SubItems->Add(stringEmptyToken); //empty end time
+						listViewItems->ForeColor = System::Drawing::SystemColors::HotTrack;
+						listOutputMain->Items->Add(this->listViewItems);
+					}
+
+					count -= 7; //each task has seven dividers "]"
+				}
+		}
 
 	private: void decomposeTaskString(string feedbackTasks, int feedbackIndex) {
 
 				string componentInfo;
 				String^ stringComponentInfo;
-				string taskType; //to identify it it is a floating task
+				string taskType; //to distinguish a floating task
 				string nextTaskDate;
 				size_t start;
 				size_t end=-1;
@@ -435,12 +574,16 @@ namespace UI {
 					feedbackIndex--;
 					
 					/****Index****/
-					iterateTaskComponentInfo(feedbackTasks, start, end, componentInfo);
+					start = end+1;
+					end = feedbackTasks.find_first_of("]", start);
+					componentInfo = feedbackTasks.substr(start, end-start);
 					stringComponentInfo = gcnew String(componentInfo.c_str());
 					listViewItems = gcnew Windows::Forms::ListViewItem(stringComponentInfo);
 
 					/****Mark****/
-					iterateTaskComponentInfo(feedbackTasks, start, end, componentInfo);
+					start = end+1;
+					end = feedbackTasks.find_first_of("]", start);
+					componentInfo = feedbackTasks.substr(start, end-start);
 					stringComponentInfo = gcnew String(componentInfo.c_str());
 					listViewItems->SubItems->Add(stringComponentInfo); 
 					if(componentInfo == "Yes") {
@@ -448,13 +591,17 @@ namespace UI {
 					}
 
 					/****Task type****/
-					iterateTaskComponentInfo(feedbackTasks, start, end, componentInfo);
+					start = end+1;
+					end = feedbackTasks.find_first_of("]", start);
+					componentInfo = feedbackTasks.substr(start, end-start);
 					stringComponentInfo = gcnew String(componentInfo.c_str());
 					listViewItems->SubItems->Add(stringComponentInfo); 
 					taskType = componentInfo;
 
 					/****Task name****/
-					iterateTaskComponentInfo(feedbackTasks, start, end, componentInfo);
+					start = end+1;
+					end = feedbackTasks.find_first_of("]", start);
+					componentInfo = feedbackTasks.substr(start, end-start);
 					/****Multiline for long task name****/
 					isMultilineNeeded = determineMultilineNeeded(componentInfo);
 					string remainingLongTask;
@@ -471,43 +618,65 @@ namespace UI {
 					/****Adding time info for non floating tasks****/
 					if(taskType != "Float") {
 						/****Date****/
-						iterateTaskComponentInfo(feedbackTasks, start, end, componentInfo);
+						start = end+1;
+						end = feedbackTasks.find_first_of("]", start);
+						componentInfo = feedbackTasks.substr(start, end-start);
 						stringComponentInfo = gcnew String(componentInfo.c_str());
 						listViewItems->SubItems->Add(stringComponentInfo); 
 
 						/****check for date of the next task****/
 						size_t tempStart = start;
 						size_t tempEnd = end;
-						skipRow(feedbackTasks, tempStart, tempEnd, 7);
+					//	skipRow(feedbackTasks, tempStart, tempEnd, 7);
+						for(int i=0; i<7; i++) {
+							tempStart = end + 1;
+							tempEnd = feedbackTasks.find_first_of("]", start);
+						}
 						nextTaskDate = feedbackTasks.substr(tempStart, tempEnd-tempStart);
 						if(componentInfo != nextTaskDate) {
 							isDifferentDate = true;
 						} 
 
 						/****Start time****/
-						iterateTaskComponentInfo(feedbackTasks, start, end, componentInfo);
+						start = end+1;
+						end = feedbackTasks.find_first_of("]", start);
+						componentInfo = feedbackTasks.substr(start, end-start);
 						stringComponentInfo = gcnew String(componentInfo.c_str());
 						listViewItems->SubItems->Add(stringComponentInfo); 
 
 						/****End time****/
-						iterateTaskComponentInfo(feedbackTasks, start, end, componentInfo);
+						start = end+1;
+						end = feedbackTasks.find_first_of("]", start);
+						componentInfo = feedbackTasks.substr(start, end-start);
 						stringComponentInfo = gcnew String(componentInfo.c_str());
 						listViewItems->SubItems->Add(stringComponentInfo); 
 					}					
 
 					/****Change colour for done tasks****/
-					changeDoneTaskColor(isDone);
+					//changeDoneTaskColor(isDone);
+					if(isDone) {
+						listViewItems->ForeColor = System::Drawing::SystemColors::GrayText;
+						isDone = false;
+					}
 
 					/****Change colour for edited row****/
-					changeEditedRowColor(feedbackIndex);
-					
+					//changeEditedRowColor(feedbackIndex, listViewItems);
+					if(feedbackIndex == 0) {
+						listViewItems->BackColor = System::Drawing::SystemColors::Highlight;
+						listViewItems->ForeColor = System::Drawing::SystemColors::HighlightText;
+					}
+
 					if(taskType == "Float") {
 						listOutputFloat->Items->Add(this->listViewItems);
 						/****Check for multiline floating task****/
 						if(isMultilineNeeded) {
 							displayMultilineTaskString(listOutputFloat, remainingLongTask, -1, isDone);
 						}
-						skipRow(feedbackTasks, start, end, 3);
+					//	skipRow(feedbackTasks, start, end, 3);
+						for(int i=0; i<3; i++) {
+							start = end + 1;
+							end = feedbackTasks.find_first_of("]", start);
+						}
 					} else {			
 						listOutputMain->Items->Add(this->listViewItems);
 						/****Check for multiline non-floating task****/
@@ -531,8 +700,9 @@ namespace UI {
 				}
 		}
 
+	//can't work
 	private: void iterateTaskComponentInfo(string feedbackTasks, size_t start, size_t end, string componentInfo) {
-				start = end+1;
+				start = end + 1;
 				end = feedbackTasks.find_first_of("]", start);
 				componentInfo = feedbackTasks.substr(start, end-start);
 		}
@@ -562,12 +732,17 @@ namespace UI {
 	private: void displayMultilineTaskString(ListView^  listOutput, string remainingPieces, int feedbackIndex, bool isDone) {
 				String^ stringRemainingPieces = gcnew String(remainingPieces.c_str()); 
 				int lineLength = TaskHeaderT->Width / widthToCharacterDisplayRatio;
-				int numberOfExtraLines = stringRemainingPieces->Length / lineLength;
-
+				int numberOfExtraLines = stringRemainingPieces->Length / lineLength + 1;
+				String^ stringEachLine;
 				int startingPos = 0;
 				 
-				for(int i=0; i<=numberOfExtraLines; i++) { //equivalent to numberOfExtraLines++
-					String^ stringEachLine = stringRemainingPieces->Substring(startingPos, lineLength);
+				for(int i=0; i<numberOfExtraLines; i++) {
+					if(stringRemainingPieces->Length > lineLength) {
+						stringEachLine = stringRemainingPieces->Substring(startingPos, lineLength);
+						stringRemainingPieces = stringRemainingPieces->Substring(startingPos+lineLength);
+					} else {
+						stringEachLine = stringRemainingPieces;
+					}
 					string emptyToken = " ";
 					String^ stringEmptyToken = gcnew String(emptyToken.c_str());
 					listViewItems = gcnew Windows::Forms::ListViewItem(stringEmptyToken); //empty index
@@ -587,10 +762,11 @@ namespace UI {
 						listViewItems->ForeColor = System::Drawing::SystemColors::HighlightText;
 					}
 					listOutput->Items->Add(this->listViewItems);
-					startingPos = startingPos + lineLength;
+			//		startingPos = startingPos + lineLength;
 				}
 		}
 
+	//can't work. same problem as iterateTaskComponentInfo
 	private: void skipRow(string feedbackTasks, size_t start, size_t end, int NumberOfIter) {
 				for(int i=0; i<NumberOfIter; i++) {
 					start = end + 1;
@@ -598,4 +774,5 @@ namespace UI {
 				}
 		}
 };
+
 }
