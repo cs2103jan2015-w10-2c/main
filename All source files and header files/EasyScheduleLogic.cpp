@@ -9,18 +9,21 @@ const string EasyScheduleLogic::DEADLINE_TASK = "DeadlineTask";
 const string EasyScheduleLogic::TIMED_TASK = "TimedTask";
 
 const string EasyScheduleLogic::MESSAGE_WELCOME = "Welcome to EasySchedule!";
+const string EasyScheduleLogic::MESSAGE_DIRECTORY_OPENED = "Directory opened";
+const string EasyScheduleLogic::MESSAGE_DIRECTORY_NOT_FOUND = "Directory is not found, please respecify file storage location";
+const string EasyScheduleLogic::MESSAGE_PROGRAM_READY = "Program is now ready to be used";
 const string EasyScheduleLogic::MESSAGE_ADD = "The task has been stored successfully.";
 const string EasyScheduleLogic::MESSAGE_ADD_FAIL = "Sorry, the task is already in the schedule.";
 const string EasyScheduleLogic::MESSAGE_DELETE = "The task has been deleted.";
 const string EasyScheduleLogic::MESSAGE_DELETE_FAIL = "There is no task \"%s\" in the schedule.";
-const string EasyScheduleLogic::MESSAGE_DELETE_CHOOSE = "Please type 'delete [number]' to delete the task.";
+const string EasyScheduleLogic::MESSAGE_DELETE_CHOOSE = "Please enter 'delete [number]' to delete the task.";
 const string EasyScheduleLogic::MESSAGE_EDIT = "The task has been edited";
 const string EasyScheduleLogic::MESSAGE_EDIT_FAIL = "There is no such task. Please check from display of all tasks.";
 const string EasyScheduleLogic::MESSAGE_CLEAR = "All tasks have been deleted.";
 const string EasyScheduleLogic::MESSAGE_SEARCH_FAIL = "There is no task containing the keyword. Please check from display of all tasks.";
 const string EasyScheduleLogic::MESSAGE_SORT = "All tasks have been sorted by task type.";
 const string EasyScheduleLogic::MESSAGE_MARK_FAIL = "There is no such task. Please check from display of all tasks.";
-const string EasyScheduleLogic::MESSAGE_MARK_CHOOSE = "Please type 'done/undone [number]' to change the status of the task.";
+const string EasyScheduleLogic::MESSAGE_MARK_CHOOSE = "Please enter 'done/undone [number]' to change the status of the task.";
 const string EasyScheduleLogic::MESSAGE_EMPTY = "The schedule is empty.";
 const string EasyScheduleLogic::MESSAGE_INVALID_INPUT_COMMAND = "Invalid command type.";
 const string EasyScheduleLogic::MESSAGE_INVALID_INPUT_NAME = "Invalid task.";
@@ -31,6 +34,19 @@ const string EasyScheduleLogic::MESSAGE_EXIT = "Program exiting now.";
 const string EasyScheduleLogic::MESSAGE_UNDO_FAIL = "Undo fail. End of command history reached.";
 const string EasyScheduleLogic::MESSAGE_UNDO_SUCCESS = "Undo successfully.";
 const string EasyScheduleLogic::MESSAGE_UNDO_ERROR = "Error occured within undo function.";
+const string EasyScheduleLogic::MESSAGE_EMPTY_DEADLINE;
+const string EasyScheduleLogic::MESSAGE_EMPTY_FLOATING;
+const string EasyScheduleLogic::MESSAGE_EMPTY_TIMED;
+const string EasyScheduleLogic::MESSAGE_EMPTY_TODAY;
+const string EasyScheduleLogic::MESSAGE_EMPTY_TOMORROW;
+const string EasyScheduleLogic::MESSAGE_EMPTY_YESTERDAY;
+const string EasyScheduleLogic::MESSAGE_VIEW_DEADLINE_ALL;
+const string EasyScheduleLogic::MESSAGE_VIEW_FLOATING_ALL;
+const string EasyScheduleLogic::MESSAGE_VIEW_TIMED_ALL;
+const string EasyScheduleLogic::MESSAGE_VIEW_TODAY_ALL;
+const string EasyScheduleLogic::MESSAGE_VIEW_TOMORROW_ALL;
+const string EasyScheduleLogic::MESSAGE_VIEW_YESTERDAY_ALL;;
+
 
 string EasyScheduleLogic::returnMessage;
 string EasyScheduleLogic::returnDisplay;
@@ -79,59 +95,114 @@ int EasyScheduleLogic::endTimeMin;
 //	
 //}
 
-
-void EasyScheduleLogic::executeLogic(string userInput) {
-	parsingCommand(userInput);
-	if(parser.commandType == "filepath"){
-		storage.setPathName(parser.name);
+void EasyScheduleLogic::commandFilePath(){
+	storage.setPathName(parser.name);
 		if (storage.showDirectory()) {
-			returnMessage = "Directory opened";
+			returnMessage = MESSAGE_DIRECTORY_OPENED;
 		} else {
-			returnMessage = "Directory is not found, please respecify file storage location";
+			returnMessage = MESSAGE_DIRECTORY_NOT_FOUND;
 		}
-	} else if(parser.commandType == "filename"){
-		if (storage._fileName!="") {
+}
+
+void EasyScheduleLogic::commandFileName(){
+	if (storage._fileName!="") {
 			storage.writeToFile();
 		}
 		storage.setFileName(parser.name);
 		storage.readFile();
 		storage.openFile();
 		returnDisplay = autoDisplay();
-		returnMessage = "Program is now ready to be used"; 
+		returnMessage = MESSAGE_PROGRAM_READY; 
 		returnIndex = 0;
-	} else if (parser.commandType == "add") {
-		returnMessage = addingTask();
+}
+
+void EasyScheduleLogic::commandAdd(){
+	returnMessage = addingTask();
 		returnDisplay = displayingTask();
 		if (storage.isSuccess) {
 			returnIndex = storage._index;
 		} else {
 			returnIndex = 0;
 		}
-	} else if (parser.commandType == "view"){
-		if(parser.name == "deadline"){
-			returnDisplay = displayAllDeadline();
+}
 
-		} else if(parser.name == "floating"){
-			returnDisplay = displayAllFloating();
-		
-		} else if(parser.name == "timed"){
-			returnDisplay = displayAllTimed();
-		
-		} else if(parser.name == "today"){
-			returnDisplay = displayAllToday();
-		
-		} else if(parser.name == "tomorrow"){
-			returnDisplay = displayAllTomorrow();
+void EasyScheduleLogic::viewDeadline(){
+	returnDisplay = displayAllDeadline();
+	if(displayAllDeadline() == ""){
+		returnMessage == MESSAGE_EMPTY_DEADLINE;
+	}else {
+		returnMessage == MESSAGE_VIEW_DEADLINE_ALL;
+	}
+}
 
-		} else if(parser.name == "yesterday"){
-			returnDisplay = displayAllYesterday();
+void EasyScheduleLogic::viewFloating(){
+		returnDisplay = displayAllFloating();
+		if(displayAllFloating() == ""){
+			returnMessage == MESSAGE_EMPTY_FLOATING;
+		}else {
+			returnMessage == MESSAGE_VIEW_FLOATING_ALL;
 		}
+}
 
-	} else if (parser.commandType == "delete") {
-		returnDisplay = deletingTask();
-		returnIndex = 0;
-	} else if (parser.commandType == "display") {
-		if (displayingTask() != "") {
+void EasyScheduleLogic::viewTimed(){
+		returnDisplay = displayAllTimed();
+		if(displayAllTimed() == ""){
+			returnMessage == MESSAGE_EMPTY_TIMED;			
+		}else {
+			returnMessage == MESSAGE_VIEW_TIMED_ALL;
+		}
+}
+
+void EasyScheduleLogic::viewToday(){
+		returnDisplay = displayAllToday();
+		if(displayAllToday() == ""){
+			returnMessage == MESSAGE_EMPTY_TODAY;
+		}else {
+			returnMessage == MESSAGE_VIEW_TODAY_ALL;
+		}
+}
+
+void EasyScheduleLogic::viewTomorrow(){
+		returnDisplay = displayAllTomorrow();
+		if(displayAllTomorrow() == ""){
+			returnMessage == MESSAGE_EMPTY_TOMORROW;
+		}else {
+			returnMessage == MESSAGE_VIEW_TOMORROW_ALL;
+		}
+}
+
+void EasyScheduleLogic::viewYesterday(){
+	returnDisplay = displayAllYesterday();
+		if(displayAllYesterday() == ""){
+			returnMessage == MESSAGE_EMPTY_YESTERDAY;
+		}else {
+			returnMessage == MESSAGE_VIEW_YESTERDAY_ALL;
+		}
+}
+
+void EasyScheduleLogic::commandView(){
+	if(parser.name == "deadline"){
+			viewDeadline();
+		} else if(parser.name == "floating"){
+			viewFloating();
+		} else if(parser.name == "timed"){
+			viewTimed();
+		} else if(parser.name == "today"){
+			viewToday();
+		} else if(parser.name == "tomorrow"){
+			viewTomorrow();
+		} else if(parser.name == "yesterday"){
+			viewYesterday();
+		}
+}
+
+void EasyScheduleLogic::commandDelete(){
+	returnDisplay = deletingTask();
+	returnIndex = 0;
+}
+
+void EasyScheduleLogic::commandDisplay(){
+	if (displayingTask() != "") {
 			returnMessage = "";
 			returnDisplay = displayingTask();
 		} else {
@@ -139,67 +210,114 @@ void EasyScheduleLogic::executeLogic(string userInput) {
 			returnDisplay = "";
 		}
 		returnIndex = 0;
-	} else if (parser.commandType == "search") {
-		if(searchingTask() == "") {
-			returnMessage = MESSAGE_SEARCH_FAIL; //Bug: not shown in feedbackBox
-			returnDisplay = displayingTask(); //display all the tasks 
-		} else {
-			returnMessage = "";
-			returnDisplay = searchingTask();
-		}
-		returnIndex = 0;
-	} else if (parser.commandType == "sort") {
-		returnMessage = sortingTask();
-		returnDisplay = displayingTask();
-		returnIndex = 0;
-	} else if (parser.commandType == "done") { //mark done/notdone doesn't work.
-		returnDisplay = markDone();
-		if (storage.isSuccess) {
-			returnIndex = storage._index;
-		}
-		if (parser.name!="") {
-			if ((storage._searchResultList).size()==0) {
-				returnDisplay = displayingTask();
-			}
-			if ((storage._searchResultList).size()==1) {
-				parser.number=1;
-				returnDisplay = markDone();
-				returnIndex = storage._index;
-			} else {
-				returnIndex = 0;
-			}
-		}
-		} else if (commandType == "notdone") {
-		returnDisplay = markNotDone();
-		if (storage.isSuccess) {
-			returnIndex = storage._index;
-		}
-		if (parser.name!="") {
-			if ((storage._searchResultList).size()==0) {
-				returnDisplay = displayingTask();
-			}
-			if ((storage._searchResultList).size()==1) {
-				parser.number=1;
-				returnDisplay = markNotDone();
-				returnIndex = storage._index;
-			} else {
-				returnIndex = 0;
-			}
-		} 
-	} else if(parser.commandType == "edit"){
-		returnDisplay = editingTask();
-		returnIndex = storage._index;
-	} else if (parser.commandType == "exit") {
-			returnMessage = MESSAGE_EXIT;
-			returnDisplay = "";
-			storage.writeToFile();
-			exit(0);
-	} else if (parser.commandType == "undo") { //Bug: for example, undo delete by add: it'll keep adding if I keep calling undo 
-		returnMessage = undoingTask();
-		returnDisplay = displayingTask();
+}
+
+void EasyScheduleLogic::commandSearch(){
+	if(searchingTask() == "") {
+		returnMessage = MESSAGE_SEARCH_FAIL; //Bug: not shown in feedbackBox
+		returnDisplay = displayingTask(); //display all the tasks 
 	} else {
-		returnMessage = MESSAGE_INVALID_INPUT_COMMAND;
+		returnMessage = "";
+		returnDisplay = searchingTask();
+	}
+	returnIndex = 0;
+}
+
+void EasyScheduleLogic::commandSort(){
+	returnMessage = sortingTask();
+	returnDisplay = displayingTask();
+	returnIndex = 0;
+}
+
+void EasyScheduleLogic::commandDone(){
+	returnDisplay = markDone();
+	if (storage.isSuccess) {
+		returnIndex = storage._index;
+	}
+	if (parser.name!="") {
+		if ((storage._searchResultList).size()==0) {
+			returnDisplay = displayingTask();
+		}
+		if ((storage._searchResultList).size()==1) {
+			parser.number=1;
+			returnDisplay = markDone();
+			returnIndex = storage._index;
+		} else {
+			returnIndex = 0;
+		}
+	}
+}
+
+void EasyScheduleLogic::commandNotDone(){
+	returnDisplay = markNotDone();
+	if (storage.isSuccess) {
+		returnIndex = storage._index;
+	}
+	if (parser.name!="") {
+		if ((storage._searchResultList).size()==0) {
+			returnDisplay = displayingTask();
+		}
+		if ((storage._searchResultList).size()==1) {
+			parser.number=1;
+			returnDisplay = markNotDone();
+			returnIndex = storage._index;
+		} else {
+			returnIndex = 0;
+		}
+	} 
+}
+
+void EasyScheduleLogic::commandEdit(){
+	returnDisplay = editingTask();
+	returnIndex = storage._index;
+}
+
+void EasyScheduleLogic::commandUndo(){
+	returnMessage = undoingTask();
+	returnDisplay = displayingTask();
+}
+
+void EasyScheduleLogic::commandExit(){
+	returnMessage = MESSAGE_EXIT;
+	returnDisplay = "";
+	storage.writeToFile();
+	exit(0);
+}
+ void EasyScheduleLogic::commandInvalid(){
+	 	returnMessage = MESSAGE_INVALID_INPUT_COMMAND;
 		returnDisplay = "";
+ }
+
+void EasyScheduleLogic::executeLogic(string userInput) {
+	parsingCommand(userInput);
+	if(parser.commandType == "filepath"){
+		commandFilePath();
+	} else if(parser.commandType == "filename"){
+		commandFileName();
+	} else if (parser.commandType == "add") {
+		commandAdd();
+	} else if (parser.commandType == "view"){
+		commandView();
+	} else if (parser.commandType == "delete") {
+		commandDelete();
+	} else if (parser.commandType == "display") {
+		commandDisplay();
+	} else if (parser.commandType == "search") {
+		commandSearch();
+	} else if (parser.commandType == "sort") {
+		commandSort();
+	} else if (parser.commandType == "done") { //mark done/notdone doesn't work.
+		commandDone();
+	} else if (commandType == "notdone") {
+		commandNotDone();
+	} else if(parser.commandType == "edit"){
+		commandEdit();
+	} else if (parser.commandType == "exit") {
+		commandExit();
+	} else if (parser.commandType == "undo") { //Bug: for example, undo delete by add: it'll keep adding if I keep calling undo 
+		commandUndo();
+	} else {
+		commandInvalid();
 	}
 	returnIndex = 0;
 }
