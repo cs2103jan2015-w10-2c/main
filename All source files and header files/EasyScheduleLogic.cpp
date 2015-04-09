@@ -82,6 +82,7 @@ int EasyScheduleLogic::endTimeMin;
 
 void EasyScheduleLogic::executeLogic(string userInput) {
 	parsingCommand(userInput);
+	returnIndex = 0;
 	if(parser.commandType == "filepath"){
 		storage.setPathName(parser.name);
 		if (storage.showDirectory()) {
@@ -165,11 +166,10 @@ void EasyScheduleLogic::executeLogic(string userInput) {
 				parser.number=1;
 				returnDisplay = markDone();
 				returnIndex = storage._index;
-			} else {
-				returnIndex = 0;
-			}
+			} 
+			
 		}
-		} else if (commandType == "notdone") {
+	} else if (commandType == "notdone") {
 		returnDisplay = markNotDone();
 		if (storage.isSuccess) {
 			returnIndex = storage._index;
@@ -201,7 +201,6 @@ void EasyScheduleLogic::executeLogic(string userInput) {
 		returnMessage = MESSAGE_INVALID_INPUT_COMMAND;
 		returnDisplay = "";
 	}
-	returnIndex = 0;
 }
 
 void EasyScheduleLogic::parsingCommand(string userInput) {
