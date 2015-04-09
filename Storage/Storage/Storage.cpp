@@ -2,12 +2,32 @@
 #include "dirent.h"
 #include <algorithm>
 #include <sstream>
-#include <assert.h>
+
+#include <atltime.h>
+#include <math.h>
+#include <locale>
+#include <ctime>
 
 using namespace std;
 
+const int Storage::MIN_MONTHS_IN_A_YEAR = 1;
+const int Storage::MAX_MONTHS_IN_A_YEAR = 12;
+const int Storage::MIN_DAY_IN_A_MONTH = 1;
+const int Storage::MAX_DAYS_IN_A_MONTH[12] = {31,28,31,30,31,30,31,31,30,31,30,31};
+const int Storage::MIN_HOURS_IN_A_DAY = 0;
+const int Storage::MAX_HOURS_IN_A_DAY = 23;
+const int Storage::MIN_MINUTES_IN_AN_HOUR = 0;
+const int Storage::MAX_MINUTES_IN_AN_HOUR = 59;
+
+const int Storage::SHIFT_BY_ONE = 1;
+
+const string Storage::FLOATING_TASK = "FloatingTask";
+const string Storage::DEADLINE_TASK = "DeadlineTask";
+const string Storage::TIMED_TASK = "TimedTask";
+
 const string Storage::LINE_BUFFER = "%s/%s/%s/%s/%s/%s/%s/%s/%s/%s/%s";
 const string Storage::COMMANDLIST = "List of commands:\n1. add\n2. display\n3. delete\n4. search\n5. done\n6. undone";
+const string Storage::PATH_NAME_BUFFER ="%s";
 
 char Storage::buffer[1000];
 list<Task> Storage::_taskList;
@@ -17,10 +37,14 @@ list<Task>::iterator Storage::_taskIt;
 ofstream Storage::_fWrite;
 ifstream Storage::_fRead;
 string Storage::_fileName;
+string Storage::_pathName;
 bool Storage::isSuccess;
 bool Storage::isSearched;
+bool Storage::isDateValid;
+bool Storage::isTimeValid;
 Record Storage::_record;
 Tracker Storage::_tracker;
+int Storage::_index;
 
 DIR *dir = NULL;
 struct dirent *ent;
@@ -40,37 +64,28 @@ void Storage::setFileName(string name) {
 	}
 }
 
-void Storage::showDirectory() {
-	if ((dir = opendir ("./")) != NULL) {
-		/* print all the files and directories within directory */
-		while ((ent = readdir (dir)) != NULL) {
-			printf ("%s\r\n", ent->d_name);
-		}
-		closedir (dir);
-		cout << "Type in name of file to open existing files" << "\n";
-		cout << "Enter a new name to create a new file" << "\n";
-	} else {
-		cout << "Could not find directory" << "\r\n";
-	}
+void Storage::setPathName(string name) {
+	_pathName =name;
 }
 
-bool Storage::isExistingFile() {
-	dir = opendir ("./");
-	while ((ent = readdir (dir)) != NULL) {
-		if (_fileName==ent->d_name) {
-			closedir (dir);
-			return true;
-		}
+bool Storage::showDirectory() {
+	if ((dir = opendir (_pathName.c_str())) != NULL) {
+		///* print all the files and directories within directory */
+		//while ((ent = readdir (dir)) != NULL) {
+		//	printf ("%s\r\n", ent->d_name);
+		//}
+		//closedir (dir);
+		return true;
+	} else {
+		return false;
 	}
-	closedir (dir);
-	return false;
 }
 
 //i have folder called databank which is where all text files will be saved into
 //pathName can be respecified if you wish to save it in another EXISTING folder
 void Storage::openFile() {
-	string pathName = "./Databank/";
-	string combined = pathName + _fileName;
+	string pathName = _pathName;
+	string combined = pathName + "/" + _fileName;
 	_fWrite.open(combined);
 }
 
@@ -92,9 +107,9 @@ void Storage::writeToFile() {
 
 //this is extremely inefficient but sigh
 void Storage::readFile() {
-	
-	string pathName = "./Databank/";
-	string combined = pathName + _fileName;
+
+	string pathName = _pathName;
+	string combined = pathName + "/" + _fileName;
 	_fRead.open(combined);
 
 	size_t posStart;
@@ -159,29 +174,28 @@ void Storage::readFile() {
 		
 }
 
-int Storage::getIndex() {
-	int index=1;
-	list<Task>::iterator i = _taskList.begin();
-	while (i!=_taskIt) {
-		index++;
-		i++;
-	}
-	return index;
-}
 
 void Storage::storeTask(Task task) {
-	if (!isTaskDuplicate(task)) {
+	if (!isValidDate(task)) {
+		isDateValid = false;
+		isSuccess = false;
+	} else if(!isValidTime(task)){
+		isTimeValid = false;
+		isSuccess = false;
+	} else if (!isTaskDuplicate(task)){
 		_taskList.push_back(task);
 		creatRecordAdd(task);
-		getTask(task);
-	/*	sortList();*/
+		sortList();
+		getIndex(task);
+		isDateValid = true;
+		isTimeValid = true;
 		isSuccess = true;
 	} else {
 		isSuccess = false;
 	}
 }
 
-string Storage::editTask(int i, string s) {
+string Storage::editTaskName(int i, string s) {
 	string commandType = "edit";
 
 	if (isSearched) {
@@ -205,23 +219,111 @@ string Storage::editTask(int i, string s) {
 			getPosition(i);
 		}
 	}
-	//pointer to task in _taskList before mark done
-	storePreviousTask(commandType);
+	_previousTaskList.clear();
+	_previousTaskList.push_back(*(_taskIt));
 	_taskIt->setName(s);
+	_previousTaskList.push_back(*(_taskIt));
+	_record = Record(commandType, _previousTaskList);
+	addToTracker();
+
+	isSuccess = true;
+	return toStringTaskDetail();
+	
+}
+
+
+string Storage::editTaskTime(int i, double sth, double stm, double eth, double etm) {
+	string commandType = "edit";
+
+	if (isSearched) {
+		_taskIt= _searchResultList.begin();
+		if (i>_searchResultList.size()||i<=0) {
+			isSuccess = false;
+			return toStringTaskDetail(_searchResultList);
+		} else {
+			getPosition(i);
+			isSuccess = compareTask(*(_taskIt));
+			if (!isSuccess) {
+				return toStringTaskDetail(_searchResultList);
+			}
+		}
+	} else {
+		if (i>_taskList.size()||i<=0) {
+			isSuccess = false;
+			return toStringTaskDetail(_searchResultList);
+		} else {
+			_taskIt= _taskList.begin();
+			getPosition(i);
+		}
+	}
+	_previousTaskList.clear();
+	_previousTaskList.push_back(*(_taskIt));
+	_taskIt->setStartTimeHour(sth);
+	_taskIt->setStartTimeMin(stm);
+	_taskIt->setEndTimeHour(eth);
+	_taskIt->setEndTimeMin(etm);
+	if (sth==0&&stm==0) {
+		_taskIt->setTaskType("DeadlineTask");
+	} else {
+		_taskIt->setTaskType("TimedTask");
+	}
+	_previousTaskList.push_back(*(_taskIt));
+	_record = Record(commandType, _previousTaskList);
+	addToTracker();
+
+	isSuccess = true;
+	return toStringTaskDetail();
+	
+}
+
+
+string Storage::editTaskDate(int i, int year, int month, int day) {
+	string commandType = "edit";
+
+	if (isSearched) {
+		_taskIt= _searchResultList.begin();
+		if (i>_searchResultList.size()||i<=0) {
+			isSuccess = false;
+			return toStringTaskDetail(_searchResultList);
+		} else {
+			getPosition(i);
+			isSuccess = compareTask(*(_taskIt));
+			if (!isSuccess) {
+				return toStringTaskDetail(_searchResultList);
+			}
+		}
+	} else {
+		if (i>_taskList.size()||i<=0) {
+			isSuccess = false;
+			return toStringTaskDetail(_searchResultList);
+		} else {
+			_taskIt= _taskList.begin();
+			getPosition(i);
+		}
+	}
+	_previousTaskList.clear();
+	_previousTaskList.push_back(*(_taskIt));
+	_taskIt->setYear(year);
+	_taskIt->setMonth(month);
+	_taskIt->setDay(day);
+	_previousTaskList.push_back(*(_taskIt));
+	_record = Record(commandType, _previousTaskList);
+	addToTracker();
+
 	isSuccess = true;
 	return toStringTaskDetail();
 	
 }
 	
-
+//@author A0115131B
 void Storage::creatRecordAdd(Task task) {
 	_record = Record( "add", task);
-	addToTracker(_record);
-	_record.clear();
+	addToTracker();
 }
 
-void Storage::addToTracker(Record record1) {
+void Storage::addToTracker() {
 		_tracker.addRecord(_record);
+		_record.clear();
 }
 
 bool Storage::isTaskDuplicate(Task task) {
@@ -360,24 +462,23 @@ string Storage::toLower(string text) {
 	return text;
 }
 
-void Storage::getTask(Task task) {
-	list<Task>::iterator i;
-	for (i=_taskList.begin();i!=_taskList.end();i++) {
-		
-		if ((i->getCommandType() == task.getCommandType()) 
-			&& (i->getTaskType() == task.getTaskType()) 
-			&& (i->getName() == task.getName())
-			&& (i->getYear() == task.getYear())
-			&& (i->getMonth() == task.getMonth())
-			&& (i->getDay() == task.getDay())
-			&& (i->getStartTimeHour() == task.getStartTimeHour())
-			&& (i->getStartTimeMin() == task.getStartTimeMin())
-			&& (i->getEndTimeHour() == task.getEndTimeHour())
-			&& (i->getEndTimeMin() == task.getEndTimeMin())
+void Storage::getIndex(Task task) {
+	_index = 1;
+	for (_taskIt=_taskList.begin();_taskIt!=_taskList.end();_taskIt++) {
+		if ((_taskIt->getCommandType() == task.getCommandType()) 
+			&& (_taskIt->getTaskType() == task.getTaskType()) 
+			&& (_taskIt->getName() == task.getName())
+			&& (_taskIt->getYear() == task.getYear())
+			&& (_taskIt->getMonth() == task.getMonth())
+			&& (_taskIt->getDay() == task.getDay())
+			&& (_taskIt->getStartTimeHour() == task.getStartTimeHour())
+			&& (_taskIt->getStartTimeMin() == task.getStartTimeMin())
+			&& (_taskIt->getEndTimeHour() == task.getEndTimeHour())
+			&& (_taskIt->getEndTimeMin() == task.getEndTimeMin())
 			&& (!task.isDone())) {
-				_taskIt = i;
 				return;
 		}
+		_index++;
 	}
 	return;
 }
@@ -386,6 +487,7 @@ void Storage::getTask(Task task) {
 //search task in the _taskList for exact matches
 bool Storage::compareTask(Task task) {
 	list<Task>::iterator i;
+	_index=1;
 	for (i=_taskList.begin();i!=_taskList.end();i++) {
 		
 		if ((i->getCommandType() == task.getCommandType()) 
@@ -401,16 +503,19 @@ bool Storage::compareTask(Task task) {
 				_taskIt = i;
 				return true;
 		}
+		_index++;
 	}
 	return false;
 }
 
 
 void Storage::getPosition(int i) {
-			while (i>1) {
-				_taskIt++;
-				i--;
-			}
+	_index = 1;
+	while (i>1) {
+		_taskIt++;
+		i--;
+		_index++;
+	}
 }
 
 string Storage::markDone(int i) {
@@ -508,7 +613,7 @@ string Storage::deleteByNumber(int i) {
 }
 
 
-
+//@author A0115131B    
 //record edited task item for undo function
 void Storage::storePreviousTask(string commandType) {
 	//creat a list storing tasks being editted
@@ -516,15 +621,160 @@ void Storage::storePreviousTask(string commandType) {
 	_previousTaskList.push_back(*(_taskIt));
 
 	//create a record to store commandType and the list of tasks
+	//add the record to tracker
 	_record = Record(commandType, _previousTaskList);
-	//add the record to the tracker
-	addToTracker(_record);
-	//clear the _record
-	_record.clear();
+	addToTracker();
 }
 
 list<Task> Storage::getPreviousTaskList(){
 	return _previousTaskList;
+}
+
+list<Task> Storage::allDeadline(){
+	_searchResultList.clear();
+
+	for(_taskIt = _taskList.begin(); _taskIt != _taskList.end(); _taskIt++){
+		if( (*_taskIt).getTaskType() == "DeadlineTask"){
+				_searchResultList.push_back(*_taskIt);
+		}
+	}
+
+	if(!_searchResultList.empty()){
+		isSearched = true;
+	}
+	
+	return _searchResultList;
+}
+	
+list<Task> Storage::allFloating(){
+	_searchResultList.clear();
+
+	for(_taskIt = _taskList.begin(); _taskIt != _taskList.end(); _taskIt++){
+		if( (*_taskIt).getTaskType() == "FloatingTask"){
+				_searchResultList.push_back(*_taskIt);
+		}
+	}
+
+	if(!_searchResultList.empty()){
+		isSearched = true;
+	}
+	
+	return _searchResultList;
+}
+
+list<Task> Storage::allTimed(){
+	_searchResultList.clear();
+
+	for(_taskIt = _taskList.begin(); _taskIt != _taskList.end(); _taskIt++){
+		if( (*_taskIt).getTaskType() == "TimedTask"){
+				_searchResultList.push_back(*_taskIt);
+		}
+	}
+
+	if(!_searchResultList.empty()){
+		isSearched = true;
+	}
+	
+	return _searchResultList;
+}
+
+list<Task> Storage::allToday(){
+	//set year, month, day as today
+	time_t now = time(0);	
+	struct tm time;
+	localtime_s(&time, &now);
+	int day =  time.tm_mday;
+	int month = time.tm_mon + 1;
+	int year = time.tm_year + 1900;
+
+	searchTodayTask(year, month, day);
+
+	if(!_searchResultList.empty()){
+		isSearched = true;
+	}
+	return _searchResultList;
+}
+
+list<Task> Storage::allTomorrow(){
+	//set year, month, day as tomorrow
+	time_t now = time(0);	
+	struct tm time;
+	localtime_s(&time, &now);
+	time.tm_mday += 1;
+	mktime(&time);
+	int day =  time.tm_mday;
+	int month = time.tm_mon + 1;
+	int year = time.tm_year + 1900;
+
+	searchTodayTask(year, month, day);
+
+	if(!_searchResultList.empty()){
+		isSearched = true;
+	}
+	return _searchResultList;
+}
+
+list<Task> Storage::allYesterday(){
+	//set year, month, day as yesterday
+	time_t now = time(0);	
+	struct tm time;
+	localtime_s(&time, &now);
+	time.tm_mday -= 1;
+	mktime(&time);
+	int day =  time.tm_mday;
+	int month = time.tm_mon + 1;
+	int year = time.tm_year + 1900;
+
+	searchTodayTask(year, month, day);
+
+	if(!_searchResultList.empty()){
+		isSearched = true;
+	}
+	return _searchResultList;
+}
+
+list<Task> Storage::autoInitialDisplay(){
+	//set year, month, day as system's today time
+	time_t now = time(0);	
+	struct tm time;
+	localtime_s(&time, &now);
+	int day =  time.tm_mday;
+	int month = time.tm_mon + 1;
+	int year = time.tm_year + 1900;
+
+	//search for all tasks happening in today
+	//store today's tasks in a list
+	searchTodayTask(day, month, year);
+	searchUpcomingDeadline(day, month, year);
+	return _searchResultList;
+}
+
+//return tasks happening in today into _searchResultList
+void Storage::searchTodayTask(int day, int month, int year){
+	_searchResultList.clear();
+
+	for(_taskIt = _taskList.begin(); _taskIt != _taskList.end(); _taskIt++){
+		if( (*_taskIt).getYear() == year 
+			&& (*_taskIt).getMonth() == month 
+			&& (*_taskIt).getDay() == day){
+				_searchResultList.push_back(*_taskIt);
+		}
+	}
+}
+
+void Storage::searchUpcomingDeadline(int day, int month, int year){
+	for(_taskIt = _taskList.begin(); _taskIt != _taskList.end(); _taskIt++){
+		if( (*_taskIt).getTaskType() == "DeadlineTask"
+			&& ((*_taskIt).getYear() > year || (*_taskIt).getYear() == year)
+			&& ((*_taskIt).getMonth() > month || (*_taskIt).getMonth() == month)
+			&& ((*_taskIt).getDay() > day)){
+				_searchResultList.push_back(*_taskIt);
+		}
+	}
+
+	if(!_searchResultList.empty()){
+		isSearched = true;
+	}
 }
 
 string Storage::toStringTaskDetail(list <Task> listToFormat){
@@ -591,6 +841,7 @@ string Storage::toStringTaskDetail(list <Task> listToFormat){
 
 string Storage::toStringTaskDetail() {
 	isSearched = false;
+	sortList();
 	stringstream s;
 	if(_taskList.empty()) {
 		s << "The schedule is empty.";
@@ -655,6 +906,7 @@ string Storage::getCommandList(){
 	return COMMANDLIST;
 }
 
+//@author A0115131B
 Tracker Storage::getTracker(){
 	return _tracker;
 }
@@ -710,6 +962,56 @@ void Storage::undoingReverseNotDone(list<Task> listToUndo){
 		if(compareTask(*it)){
 			_taskIt->markDone();
 		}
+	}
+}
+
+void Storage::undoingReverseEdit(list<Task> listToUndo){
+	//undo the edit action
+	list<Task>::iterator it;
+	list<Task> newTaskList;
+
+	Task taskAfterEdit = listToUndo.back();
+	if(compareTask(taskAfterEdit)){
+		//delete the editted copy
+		for (it = _taskList.begin(); it != _taskList.end(); it++){
+			if(it != _taskIt){
+				newTaskList.push_back(*it);
+			}
+		}
+		//add the before edit copy back
+		newTaskList.push_back(*(listToUndo.begin()));
+		_taskList = newTaskList;
+	}
+}
+
+bool Storage::isValidDate(Task task){
+	if (task.getTaskType() == FLOATING_TASK){
+		return true;
+	}
+	else if(task.getMonth() < MIN_MONTHS_IN_A_YEAR || task.getMonth() > MAX_MONTHS_IN_A_YEAR){
+			return false;	
+		} 
+}
+
+bool Storage::isValidTime(Task task){
+	if (task.getTaskType() == FLOATING_TASK){
+		return true;
+	} else if(task.getDay() < MIN_DAY_IN_A_MONTH || task.getDay() > MAX_DAYS_IN_A_MONTH[task.getMonth() - SHIFT_BY_ONE]){
+		return false;
+	} else if(task.getStartTimeHour() < MIN_HOURS_IN_A_DAY || task.getStartTimeHour() > MAX_HOURS_IN_A_DAY){
+		return false;
+	} else if(task.getStartTimeMin() < MIN_MINUTES_IN_AN_HOUR || task.getStartTimeMin() > MAX_MINUTES_IN_AN_HOUR){
+		return false;
+	} else if(task.getEndTimeHour() < MIN_HOURS_IN_A_DAY || task.getEndTimeHour() > MAX_HOURS_IN_A_DAY){
+		return false;
+	} else if(task.getEndTimeMin() < MIN_MINUTES_IN_AN_HOUR || task.getEndTimeMin() > MAX_MINUTES_IN_AN_HOUR){
+		return false;
+	} else if(task.getStartTimeHour() == task.getEndTimeHour() && task.getStartTimeMin() > task.getEndTimeMin()){
+		return false;
+	} else if(task.getStartTimeHour() > task.getEndTimeHour()){
+		return false;
+	} else {
+		return true;
 	}
 }
 
