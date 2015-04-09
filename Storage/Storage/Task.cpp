@@ -52,7 +52,7 @@ Task::Task(string commandType, string name):
 _commandType(commandType),  _name(name) {
 	_isDone = false;
 	_taskType = "FloatingTask";
-	_year = 0;
+	_year = 99999;
 	_month = 0;
 	_day = 0;
 	_startTimeHour=0;
@@ -73,6 +73,10 @@ void Task::setName(string newName) {
 	_name = newName;
 }
 
+void Task::setTaskType(string taskType) {
+	_taskType = taskType;
+}
+
 void Task::setYear(int newYear){
 	_year = newYear;
 }
@@ -85,19 +89,19 @@ void Task::setDay(int newDay){
 	_day = newDay;
 }
 
-void Task::setStartTimeHour(int newStartTimeHour){
+void Task::setStartTimeHour(double newStartTimeHour){
 	_startTimeHour = newStartTimeHour;
 }
 
-void Task::setStartTimeMin(int newStartTimeMin){
+void Task::setStartTimeMin(double newStartTimeMin){
 	_startTimeMin = newStartTimeMin;
 }
 
-void Task::setEndTimeHour(int newEndTimeHour){
+void Task::setEndTimeHour(double newEndTimeHour){
 	_endTimeHour = newEndTimeHour;
 }
 
-void Task::setEndTimeMin(int newEndTimeMin){
+void Task::setEndTimeMin(double newEndTimeMin){
 	_endTimeMin = newEndTimeMin;
 }
 
