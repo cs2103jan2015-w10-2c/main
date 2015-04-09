@@ -52,7 +52,7 @@ Task::Task(string commandType, string name):
 _commandType(commandType),  _name(name) {
 	_isDone = false;
 	_taskType = "FloatingTask";
-	_year = 0;
+	_year = 99999;
 	_month = 0;
 	_day = 0;
 	_startTimeHour=0;
