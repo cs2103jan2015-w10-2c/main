@@ -28,6 +28,9 @@ private:
 
 	
 	static const string MESSAGE_WELCOME;
+	static const string MESSAGE_DIRECTORY_OPENED;
+	static const string MESSAGE_DIRECTORY_NOT_FOUND;
+	static const string MESSAGE_PROGRAM_READY;
 	static const string MESSAGE_ADD;
 	static const string MESSAGE_ADD_FAIL;
 	static const string MESSAGE_DELETE;
@@ -50,6 +53,18 @@ private:
 	static const string MESSAGE_UNDO_FAIL;
 	static const string MESSAGE_UNDO_SUCCESS;
 	static const string MESSAGE_UNDO_ERROR;
+	static const string MESSAGE_EMPTY_DEADLINE;
+	static const string MESSAGE_EMPTY_FLOATING;
+	static const string MESSAGE_EMPTY_TIMED;
+	static const string MESSAGE_EMPTY_TODAY;
+	static const string MESSAGE_EMPTY_TOMORROW;
+	static const string MESSAGE_EMPTY_YESTERDAY;
+	static const string MESSAGE_VIEW_DEADLINE_ALL;
+	static const string MESSAGE_VIEW_FLOATING_ALL;
+	static const string MESSAGE_VIEW_TIMED_ALL;
+	static const string MESSAGE_VIEW_TODAY_ALL;
+	static const string MESSAGE_VIEW_TOMORROW_ALL;
+	static const string MESSAGE_VIEW_YESTERDAY_ALL;
 
 
 private:
@@ -85,6 +100,26 @@ public:
 	
 	static void main();
 	static void executeLogic(string userInput);
+	static void commandFilePath();
+	static void commandFileName();
+	static void commandAdd();
+	static void commandView();
+	static void viewDeadline();
+	static void viewFloating();
+	static void viewTimed();
+	static void viewToday();
+	static void viewTomorrow();
+	static void viewYesterday();
+	static void commandDelete();
+	static void commandDisplay();
+	static void commandSearch();
+	static void commandSort();
+	static void commandDone();
+	static void commandNotDone();
+	static void commandEdit();
+	static void commandUndo();
+	static void commandExit();
+	static void commandInvalid();
 
 	static void parsingCommand(string userInput);
 	static void creatingTask();

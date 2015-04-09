@@ -687,11 +687,8 @@ list<Task> Storage::allToday(){
 	int month = time.tm_mon + 1;
 	int year = time.tm_year + 1900;
 
-	searchTodayTask(year, month, day);
+	searchTodayTask(day, month, year);
 
-	if(!_searchResultList.empty()){
-		isSearched = true;
-	}
 	return _searchResultList;
 }
 
@@ -706,11 +703,8 @@ list<Task> Storage::allTomorrow(){
 	int month = time.tm_mon + 1;
 	int year = time.tm_year + 1900;
 
-	searchTodayTask(year, month, day);
+	searchTodayTask(day, month, year);
 
-	if(!_searchResultList.empty()){
-		isSearched = true;
-	}
 	return _searchResultList;
 }
 
@@ -725,11 +719,8 @@ list<Task> Storage::allYesterday(){
 	int month = time.tm_mon + 1;
 	int year = time.tm_year + 1900;
 
-	searchTodayTask(year, month, day);
+	searchTodayTask(day, month, year);
 
-	if(!_searchResultList.empty()){
-		isSearched = true;
-	}
 	return _searchResultList;
 }
 
@@ -759,6 +750,9 @@ void Storage::searchTodayTask(int day, int month, int year){
 			&& (*_taskIt).getDay() == day){
 				_searchResultList.push_back(*_taskIt);
 		}
+	}
+	if(!_searchResultList.empty()){
+		isSearched = true;
 	}
 }
 

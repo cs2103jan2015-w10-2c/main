@@ -37,6 +37,8 @@ size_t posD7;
 
 void CommandParser::addTimeDeadline(string userInput){
 	taskType = "DeadlineTask";
+	startTimeHour = 0;
+	startTimeMin = 0;
 	endTimeHour = stoi(userInput.substr(posD1+1, (posD2-posD1)));
 	endTimeMin = stoi(userInput.substr(posD2+1, (posD3-posD2)));
 }
