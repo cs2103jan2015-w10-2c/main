@@ -139,6 +139,8 @@ public:
 	static string markNotDone();
 	static string editingTask();
 	static string undoingTask();
+	static Record getLastRecord();
+	static string callUndoingAdd(Record recordToUndo);
 	static bool undoingAdd(Record recordToUndo);
 	static bool undoingDelete(Record recordToUndo);
 	static bool undoingDone(Record recordToUndo);
