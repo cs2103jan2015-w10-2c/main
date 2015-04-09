@@ -7,7 +7,27 @@
 
 using namespace std;
 
-//string CommandParser::userInput;
+const string CommandParser::FILEPATH = "filepath";
+const string CommandParser::FILENAME = "filename";
+const string CommandParser::FLOATING_TASK = "FloatingTask";
+const string CommandParser::DEADLINE_TASK = "DeadlineTask";
+const string CommandParser::TIMED_TASK = "TimedTask";
+
+const string CommandParser::ADD = "add";
+const string CommandParser::COMMAND_DELETE = "delete";
+const string CommandParser::DISPLAY = "display";
+const string CommandParser::DONE = "done";
+const string CommandParser::EDIT = "edit";
+const string CommandParser::EXIT = "exit";
+const string CommandParser::NOT_DONE = "notdone";
+const string CommandParser::SEARCH = "search";
+const string CommandParser::SORT = "sort";
+const string CommandParser::UNDO = "undo";
+const string CommandParser::VIEW = "view";
+
+const string CommandParser::DATE = "date";
+const string CommandParser::NAME = "name";
+const string CommandParser::TIME = "time";
 
 string CommandParser::taskType="";
 string CommandParser::commandType="";
@@ -20,6 +40,7 @@ int CommandParser::startTimeMin=-1;
 int CommandParser::endTimeHour=-1;
 int CommandParser::endTimeMin=-1;
 string CommandParser::dayOfWeek;
+int CommandParser::dayOfWeekNo;
 int CommandParser::number=-1;
 string CommandParser::attribute="";
 string devider = "/";
@@ -34,9 +55,11 @@ size_t posD4;
 size_t posD5;
 size_t posD6;
 size_t posD7;
+int dayToAdd;
+
 
 void CommandParser::addTimeDeadline(string userInput){
-	taskType = "DeadlineTask";
+	taskType = DEADLINE_TASK;
 	startTimeHour = 0;
 	startTimeMin = 0;
 	endTimeHour = stoi(userInput.substr(posD1+1, (posD2-posD1)));
@@ -44,7 +67,7 @@ void CommandParser::addTimeDeadline(string userInput){
 }
 
 void CommandParser::addTimeTimedTask(string userInput){
-	taskType = "TimedTask";
+	taskType = TIMED_TASK;
 	startTimeHour = stoi(userInput.substr(posD1+1, (posD2-posD1)));
 	startTimeMin = stoi(userInput.substr(posD2+1, (posD3-posD2)));
 	endTimeHour = stoi(userInput.substr(posD3+1, (posD4-posD3)));
@@ -57,66 +80,82 @@ void CommandParser::normalAddDate(string userInput){
 	day =  stoi(userInput.substr(posD2+1, (posD3-posD2)));
 }
 
+void CommandParser::getDayOfWeekNo(string dayOfWeek){
+	transform(dayOfWeek.begin(), dayOfWeek.end(), dayOfWeek.begin(), ::tolower);
+	if (dayOfWeek == "monday" || dayOfWeek == "mon"){
+		dayOfWeekNo = 1;
+	} else if (dayOfWeek == "tuesday" || dayOfWeek == "tue"){
+		dayOfWeekNo = 2;
+	} else if (dayOfWeek == "wednesday" || dayOfWeek =="wed"){
+		dayOfWeekNo = 3;
+	} else if (dayOfWeek == "thursday" || dayOfWeek =="thu"){
+		dayOfWeekNo = 4;
+	} else if (dayOfWeek == "friday" || dayOfWeek =="fri"){
+		dayOfWeekNo = 5;
+	} else if (dayOfWeek == "saturday" || dayOfWeek =="sat"){
+		dayOfWeekNo = 6;
+	} else if (dayOfWeek == "sunday" || dayOfWeek =="sun"){
+		dayOfWeekNo = 0;
+	}
+}
+
+void CommandParser::getDayToAdd(int localWeekday){
+	if (localWeekday > dayOfWeekNo){
+		dayToAdd = 7 - abs(dayOfWeekNo - localWeekday);
+	} else {
+		dayToAdd = dayOfWeekNo - localWeekday;
+	}
+}
+
+void CommandParser::setTodayDate(){
+	time_t now = time(0);	
+	struct tm time;
+	localtime_s(&time, &now);
+	day =  time.tm_mday;
+	month = time.tm_mon + 1;
+	year = time.tm_year + 1900;
+}
+
+void CommandParser::setTomorrowDate(){
+	time_t now = time(0);	
+	struct tm time;
+	localtime_s(&time, &now);
+	time.tm_mday += 1;
+	mktime(&time);
+	day =  time.tm_mday;
+	month = time.tm_mon + 1;
+	year = time.tm_year + 1900;
+}
+
+void CommandParser::setDayDate(){
+	dayOfWeekNo = 0;
+	getDayOfWeekNo(dayOfWeek);
+
+	time_t now = time(0);	
+	dayToAdd = 0;
+	struct tm time;
+	localtime_s(&time, &now);
+	getDayToAdd(time.tm_wday);
+	time.tm_mday =  time.tm_mday + dayToAdd;
+
+	mktime(&time);
+	day = time.tm_mday;
+	month = time.tm_mon + 1;
+	year = time.tm_year + 1900;
+}
+
 void CommandParser::easyAddDate(string userInput){
 	string todayOrTomorrow = userInput.substr(pos1+1, (posD1-pos1-1));
 	transform(todayOrTomorrow.begin(), todayOrTomorrow.end(), todayOrTomorrow.begin(), ::tolower);
 	
 	if (todayOrTomorrow == "today"){
-				time_t now = time(0);	
-				struct tm time;
-				localtime_s(&time, &now);
-				day =  time.tm_mday;
-				month = time.tm_mon + 1;
-				year = time.tm_year + 1900;
-			}	
-		else if (todayOrTomorrow == "tomorrow"){
-				time_t now = time(0);	
-				struct tm time;
-				localtime_s(&time, &now);
-				time.tm_mday += 1;
-				mktime(&time);
-				day =  time.tm_mday;
-				month = time.tm_mon + 1;
-				year = time.tm_year + 1900;
-			} else {
-				dayOfWeek = userInput.substr(pos1+1, (posD1-pos1-1));
-				int dayOfWeekNo = 0;
-				transform(dayOfWeek.begin(), dayOfWeek.end(), dayOfWeek.begin(), ::tolower);
-			
-				if (dayOfWeek == "monday" || dayOfWeek == "mon"){
-					dayOfWeekNo = 1;
-				} else if (dayOfWeek == "tuesday" || dayOfWeek == "tue"){
-					dayOfWeekNo = 2;
-				} else if (dayOfWeek == "wednesday" || dayOfWeek =="wed"){
-					dayOfWeekNo = 3;
-				} else if (dayOfWeek == "thursday" || dayOfWeek =="thu"){
-					dayOfWeekNo = 4;
-				} else if (dayOfWeek == "friday" || dayOfWeek =="fri"){
-					dayOfWeekNo = 5;
-				} else if (dayOfWeek == "saturday" || dayOfWeek =="sat"){
-					dayOfWeekNo = 6;
-				} else if (dayOfWeek == "sunday" || dayOfWeek =="sun"){
-					dayOfWeekNo = 0;
-				}
-
-				time_t now = time(0);	
-				int dayToAdd = 0;
-				struct tm time;
-				localtime_s(&time, &now);
-			
-				if (time.tm_wday > dayOfWeekNo){
-					dayToAdd = 7 - abs(dayOfWeekNo - time.tm_wday);
-				} else {
-					dayToAdd = dayOfWeekNo - time.tm_wday;
-				}
-				
-				time.tm_mday =  time.tm_mday + dayToAdd;
-				
-				mktime(&time);
-				day = time.tm_mday;
-				month = time.tm_mon + 1;
-				year = time.tm_year + 1900;
-			}
+		setTodayDate();
+	} else if (todayOrTomorrow == "tomorrow"){
+		setTomorrowDate();	
+	} else {
+		dayOfWeek = userInput.substr(pos1+1, (posD1-pos1-1));
+		setDayDate();
+	}
 }
 
 void CommandParser::setDevider(string userInput){
@@ -136,169 +175,224 @@ void CommandParser::setDevider(string userInput){
 	posD7 = userInput.find(devider, posD6+1);
 }
 
-void CommandParser::identifyTask(string userInput) {
+void CommandParser::extractCommandType(string userInput){
 	setDevider(userInput);
 	commandType = userInput.substr(0, pos1);
-	//convert all letters in the commandType to lower case
 	transform(commandType.begin(), commandType.end(), commandType.begin(), ::tolower);
+}
 
-	if(commandType == "filepath"){
+bool isFloating(){
+	if(posD1 == string::npos){
+		return true;
+	} else {
+		return false;
+	}
+}
+
+bool isUsingEasyAdd(string userInput){
+	if(isalpha(userInput.at(pos1+1))){
+		return true;
+	} else {
+		return false;
+	}
+}
+
+bool isAddingDeadlineTask(){
+	if (posD4 == string::npos){
+		return true;
+	} else {
+		return false;
+	}
+}
+
+void CommandParser::easyAdd(string userInput){
+	easyAddDate(userInput);
+
+	if(isAddingDeadlineTask()) {
+		addTimeDeadline(userInput);
+		name = userInput.substr(posD3+1);
+	} else {
+		addTimeTimedTask(userInput);
+		name = userInput.substr(posD5+1);
+	}	
+}
+
+void CommandParser::normalAdd(string userInput){
+	normalAddDate(userInput);
+	string cutInput = userInput.substr(posD3);
+	setDevider(cutInput);
+	if(isAddingDeadlineTask()) {
+		addTimeDeadline(cutInput);
+		name = cutInput.substr(posD3+1);
+	} else {
+		addTimeTimedTask(cutInput);
+		name = cutInput.substr(posD5+1);
+	}	
+}
+
+bool isByName(string userInput){
+	if(isalpha(userInput.at(pos1+1))){
+		return true;
+	} else {
+		return false;
+	}
+}
+
+void CommandParser::addingTask(string userInput){
+	if(isFloating()) {
+		taskType = FLOATING_TASK;
 		name = userInput.substr(pos1+1);
 		return;
-	}else if(commandType == "filename"){
-		name = userInput.substr(pos1+1);
-		return;
-	}else if(commandType == "add"){
-
-		if(posD1 == string::npos) {
-			taskType = "FloatingTask";
-			name = userInput.substr(pos1+1);
-			return;
-
+	} else {
+		if (isUsingEasyAdd(userInput)){
+			easyAdd(userInput);
 		} else {
-			//add tomorrow/9/30/meeting
-			//add Friday/19/0/21/30/CCA
-			//NOTE: doesn't cover the case where the task type is invalid.
-			if (isalpha(userInput.at(pos1+1))){
-				easyAddDate(userInput);
+			normalAdd(userInput);
+		}	
+	}
+}
 
-				if(posD4 == string::npos) {
-					addTimeDeadline(userInput);
-					name = userInput.substr(posD3+1);
-					return;
-				} else {
-					addTimeTimedTask(userInput);
-					name = userInput.substr(posD5+1);
-					return;
-				}	
-			} else {
-				//add 2015/01/02/8/0/meeting
-				//add 2015/01/02/8/0/11/0/meeting
-				
-				normalAddDate(userInput);
-				string cutInput = userInput.substr(posD3);
-				setDevider(cutInput);
+void CommandParser::executeByNumberOrName(string userInput){
+	if (isByName(userInput)) {
+		name = userInput.substr(pos1+1);
+		number = -1;
+	} else {
+		number = stoi(userInput.substr(pos1+1));
+	}
+}
+
+void CommandParser::editName(string userInput){
+	name = userInput.substr(pos3+1);
+}
+
+void CommandParser::editDate(string userInput){
+	//userInput == edit 3 date ......
+		string cutInput = userInput.substr(pos2+1);
+		//cutInput == date .....
+		setDevider(cutInput);
+
+		if (taskType == FLOATING_TASK){ //NOTE:NOW CANNOT EDIT DATE FOR FLOATING TASK!!!
+			//FloatingTask, need to add both date and time
+			if(isalpha(cutInput.at(pos1+1))){
+				//cutInput == date today/9/30/eat
+				easyAddDate(cutInput);
 				if(posD4 == string::npos) {
 					addTimeDeadline(cutInput);
-					name = cutInput.substr(posD3+1);
+					return;
 				} else {
 					addTimeTimedTask(cutInput);
-					name = cutInput.substr(posD5+1);
+					return;
 				}	
-			}	
-		}
-	} else if (commandType == "delete" || commandType == "done" || commandType == "notdone" || commandType == "search") {
-		if (isalpha(userInput.at(pos1+1))) {
-			name = userInput.substr(pos1+1);
-			number = -1;
-		} else {
-			number = stoi(userInput.substr(pos1+1));
-		}
 
-	} else if (commandType == "sort" || commandType == "display" || commandType == "undo") {
-		return;
-	} else if (commandType == "edit"){
-		setDevider(userInput);
-		number = stoi(userInput.substr(pos1+1, pos2-pos1-1));
-		attribute = userInput.substr(pos2+1, pos3-pos2-1);
-		
-		if (attribute == "name"){
-			//userInput == edit 4 name XXXXX
-			name = userInput.substr(pos3+1);
-		} else if (attribute == "date"){
-			//userInput == edit 3 date ......
-			string cutInput = userInput.substr(pos2+1);
-
-			//cutInput == date .....
-			setDevider(cutInput);
-
-			if (taskType == "FloatingTask"){
-				//FloatingTask, need to add both date and time
-				if(isalpha(cutInput.at(pos1+1))){
-					//cutInput == date today/9/30/eat
-					easyAddDate(cutInput);
-					if(posD4 == string::npos) {
-						addTimeDeadline(cutInput);
-						return;
-					} else {
-						addTimeTimedTask(cutInput);
-						return;
-					}	
-
-				} else{
-					normalAddDate(cutInput);
-					string cutInput2 = cutInput.substr(posD3);
-					//cutInput2 == /9/30/10/30/eat
-					//cutInput2 == /9/30/eat
-					setDevider(cutInput2);
-					if(posD4 == string::npos) {
-						addTimeDeadline(cutInput2);
-					} else {
-						addTimeTimedTask(cutInput2);
-					}	
-				}
-				
-			} else {
-				//DeadlineTask or TimedTask
-				if(isalpha(cutInput.at(pos1+1))){
-					easyAddDate(cutInput);
-				} else{
-					normalAddDate(cutInput);
-				}
-			}
-
-		} else if (attribute == "time"){
-			string cutInput = userInput.substr(pos2+1);
-			//cutInput == time .....
-			setDevider(cutInput);
-
-			if (taskType == "FloatingTask"){
-				//FloatingTask, need to add both date and time
-
-				if(isalpha(cutInput.at(pos1+1))){
-					//cutInput == date today/9/30/eat
-					easyAddDate(cutInput);
-					if(posD4 == string::npos) {
-						addTimeDeadline(cutInput);
-						return;
-					} else {
-						addTimeTimedTask(cutInput);
-						return;
-					}	
-
-				} else{
-					normalAddDate(cutInput);
-					string cutInput2 = cutInput.substr(posD3);
-					//cutInput2 == /9/30/10/30/eat
-					//cutInput2 == /9/30/eat
-					setDevider(cutInput2);
-					if(posD4 == string::npos) {
-						addTimeDeadline(cutInput2);
-					} else {
-						addTimeTimedTask(cutInput2);
-					}	
-				}
-			}else{
-				//DeadlineTask or TimedTask
-				//cutInput == time 17/30 || cutInput == time 17/30/18/30
-				string cutInput2 = cutInput.substr(pos1+1);
-				cutInput2 = '/' + cutInput2; // so we can use the addTimeDeadline or addTimeTimedTask
-				//cutInput2 == /17/30 || /17/30/18/30
+			} else{
+				normalAddDate(cutInput);
+				string cutInput2 = cutInput.substr(posD3);
+				//cutInput2 == /9/30/10/30/eat
+				//cutInput2 == /9/30/eat
 				setDevider(cutInput2);
-				if(posD3 == string::npos){
+				if(posD4 == string::npos) {
 					addTimeDeadline(cutInput2);
 				} else {
 					addTimeTimedTask(cutInput2);
-				}
-			}	
+				}	
+			}
+				
+		} else {
+			//DeadlineTask or TimedTask
+			if(isalpha(cutInput.at(pos1+1))){
+				easyAddDate(cutInput);
+			} else{
+				normalAddDate(cutInput);
+			}
 		}
-	} else if (commandType == "view"){
+}
+
+void CommandParser::editTime(string userInput){
+	string cutInput = userInput.substr(pos2+1);
+		//cutInput == time .....
+		setDevider(cutInput);
+
+		if (taskType == FLOATING_TASK){
+			//FloatingTask, need to add both date and time
+
+			if(isalpha(cutInput.at(pos1+1))){
+				//cutInput == date today/9/30/eat
+				easyAddDate(cutInput);
+				if(posD4 == string::npos) {
+					addTimeDeadline(cutInput);
+					return;
+				} else {
+					addTimeTimedTask(cutInput);
+					return;
+				}	
+
+			} else{
+				normalAddDate(cutInput);
+				string cutInput2 = cutInput.substr(posD3);
+				//cutInput2 == /9/30/10/30/eat
+				//cutInput2 == /9/30/eat
+				setDevider(cutInput2);
+				if(posD4 == string::npos) {
+					addTimeDeadline(cutInput2);
+				} else {
+					addTimeTimedTask(cutInput2);
+				}	
+			}
+		}else{
+			//DeadlineTask or TimedTask
+			//cutInput == time 17/30 || cutInput == time 17/30/18/30
+			string cutInput2 = cutInput.substr(pos1+1);
+			cutInput2 = '/' + cutInput2; // so we can use the addTimeDeadline or addTimeTimedTask
+			//cutInput2 == /17/30 || /17/30/18/30
+			setDevider(cutInput2);
+			if(posD3 == string::npos){
+				addTimeDeadline(cutInput2);
+			} else {
+				addTimeTimedTask(cutInput2);
+			}
+		}
+}
+
+void CommandParser::editingTask(string userInput){
+	setDevider(userInput);
+	number = stoi(userInput.substr(pos1+1, pos2-pos1-1));
+	attribute = userInput.substr(pos2+1, pos3-pos2-1);
+		
+	if (attribute == NAME){
+		editName(userInput);
+	} else if (attribute == DATE){
+		editDate(userInput);
+	} else if (attribute == TIME){
+		editTime(userInput);	
+	}
+}
+
+void CommandParser::identifyTask(string userInput) {
+	
+	extractCommandType(userInput);
+
+	if(commandType == FILEPATH){
 		name = userInput.substr(pos1+1);
-		transform(name.begin(), name.end(), name.begin(), ::tolower);
-	} else if (commandType == "exit") {
+	} else if(commandType == FILENAME){
+		name = userInput.substr(pos1+1);
+	} else if(commandType == ADD){
+		addingTask(userInput);
+	} else if (commandType == COMMAND_DELETE || commandType == DONE || commandType == NOT_DONE || commandType == SEARCH) {
+		executeByNumberOrName(userInput);
+	} else if (commandType == SORT || commandType == DISPLAY || commandType == UNDO) {
+		return;
+	} else if (commandType == EDIT){
+		editingTask(userInput);
+	} else if (commandType == VIEW){
+		viewTask(userInput);
+	} else if (commandType == EXIT) {
 		return;
 	} 
-	return;
+}
+
+void CommandParser::viewTask(string userInput){
+	name = userInput.substr(pos1+1);
+	transform(name.begin(), name.end(), name.begin(), ::tolower);
 }
 
 string CommandParser::getCommandType() {

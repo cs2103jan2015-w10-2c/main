@@ -12,11 +12,34 @@
 using namespace std;
 
 class CommandParser {
+private:
+	static const string FILEPATH;
+	static const string FILENAME;
+	static const string FLOATING_TASK;
+	static const string DEADLINE_TASK;
+	static const string TIMED_TASK;
+
+	static const string ADD;
+	static const string COMMAND_DELETE;
+	static const string DISPLAY;
+	static const string DONE;
+	static const string EDIT;
+	static const string EXIT;
+	static const string NOT_DONE;
+	static const string SEARCH;
+	static const string SORT;
+	static const string UNDO;
+	static const string VIEW;
+
+	static const string DATE;
+	static const string NAME;
+	static const string TIME;
+
 public:
 	static string taskType;
 	static string commandType;
 	static string name;
-	static int number; //for delete
+	static int number; //for delete, done, notdone
 	static int year;
 	static int month;
 	static int day;
@@ -25,16 +48,31 @@ public:
 	static int startTimeHour;
 	static int endTimeHour;
 	static string dayOfWeek;
-	static string attribute; //for edit
+	static int dayOfWeekNo;
+	static string attribute; //what to edit
 
 public:
 	CommandParser(void);
 	~CommandParser(void);
 	void identifyTask(string userInput);
+	void extractCommandType(string userInput);
+
+	void addingTask(string userInput);
+	void easyAdd(string userInput);
 	void easyAddDate(string userInput);
+	void normalAdd(string userInput);
 	void normalAddDate(string userInput);
 	void addTimeDeadline(string userInput);
 	void addTimeTimedTask(string userInput);
+	void getDayOfWeekNo(string dayOfWeek);
+	void getDayToAdd(int localWeekday);
+	void executeByNumberOrName(string userInput);
+
+	void editingTask(string userInput);
+	void editDate(string userInput);
+	void editName(string userInput);
+	void editTime(string userInput);
+
 	string getCommandType();
 	string getTaskType();
 	string getName();
@@ -48,7 +86,11 @@ public:
 	int getEndTimeMin();
 
 	void setDevider(string userInput);
-	
+	void setTodayDate();
+	void setTomorrowDate();
+	void setDayDate();
+
+	void viewTask(string userInput);
 };
 
 #endif
