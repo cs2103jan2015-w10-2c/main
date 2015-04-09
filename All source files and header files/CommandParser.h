@@ -31,11 +31,15 @@ private:
 	static const string UNDO;
 	static const string VIEW;
 
+	static const string DATE;
+	static const string NAME;
+	static const string TIME;
+
 public:
 	static string taskType;
 	static string commandType;
 	static string name;
-	static int number; //for delete
+	static int number; //for delete, done, notdone
 	static int year;
 	static int month;
 	static int day;
@@ -45,13 +49,14 @@ public:
 	static int endTimeHour;
 	static string dayOfWeek;
 	static int dayOfWeekNo;
-	static string attribute; //for edit
+	static string attribute; //what to edit
 
 public:
 	CommandParser(void);
 	~CommandParser(void);
 	void identifyTask(string userInput);
 	void extractCommandType(string userInput);
+
 	void addingTask(string userInput);
 	void easyAdd(string userInput);
 	void easyAddDate(string userInput);
@@ -62,6 +67,12 @@ public:
 	void getDayOfWeekNo(string dayOfWeek);
 	void getDayToAdd(int localWeekday);
 	void executeByNumberOrName(string userInput);
+
+	void editingTask(string userInput);
+	void editDate(string userInput);
+	void editName(string userInput);
+	void editTime(string userInput);
+
 	string getCommandType();
 	string getTaskType();
 	string getName();
