@@ -629,8 +629,8 @@ namespace UI {
 						size_t tempEnd = end;
 					//	skipRow(feedbackTasks, tempStart, tempEnd, 7);
 						for(int i=0; i<7; i++) {
-							tempStart = end + 1;
-							tempEnd = feedbackTasks.find_first_of("]", start);
+							tempStart = tempEnd + 1;
+							tempEnd = feedbackTasks.find_first_of("]", tempStart);
 						}
 						nextTaskDate = feedbackTasks.substr(tempStart, tempEnd-tempStart);
 						if(componentInfo != nextTaskDate) {
@@ -692,8 +692,8 @@ namespace UI {
 								listViewItems->SubItems->Add(stringEmptyToken);
 							}
 							listOutputMain->Items->Add(this->listViewItems);
+							isDifferentDate = false; //for future use
 						}
-						isDifferentDate = false; //for future use
 					}
 
 					count -= 7; //each task has seven dividers "]"
