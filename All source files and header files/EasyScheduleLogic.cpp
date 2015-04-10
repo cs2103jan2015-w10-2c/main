@@ -126,6 +126,7 @@ void EasyScheduleLogic::commandAdd(){
 		}
 }
 
+//@author A0115131B
 void EasyScheduleLogic::viewDeadline(){
 	returnDisplay = displayAllDeadline();
 	if(displayAllDeadline() == ""){
@@ -180,6 +181,7 @@ void EasyScheduleLogic::viewYesterday(){
 		}
 }
 
+//@author A0115131B
 void EasyScheduleLogic::commandView(){
 	if(parser.name == "deadline"){
 			viewDeadline();
@@ -288,6 +290,7 @@ void EasyScheduleLogic::commandExit(){
 		returnDisplay = "";
  }
 
+ //@author A0115131B
 void EasyScheduleLogic::executeLogic(string userInput) {
 	parsingCommand(userInput);
 	if(parser.commandType == "filepath"){
@@ -306,7 +309,7 @@ void EasyScheduleLogic::executeLogic(string userInput) {
 		commandSearch();
 	} else if (parser.commandType == "sort") {
 		commandSort();
-	} else if (parser.commandType == "done") { //mark done/notdone doesn't work.
+	} else if (parser.commandType == "done") {
 		commandDone();
 	} else if (commandType == "notdone") {
 		commandNotDone();
@@ -314,7 +317,7 @@ void EasyScheduleLogic::executeLogic(string userInput) {
 		commandEdit();
 	} else if (parser.commandType == "exit") {
 		commandExit();
-	} else if (parser.commandType == "undo") { //Bug: for example, undo delete by add: it'll keep adding if I keep calling undo 
+	} else if (parser.commandType == "undo") {  
 		commandUndo();
 	} else {
 		commandInvalid();
@@ -333,6 +336,55 @@ void EasyScheduleLogic::parsingCommand(string userInput) {
 	day = parser.day;
 }
 
+ //@author A0115131B
+string EasyScheduleLogic::callUndoingAdd(Record recordToUndo){
+		if(undoingAdd(recordToUndo)) {
+			return MESSAGE_UNDO_SUCCESS;
+		}else{
+			return MESSAGE_UNDO_ERROR;
+		}
+}
+
+string EasyScheduleLogic::callUndoingDelete(Record recordToUndo){
+	if(undoingDelete(recordToUndo)) {
+		return MESSAGE_UNDO_SUCCESS;
+	}else{
+			return MESSAGE_UNDO_ERROR;
+	}
+}
+
+string EasyScheduleLogic::callUndoingDone(Record recordToUndo){
+	if(undoingDone(recordToUndo)) {
+		return MESSAGE_UNDO_SUCCESS;
+	}else{
+			return MESSAGE_UNDO_ERROR;
+	}
+}
+
+string EasyScheduleLogic::callUndoingNotDone(Record recordToUndo){
+	if(undoingNotDone(recordToUndo)) {
+		return MESSAGE_UNDO_SUCCESS;
+	}else{
+		return MESSAGE_UNDO_ERROR;
+	}
+}
+
+string EasyScheduleLogic::callUndoingEdit(Record recordToUndo){
+	if(undoingEdit(recordToUndo)){
+		return MESSAGE_UNDO_SUCCESS;
+	}else{
+		return MESSAGE_UNDO_ERROR;
+	}
+}
+
+Record EasyScheduleLogic::getLastRecord(){
+	Record recordToUndo;
+	recordToUndo = storage.getTracker().getNewestRecord();
+	storage.deleteLastTrackerEntry();
+
+	return recordToUndo;
+}
+
 //@author A0115131B
 string EasyScheduleLogic::undoingTask() {
 	string message;
@@ -340,38 +392,18 @@ string EasyScheduleLogic::undoingTask() {
 		message = MESSAGE_UNDO_FAIL;
 	}else{
 		Record recordToUndo;
-		recordToUndo = storage.getTracker().getNewestRecord();
-		storage.deleteLastTrackerEntry();
+		recordToUndo = getLastRecord();
+
 		if(recordToUndo.getCommandType() == "add") {
-			if(undoingAdd(recordToUndo)) {
-				message = MESSAGE_UNDO_SUCCESS;
-			}else{
-				message = MESSAGE_UNDO_ERROR;
-			}
+			message = callUndoingAdd(recordToUndo);
 		}else if(recordToUndo.getCommandType() == "delete") {
-			if(undoingDelete(recordToUndo)) {
-				message = MESSAGE_UNDO_SUCCESS;
-			}else{
-				message = MESSAGE_UNDO_ERROR;
-			}
+			message = callUndoingDelete(recordToUndo);
 		}else if(recordToUndo.getCommandType() == "done") {
-			if(undoingDone(recordToUndo)) {
-				message = MESSAGE_UNDO_SUCCESS;
-			}else{
-				message = MESSAGE_UNDO_ERROR;
-			}
+			message = callUndoingDone(recordToUndo);
 		}else if(recordToUndo.getCommandType() == "notdone") {
-			if(undoingNotDone(recordToUndo)) {
-				message = MESSAGE_UNDO_SUCCESS;
-			}else{
-				message = MESSAGE_UNDO_ERROR;
-			}
+			message = callUndoingNotDone(recordToUndo);
 		}else if(recordToUndo.getCommandType() == "edit"){
-			if(undoingEdit(recordToUndo)){
-				message = MESSAGE_UNDO_SUCCESS;
-			}else{
-				message = MESSAGE_UNDO_ERROR;
-			}
+			message = callUndoingEdit(recordToUndo);
 		}
 	}
 	return message;
@@ -415,7 +447,6 @@ bool EasyScheduleLogic::undoingEdit(Record recordToUndo){
 	return true;
 }
 
-//@author A0115131B
 void EasyScheduleLogic::creatingTask() {
 	if(taskType == FLOATING_TASK) {
 		task = Task(commandType, name);			
