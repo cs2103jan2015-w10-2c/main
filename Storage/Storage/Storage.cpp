@@ -55,34 +55,22 @@ isSuccess = false;
 }
 
 void Storage::setFileName(string name) {
+	_fileName = name;
 	string fileType = ".txt";
 	size_t findPos = name.find(fileType);
 	if (findPos==std::string::npos) {
-	_fileName = name+fileType;
-	} else {
-		_fileName = name;
-	}
+	_fileName += fileType;
+	} 
 }
 
 void Storage::setPathName(string name) {
 	_pathName =name;
 }
 
-bool Storage::showDirectory() {
-	if ((dir = opendir (_pathName.c_str())) != NULL) {
-		///* print all the files and directories within directory */
-		//while ((ent = readdir (dir)) != NULL) {
-		//	printf ("%s\r\n", ent->d_name);
-		//}
-		//closedir (dir);
-		return true;
-	} else {
-		return false;
-	}
+bool Storage::isValidDirectory() {
+	return (((dir = opendir (_pathName.c_str())) != NULL)) 
 }
 
-//i have folder called databank which is where all text files will be saved into
-//pathName can be respecified if you wish to save it in another EXISTING folder
 void Storage::openFile() {
 	string pathName = _pathName;
 	string combined = pathName + "/" + _fileName;
@@ -90,9 +78,8 @@ void Storage::openFile() {
 }
 
 void Storage::writeToFile() {
-	int i;
 	_taskIt = _taskList.begin();
-	for (i=1;i<=_taskList.size();i++) {
+	for (int i=1;i<=_taskList.size();i++) {
 		sprintf_s(buffer, LINE_BUFFER.c_str(), ((_taskIt->getCommandType()).c_str())
 			, (_taskIt->getTaskType()).c_str(), (_taskIt->getName()).c_str()
 			, to_string(_taskIt->getYear()).c_str(), to_string((_taskIt->getMonth())).c_str()
@@ -508,9 +495,13 @@ bool Storage::compareTask(Task task) {
 	return false;
 }
 
+bool Storage::isValidIndex(int i, list<Task> taskList) {
+	return (i<taskList.size()&&i>0);
+}
 
-void Storage::getPosition(int i) {
+void Storage::getPosition(int i, list<Task> taskList) {
 	_index = 1;
+	_taskIt= taskList.begin();
 	while (i>1) {
 		_taskIt++;
 		i--;
@@ -522,12 +513,10 @@ string Storage::markDone(int i) {
 	string commandType = "done";
 
 	if (isSearched) {
-		_taskIt= _searchResultList.begin();
-		if (i>_searchResultList.size()||i<=0) {
-			isSuccess = false;
-			return toStringTaskDetail(_searchResultList);
+		if (isValidIndex(i, _searchResultList)) {
+			getPosition(i, _searchResultList);
+			if (compareTask(*(_taskIt))
 		} else {
-			getPosition(i);
 			isSuccess = compareTask(*(_taskIt));
 			if (!isSuccess) {
 				return toStringTaskDetail(_searchResultList);
@@ -687,11 +676,8 @@ list<Task> Storage::allToday(){
 	int month = time.tm_mon + 1;
 	int year = time.tm_year + 1900;
 
-	searchTodayTask(year, month, day);
+	searchTodayTask(day, month, year);
 
-	if(!_searchResultList.empty()){
-		isSearched = true;
-	}
 	return _searchResultList;
 }
 
@@ -706,11 +692,8 @@ list<Task> Storage::allTomorrow(){
 	int month = time.tm_mon + 1;
 	int year = time.tm_year + 1900;
 
-	searchTodayTask(year, month, day);
+	searchTodayTask(day, month, year);
 
-	if(!_searchResultList.empty()){
-		isSearched = true;
-	}
 	return _searchResultList;
 }
 
@@ -725,11 +708,8 @@ list<Task> Storage::allYesterday(){
 	int month = time.tm_mon + 1;
 	int year = time.tm_year + 1900;
 
-	searchTodayTask(year, month, day);
+	searchTodayTask(day, month, year);
 
-	if(!_searchResultList.empty()){
-		isSearched = true;
-	}
 	return _searchResultList;
 }
 
@@ -759,6 +739,9 @@ void Storage::searchTodayTask(int day, int month, int year){
 			&& (*_taskIt).getDay() == day){
 				_searchResultList.push_back(*_taskIt);
 		}
+	}
+	if(!_searchResultList.empty()){
+		isSearched = true;
 	}
 }
 

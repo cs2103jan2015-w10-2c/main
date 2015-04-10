@@ -73,7 +73,7 @@ public:
 	static list<Task> allYesterday();
 	static void searchTodayTask(int day, int month, int year);
 	static void searchUpcomingDeadline(int day, int month, int year);
-	static void getPosition(int i);
+	static void getPosition(int i, list<Task> taskList);
 
 	static void findTaskInList(string searchKeyWord);
 	static bool isTaskDuplicate(Task task);
@@ -82,7 +82,8 @@ public:
 	static bool isDeadlineDuplicate(Task task);
 	static bool isValidDate(Task task);
 	static bool isValidTime(Task task);
-	static bool showDirectory();
+	static bool isValidDirectory();
+	static bool isValidIndex(int i, list<Task> taskList);
 	static void openFile();
 	static void readFile();
 	static void setFileName(string name);
