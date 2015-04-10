@@ -5,7 +5,7 @@ const string Task::NAME_OF_MONTH[12] = {"Jan", "Feb", "Mar", "Apr", "May", "Jun"
 
 Task::Task() { };
 
-Task::Task(string commandType, string taskType, string name, int year, int month, int day, double startTimeHour, double startTimeMin, double endTimeHour, double endTimeMin, bool isDone) {
+Task::Task(string commandType, string taskType, string name, int year, int month, int day, int startTimeHour, int startTimeMin, int endTimeHour, int endTimeMin, bool isDone) {
 	_commandType = commandType;
 	_taskType = taskType;
 	_name = name;
@@ -20,7 +20,7 @@ Task::Task(string commandType, string taskType, string name, int year, int month
 }
 
 
-Task::Task(string commandType, string name, int year, int month, int day, double startTimeHour, double startTimeMin, double endTimeHour, double endTimeMin) {
+Task::Task(string commandType, string name, int year, int month, int day, int startTimeHour, int startTimeMin, int endTimeHour, int endTimeMin) {
 	_isDone = false;
 	_taskType = "TimedTask";
 	_commandType = commandType;
@@ -34,7 +34,7 @@ Task::Task(string commandType, string name, int year, int month, int day, double
 	_endTimeMin = endTimeMin;
 }
 
-Task::Task(string commandType, string name, int year, int month, int day, double endTimeHour, double endTimeMin) {
+Task::Task(string commandType, string name, int year, int month, int day, int endTimeHour, int endTimeMin) {
 	_isDone = false;
 	_taskType = "DeadlineTask";
 	_commandType = commandType;
@@ -89,19 +89,19 @@ void Task::setDay(int newDay){
 	_day = newDay;
 }
 
-void Task::setStartTimeHour(double newStartTimeHour){
+void Task::setStartTimeHour(int newStartTimeHour){
 	_startTimeHour = newStartTimeHour;
 }
 
-void Task::setStartTimeMin(double newStartTimeMin){
+void Task::setStartTimeMin(int newStartTimeMin){
 	_startTimeMin = newStartTimeMin;
 }
 
-void Task::setEndTimeHour(double newEndTimeHour){
+void Task::setEndTimeHour(int newEndTimeHour){
 	_endTimeHour = newEndTimeHour;
 }
 
-void Task::setEndTimeMin(double newEndTimeMin){
+void Task::setEndTimeMin(int newEndTimeMin){
 	_endTimeMin = newEndTimeMin;
 }
 
@@ -149,22 +149,22 @@ int Task::getDay() {
 	return _day;
 }
 
-double Task::getEndTimeHour() {
+int Task::getEndTimeHour() {
 	return _endTimeHour;
 }
 
-double Task::getEndTimeMin() {
+int Task::getEndTimeMin() {
 	return _endTimeMin;
 }
 
-double Task::getStartTimeHour() {
+int Task::getStartTimeHour() {
 	return _startTimeHour;
 }
 
-double Task::getStartTimeMin() {
+int Task::getStartTimeMin() {
 	return _startTimeMin;
 }
 
-bool Task::isDone(){
+bool Task::getIsDone(){
 	return _isDone;
 }

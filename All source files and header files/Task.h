@@ -55,7 +55,7 @@ public:
 	int getStartTimeMin();
 	int getEndTimeHour();
 	int getEndTimeMin();
-	bool isDone();
+	bool getIsDone();
 };
 
 #endif

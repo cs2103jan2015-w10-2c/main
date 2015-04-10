@@ -97,7 +97,7 @@ int EasyScheduleLogic::endTimeMin;
 
 void EasyScheduleLogic::commandFilePath(){
 	storage.setPathName(parser.name);
-		if (storage.showDirectory()) {
+		if (storage.isValidDirectory()) {
 			returnMessage = MESSAGE_DIRECTORY_OPENED;
 		} else {
 			returnMessage = MESSAGE_DIRECTORY_NOT_FOUND;
@@ -120,7 +120,7 @@ void EasyScheduleLogic::commandAdd(){
 	returnMessage = addingTask();
 		returnDisplay = displayingTask();
 		if (storage.isSuccess) {
-			returnIndex = storage._index;
+			returnIndex = storage.getIndex();
 		} else {
 			returnIndex = 0;
 		}
@@ -234,7 +234,7 @@ void EasyScheduleLogic::commandSort(){
 void EasyScheduleLogic::commandDone(){
 	returnDisplay = markDone();
 	if (storage.isSuccess) {
-		returnIndex = storage._index;
+		returnIndex = storage.getIndex();
 	}
 	if (parser.name!="") {
 		if ((storage._searchResultList).size()==0) {
@@ -243,17 +243,17 @@ void EasyScheduleLogic::commandDone(){
 		if ((storage._searchResultList).size()==1) {
 			parser.number=1;
 			returnDisplay = markDone();
-			returnIndex = storage._index;
-		} else {
-			returnIndex = 0;
+			returnIndex = storage.getIndex();
 		}
+	} else {
+		returnIndex = 0;
 	}
 }
 
 void EasyScheduleLogic::commandNotDone(){
 	returnDisplay = markNotDone();
 	if (storage.isSuccess) {
-		returnIndex = storage._index;
+		returnIndex = storage.getIndex();
 	}
 	if (parser.name!="") {
 		if ((storage._searchResultList).size()==0) {
@@ -262,7 +262,7 @@ void EasyScheduleLogic::commandNotDone(){
 		if ((storage._searchResultList).size()==1) {
 			parser.number=1;
 			returnDisplay = markNotDone();
-			returnIndex = storage._index;
+			returnIndex = storage.getIndex();
 		} else {
 			returnIndex = 0;
 		}
@@ -271,7 +271,7 @@ void EasyScheduleLogic::commandNotDone(){
 
 void EasyScheduleLogic::commandEdit(){
 	returnDisplay = editingTask();
-	returnIndex = storage._index;
+	returnIndex = storage.getIndex();
 }
 
 void EasyScheduleLogic::commandUndo(){
@@ -598,7 +598,7 @@ string EasyScheduleLogic::autoDisplay(){
 }
 
 string EasyScheduleLogic::displayingTask() {
-	return storage.toStringTaskDetail();
+	return storage.toStringTaskDetail(storage._taskList);
 }
 
 string EasyScheduleLogic::sortingTask() {
@@ -620,7 +620,7 @@ int EasyScheduleLogic::tellUIReturnIndex() {
 }
 
 bool EasyScheduleLogic::isDuplicate() {
-	return storage.isTaskDuplicate(task);
+	return storage.isExistingTask(task);
 }
 
 

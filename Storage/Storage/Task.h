@@ -13,10 +13,10 @@ private:
 	int _year;
 	int _month;
 	int _day;
-	double _startTimeHour;
-	double _startTimeMin;
-	double _endTimeHour;
-	double _endTimeMin;
+	int _startTimeHour;
+	int _startTimeMin;
+	int _endTimeHour;
+	int _endTimeMin;
 	bool _isDone;
 
 	static const string NAME_OF_MONTH[12];
@@ -24,9 +24,9 @@ private:
 
 public:
 	Task();
-	Task(string commandType, string taskType, string name, int year, int month, int day, double startTimeHour, double startTimeMin, double endTimeHour, double endTimeMin, bool isDone);
-	Task(string commandType, string name, int year, int month, int day, double startTimeHour, double startTimeMin, double endTimeHour, double endTimeMin);
-	Task(string commandType, string name, int year, int month, int day, double endTimeHour, double endTimeMin);
+	Task(string commandType, string taskType, string name, int year, int month, int day, int startTimeHour, int startTimeMin, int endTimeHour, int endTimeMin, bool isDone);
+	Task(string commandType, string name, int year, int month, int day, int startTimeHour, int startTimeMin, int endTimeHour, int endTimeMin);
+	Task(string commandType, string name, int year, int month, int day, int endTimeHour, int endTimeMin);
 	Task(string commandType, string name);
 
 	void markDone();
@@ -35,10 +35,10 @@ public:
 	void setYear(int newYear);
 	void setMonth(int newMonth);
 	void setDay(int newDay);
-	void setStartTimeHour(double newStartTimeHour);
-	void setStartTimeMin(double newStartTimeMin);
-	void setEndTimeHour(double newEndTimeHour);
-	void setEndTimeMin(double newEndTimeMin);
+	void setStartTimeHour(int newStartTimeHour);
+	void setStartTimeMin(int newStartTimeMin);
+	void setEndTimeHour(int newEndTimeHour);
+	void setEndTimeMin(int newEndTimeMin);
 	void setCommandType(string commandType);
 	void setTaskType(string taskType);
 
@@ -51,11 +51,11 @@ public:
 	int getDay();
 	string getDate();
 	string getAlphabetDate();
-	double getStartTimeHour();
-	double getStartTimeMin();
-	double getEndTimeHour();
-	double getEndTimeMin();
-	bool isDone();
+	int getStartTimeHour();
+	int getStartTimeMin();
+	int getEndTimeHour();
+	int getEndTimeMin();
+	bool getIsDone();
 };
 
 #endif

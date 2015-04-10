@@ -165,6 +165,6 @@ int Task::getStartTimeMin() {
 	return _startTimeMin;
 }
 
-bool Task::isDone(){
+bool Task::getIsDone(){
 	return _isDone;
 }

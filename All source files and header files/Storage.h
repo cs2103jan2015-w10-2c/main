@@ -73,16 +73,16 @@ public:
 	static list<Task> allYesterday();
 	static void searchTodayTask(int day, int month, int year);
 	static void searchUpcomingDeadline(int day, int month, int year);
-	static void getPosition(int i);
+	static void getTaskItFromIndex(int i, list<Task> &taskList);
+	static void getTaskItFromIndex(int i);
+	static void getTaskIt(Task task);
 
 	static void findTaskInList(string searchKeyWord);
-	static bool isTaskDuplicate(Task task);
-	static bool isFloatDuplicate(Task task);
-	static bool isTimedDuplicate(Task task);
-	static bool isDeadlineDuplicate(Task task);
+	static bool isExistingTask(Task task);
 	static bool isValidDate(Task task);
 	static bool isValidTime(Task task);
-	static bool showDirectory();
+	static bool isValidDirectory();
+	static bool isValidIndex(int i, list<Task> &taskList);
 	static void openFile();
 	static void readFile();
 	static void setFileName(string name);
@@ -106,19 +106,25 @@ public:
 	static string editTaskName(int i, string s);
 	static string editTaskTime(int i, double sth, double stm, double eth, double etm);
 	static string editTaskDate(int i, int year, int month, int day);
+	static void executeEditName(string commandType, string name);
+	static void executeEditTime(string commandType, double sth, double stm, double eth, double etm);
+	static void executeEditDate(string commandType, int year, int month, int day);
+	static void setTime(double sth, double stm, double eth, double etm);
+	static void setDate(int year, int month, int day);
 	static string searchByName(string searchKeyWord);
 	static string markDone(int i);
 	static string markNotDone(int i);
+	static string executeIndexCommand(int i, string commandType);
+	static void executeTaskCommand(string commandType);
 	static string deleteByNumber(int i);
-	static void getIndex(Task task);
+	static int getIndex();
 
 
-	static string toStringTaskDetail();
-	static string toStringTaskDetail(list <Task> listToFormat);
+	static string toStringTaskDetail(list <Task> &listToFormat);
 	static Tracker getTracker();
 	static void deleteLastTrackerEntry();
 
 };
 
 
-#endif
+#endif	
