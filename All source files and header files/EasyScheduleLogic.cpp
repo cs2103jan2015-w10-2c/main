@@ -293,6 +293,7 @@ void EasyScheduleLogic::commandExit(){
  //@author A0115131B
 void EasyScheduleLogic::executeLogic(string userInput) {
 	parsingCommand(userInput);
+	returnIndex = 0;
 	if(parser.commandType == "filepath"){
 		commandFilePath();
 	} else if(parser.commandType == "filename"){
@@ -322,7 +323,6 @@ void EasyScheduleLogic::executeLogic(string userInput) {
 	} else {
 		commandInvalid();
 	}
-	returnIndex = 0;
 }
 
 void EasyScheduleLogic::parsingCommand(string userInput) {
