@@ -6,7 +6,7 @@ using namespace Microsoft::VisualStudio::CppUnitTestFramework;
 namespace UnitTest
 {		
 	//@author A0114255N
-	TEST_CLASS(UnitTest_nathan){
+	TEST_CLASS(TaskTest){
 	public:
 
 		TEST_METHOD(ConstructorTest){
