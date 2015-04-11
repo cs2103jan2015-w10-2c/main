@@ -783,7 +783,7 @@ void Storage::searchUpcomingDeadline(int day, int month, int year){
 string Storage::toStringTaskDetail(list <Task> &listToFormat){
 	ostringstream s;
 	if(listToFormat.empty()) {
-		s << "The schedule is empty.";
+		s << "";
 		return s.str();
 	} else {
 		list <Task>::iterator iter;
@@ -841,7 +841,7 @@ string Storage::toStringTaskDetail(){
 	ostringstream s;
 	isSearched = false;
 	if(_taskList.empty()) {
-		s << "The schedule is empty.";
+		s << "";
 		return s.str();
 	} else {
 		list <Task>::iterator iter;

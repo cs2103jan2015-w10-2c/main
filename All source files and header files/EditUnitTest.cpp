@@ -29,8 +29,11 @@ namespace EditUnitTest {
 			expectedDisplay = "1]No]Float]dinner with friends]N.A.]N.A.]N.A.]";
 			Assert::AreEqual(expectedDisplay, actualDisplay);
 			
-			string clearTaskCommand = "clear";
-			Nlogic.executeLogic(clearTaskCommand);
+			string deleteTaskCommand = "delete 1";
+			while(Nlogic.displayingTask() != "") {
+				Nlogic.executeLogic(deleteTaskCommand);
+			}
+			
 
 		}
 
@@ -59,8 +62,10 @@ namespace EditUnitTest {
 			expectedDisplay = "1]No]Deadline]CS submission]13 Apr 2015]N.A.]23:59]";
 			Assert::AreEqual(expectedDisplay, actualDisplay);
 
-			string clearTaskCommand = "clear";
-			Dlogic.executeLogic(clearTaskCommand);
+			string deleteTaskCommand = "delete 1";
+			while(Dlogic.displayingTask() != "") {
+				Dlogic.executeLogic(deleteTaskCommand);
+			}
 		}
 
 		TEST_METHOD(EditTaskTimeTest) {
@@ -82,8 +87,10 @@ namespace EditUnitTest {
 			expectedDisplay = "1]No]Timed]watch musical show]5 Apr 2015]08:00]10:00]";
 			Assert::AreEqual(expectedDisplay, actualDisplay);
 
-			string clearTaskCommand = "clear";
-			Tlogic.executeLogic(clearTaskCommand);
+			string deleteTaskCommand = "delete 1";
+			while(Tlogic.displayingTask() != "") {
+				Tlogic.executeLogic(deleteTaskCommand);
+			}
 		}
 
 		TEST_METHOD(EditTaskTypeTest) {
@@ -128,8 +135,10 @@ namespace EditUnitTest {
 			expectedDisplay = "1]No]Deadline]lunch with friends]5 Apr 2015]N.A.]13:00]2]No]Timed]dinner with friends]5 Apr 2015]18:00]19:00]";
 			Assert::AreEqual(expectedDisplay, actualDisplay);
 
-			string clearTaskCommand = "clear";
-			Ylogic.executeLogic(clearTaskCommand);
+			string deleteTaskCommand = "delete 1";
+			while(Ylogic.displayingTask() != "") {
+				Ylogic.executeLogic(deleteTaskCommand);
+			}
 		}
 
 	};
