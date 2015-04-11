@@ -56,6 +56,12 @@ isSearched = false;
 isSuccess = false;
 }
 
+Storage::~Storage() {
+}
+
+//all file types have to be txt files
+//if the user does not type
+
 void Storage::setFileName(string name) {
 	_fileName = name;
 	string fileType = ".txt";
@@ -182,7 +188,7 @@ void Storage::storeTask(Task task) {
 	} 
 }
 
-bool Storage::isExistingTask(Task task) {
+bool Storage::isExistingTask(Task &task) {
 	list<Task>::iterator i;
 	for (i=_taskList.begin();i!=_taskList.end();i++) {
 		if ((i->getCommandType() == task.getCommandType()) 
@@ -367,7 +373,7 @@ string Storage::executeIndexCommand(int i, string commandType) {
 			isSuccess = false;
 		}
 	}
-	return toStringTaskDetail(_taskList);
+	return toStringTaskDetail();
 }
 
 void Storage::executeTaskCommand(string commandType) {
@@ -468,7 +474,7 @@ string Storage::editTaskName(int i, string s) {
 	}
 	sortList();
 	getTaskIt(*_taskIt);
-	return toStringTaskDetail(_taskList);
+	return toStringTaskDetail();
 }
 
 string Storage::editTaskTime(int i, int sth, int stm, int eth, int etm) {
@@ -495,7 +501,7 @@ string Storage::editTaskTime(int i, int sth, int stm, int eth, int etm) {
 	}
 	sortList();
 	getTaskIt(*_taskIt);
-	return toStringTaskDetail(_taskList);
+	return toStringTaskDetail();
 }
 
 
@@ -523,7 +529,7 @@ string Storage::editTaskDate(int i, int year, int month, int day) {
 	}
 	sortList();
 	getTaskIt(*_taskIt);
-	return toStringTaskDetail(_taskList);
+	return toStringTaskDetail();
 }
 	
 //@author A0115131B
@@ -705,6 +711,70 @@ string Storage::toStringTaskDetail(list <Task> &listToFormat){
 		list <Task>::iterator iter;
 		int index = 0;
 		for (iter = listToFormat.begin(); iter != listToFormat.end(); iter++) {
+			/****Index****/
+			index++;
+			s << index << "]"; // "]" as a divider to divide each component
+			/****check if Mark as Done****/
+			if(iter->getIsDone()) {
+				s << "Yes" << "]";
+			} else {
+				s << "No" << "]";
+			}
+			/****For floating task****/
+			if (iter->getTaskType() == "FloatingTask") {
+				s << "Float]" << iter->getName() << "]N.A.]N.A.]N.A.]";
+			} else { //for other 2 types of tasks
+				/****Task Type****/
+				if (iter->getTaskType() == "TimedTask") {
+					s << "Timed]";
+				} else {
+					s << "Deadline]";
+				}
+				/****Task name and date****/
+				s << iter->getName() << "]" << iter->getAlphabetDate() << "]";
+				/****start and end time****/
+				if (iter->getTaskType() == "TimedTask") {
+					if(iter->getStartTimeHour() < 10) {
+						s << "0" << iter->getStartTimeHour() <<":";
+					} else {
+						s << iter->getStartTimeHour() << ":";
+					}
+					if(iter->getStartTimeMin() < 10) {
+						s << "0" << iter->getStartTimeMin() << "]";
+					} else {
+						s << iter->getStartTimeMin() << "]";
+					}
+				} else {
+					s << "N.A.]"; //start time Non Applicable
+				}
+
+				if(iter->getEndTimeHour() < 10) {
+					s << "0" << iter->getEndTimeHour() <<":";
+				} else {
+					s << iter->getEndTimeHour() << ":";
+				}
+				if(iter->getEndTimeMin() < 10){
+					s << "0" << iter->getEndTimeMin() <<"]";
+				} else {
+					s << iter->getEndTimeMin() << "]";
+				}
+			}
+		}
+		return s.str();
+	}
+}
+
+
+string Storage::toStringTaskDetail(){
+	ostringstream s;
+	isSearched = false;
+	if(_taskList.empty()) {
+		s << "The schedule is empty.";
+		return s.str();
+	} else {
+		list <Task>::iterator iter;
+		int index = 0;
+		for (iter = _taskList.begin(); iter != _taskList.end(); iter++) {
 			/****Index****/
 			index++;
 			s << index << "]"; // "]" as a divider to divide each component

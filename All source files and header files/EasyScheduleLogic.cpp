@@ -619,7 +619,7 @@ string EasyScheduleLogic::autoDisplay(){
 }
 
 string EasyScheduleLogic::displayingTask() {
-	return storage.toStringTaskDetail(storage._taskList);
+	return storage.toStringTaskDetail();
 }
 
 string EasyScheduleLogic::sortingTask() {
