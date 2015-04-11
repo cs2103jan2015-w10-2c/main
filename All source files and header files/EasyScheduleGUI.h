@@ -26,12 +26,9 @@ namespace UI {
 	public ref class EasyScheduleGUI : public System::Windows::Forms::Form {
 	
 	private: 
+
 	public:
 	//	cliext::vector<String^> allUserInputs; //a vector to store all user inputs
-
-
-	public: 
-
 		
 	public:
 		EasyScheduleGUI(void) {
@@ -500,7 +497,7 @@ namespace UI {
 					size_t tempEnd = end;
 				//	skipRow(feedbackTasks, tempStart, tempEnd, 7);
 					for(int i=0; i<7; i++) {
-						tempStart = end + 1;
+						tempStart = tempEnd + 1;
 						tempEnd = feedbackTasks.find_first_of("]", start);
 					}
 					nextTaskDate = feedbackTasks.substr(tempStart, tempEnd-tempStart);
@@ -531,6 +528,9 @@ namespace UI {
 
 					/****Adding a message line before upcoming deadline tasks****/
 					if(differentDate == 1) {
+
+						differentDate++;
+
 						string MESSAGE_UPCOMING_DEADLINES = "Upcoming Deadlines:";
 						String^ STRING_MESSAGE_UPCOMING_DEADLINES = gcnew String(MESSAGE_UPCOMING_DEADLINES.c_str());
 						
