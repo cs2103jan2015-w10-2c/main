@@ -75,25 +75,26 @@ int EasyScheduleLogic::endTimeMin;
 //int EasyScheduleLogic::localHour;
 //int EasyScheduleLogic::localMin;
 
+//here
+/*
+int main () {
+	EasyScheduleLogic::main();
+}
 
-//
-//int main () {
-//	EasyScheduleLogic::main();
-//}
-//
-//void EasyScheduleLogic::main() {
-//	string input;
-//	getline(cin, input);
-//
-//	while (input!="exit") {
-//		executeLogic(input);
-//		getline(cin, input);
-//	}
-//	
-//	storage.writeToFile();
-//	exit(0);
-//	
-//}
+void EasyScheduleLogic::main() {
+	string input;
+	getline(cin, input);
+
+	while (input!="exit") {
+		executeLogic(input);
+		getline(cin, input);
+	}
+	
+	storage.writeToFile();
+	exit(0);
+	}
+//here
+*/
 
 void EasyScheduleLogic::commandFilePath(){
 	storage.setPathName(parser.name);
