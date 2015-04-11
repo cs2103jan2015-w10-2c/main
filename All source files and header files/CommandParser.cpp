@@ -1,3 +1,4 @@
+//@author A0114255N
 #include "CommandParser.h"
 
 #include <atltime.h>
@@ -274,8 +275,7 @@ void CommandParser::editDate(string userInput){
 	if (taskType == FLOATING_TASK){
 		editFloatDateTime(cutInput); 
 	} else {
-		//DeadlineTask or TimedTask
-		if(isalpha(cutInput.at(pos1+1))){
+		if(isUsingEasyAdd(cutInput)){
 			easyAddDate(cutInput);
 		} else{
 			normalAddDate(cutInput);
@@ -284,8 +284,7 @@ void CommandParser::editDate(string userInput){
 }
 
 void CommandParser::editFloatDateTime(string cutInput){
-	if(isalpha(cutInput.at(pos1+1))){
-		//cutInput == date today/9/30
+	if(isUsingEasyAdd(cutInput)){
 		easyAddDate(cutInput);
 		if(posD3 == string::npos) {
 			addTimeDeadline(cutInput);
@@ -298,11 +297,9 @@ void CommandParser::editFloatDateTime(string cutInput){
 	} else{
 		normalAddDate(cutInput);
 		string cutInput2 = cutInput.substr(posD3);
-		//cutInput2 == /9/30/10/30
-		// or cutInput2 == /9/30
 		setDevider(cutInput2);
 		if(posD3 == string::npos) {
-		addTimeDeadline(cutInput2);
+			addTimeDeadline(cutInput2);
 		} else {
 			addTimeTimedTask(cutInput2);
 		}	
@@ -311,17 +308,14 @@ void CommandParser::editFloatDateTime(string cutInput){
 
 void CommandParser::editTime(string userInput){
 	string cutInput = userInput.substr(pos2+1);
-	//cutInput == time .....
+	//cutInput == time ....
 	setDevider(cutInput);
 
 	if (taskType == FLOATING_TASK){
 		editFloatDateTime(cutInput); 
 	}else{
-		//DeadlineTask or TimedTask
-		//cutInput == time 17/30 || cutInput == time 17/30/18/30
 		string cutInput2 = cutInput.substr(pos1+1);
 		cutInput2 = '/' + cutInput2; // so we can use the addTimeDeadline or addTimeTimedTask
-		//cutInput2 == /17/30 || /17/30/18/30
 		setDevider(cutInput2);
 		if(posD3 == string::npos){
 			addTimeDeadline(cutInput2);
@@ -348,24 +342,25 @@ void CommandParser::editingTask(string userInput){
 void CommandParser::identifyTask(string userInput) {
 	
 	extractCommandType(userInput);
-
-	if(commandType == FILEPATH){
-		name = userInput.substr(pos1+1);
-	} else if(commandType == FILENAME){
-		name = userInput.substr(pos1+1);
-	} else if(commandType == ADD){
-		addingTask(userInput);
-	} else if (commandType == COMMAND_DELETE || commandType == DONE || commandType == NOT_DONE || commandType == SEARCH) {
-		executeByNumberOrName(userInput);
-	} else if (commandType == SORT || commandType == DISPLAY || commandType == UNDO) {
-		return;
-	} else if (commandType == EDIT){
-		editingTask(userInput);
-	} else if (commandType == VIEW){
-		viewTask(userInput);
-	} else if (commandType == EXIT) {
-		return;
-	} 
+	
+		if(commandType == FILEPATH){
+			name = userInput.substr(pos1+1);
+		} else if(commandType == FILENAME){
+			name = userInput.substr(pos1+1);
+		} else if(commandType == ADD){
+			addingTask(userInput);
+		} else if (commandType == COMMAND_DELETE || commandType == DONE || commandType == NOT_DONE || commandType == SEARCH) {
+			executeByNumberOrName(userInput);
+		} else if (commandType == SORT || commandType == DISPLAY || commandType == UNDO) {
+			return;
+		} else if (commandType == EDIT){
+			editingTask(userInput);
+		} else if (commandType == VIEW){
+			viewTask(userInput);
+		} else if (commandType == EXIT) {
+			return;
+		} 
+	
 }
 
 void CommandParser::viewTask(string userInput){
