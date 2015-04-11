@@ -565,26 +565,28 @@ string EasyScheduleLogic::editingTask(){
 	if (parser.attribute == "name"){
 		s = storage.editTaskName(taskNumber, parser.name);
 	} else if (parser.attribute == "date"){
-		if(task.getTaskType() == FLOATING_TASK){
-			s = storage.editTaskDate(taskNumber, parser.year, parser.month, parser.day);
-			s = storage.editTaskTime(taskNumber,parser.startTimeHour, parser.startTimeMin, parser.endTimeHour, parser.endTimeMin);
+		if(parser.taskType == FLOATING_TASK){
+			s = storage.editTaskDateTime(taskNumber, parser.year, parser.month, parser.day,parser.startTimeHour, parser.startTimeMin, parser.endTimeHour, parser.endTimeMin);
 		} else {
 			s = storage.editTaskDate(taskNumber, parser.year, parser.month, parser.day);
 		}
 	} else if (parser.attribute == "time"){
-		if(task.getTaskType() == FLOATING_TASK){
-			s = storage.editTaskDate(taskNumber, parser.year, parser.month, parser.day);
-			s = storage.editTaskTime(taskNumber,parser.startTimeHour, parser.startTimeMin, parser.endTimeHour, parser.endTimeMin);
+		if(parser.taskType == FLOATING_TASK){
+			s = storage.editTaskDateTime(taskNumber, parser.year, parser.month, parser.day,parser.startTimeHour, parser.startTimeMin, parser.endTimeHour, parser.endTimeMin);
 		} else {
 			s = storage.editTaskTime(taskNumber,parser.startTimeHour, parser.startTimeMin, parser.endTimeHour, parser.endTimeMin);
 		}
 	}
 
-	if (storage.isSuccess){
-		returnMessage = MESSAGE_EDIT;
-	}else{
-		returnMessage = MESSAGE_EDIT_FAIL;
-	}
+	if (!storage.isDateValid){
+			returnMessage = MESSAGE_INVALID_DATE;
+		} else if(!storage.isTimeValid){
+			returnMessage = MESSAGE_INVALID_TIME;
+		} else if (!storage.isSuccess){
+			returnMessage = MESSAGE_EDIT_FAIL;
+		} else {
+			returnMessage = MESSAGE_EDIT;
+		}
 	return s;
 }
 
