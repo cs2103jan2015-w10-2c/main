@@ -2,7 +2,6 @@
 #include "dirent.h"
 #include <algorithm>
 #include <sstream>
-
 #include <assert.h>
 #include <atltime.h>
 #include <math.h>
