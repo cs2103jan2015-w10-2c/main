@@ -1,5 +1,6 @@
 //@author A0115131B
 #include "Record.h"
+#include <assert.h>
 
 Record::Record(void) { }
 Record::~Record(void) { }
@@ -31,6 +32,9 @@ string Record::getCommandType(){
 void Record::clear(){
 	_commandType = "";
 	_taskRecord.clear();
+
+	assert(_commandType == "");
+	assert(_taskRecord.size() == 0);
 }
 
 list<Task> Record::getTaskRecord(){
