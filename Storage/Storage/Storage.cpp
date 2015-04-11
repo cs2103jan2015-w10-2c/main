@@ -120,10 +120,10 @@ void Storage::readFile() {
 	int year;
 	int month;
 	int day;
-	double startTimeHour;
-	double startTimeMin;
-	double endTimeHour;
-	double endTimeMin;
+	int startTimeHour;
+	int startTimeMin;
+	int endTimeHour;
+	int endTimeMin;
 	bool isDone;
 
 	string devider = "/";
@@ -148,10 +148,10 @@ void Storage::readFile() {
 		year = stoi(input.substr((posD3+1), (posD4-posD3)));
 		month = stoi(input.substr((posD4+1), (posD5-posD4)));
 		day = stoi(input.substr((posD5+1), (posD6-posD5)));
-		startTimeHour = stod(input.substr((posD6+1), (posD7-posD6)));
-		startTimeMin = stod(input.substr((posD7+1), (posD8-posD7)));
-		endTimeHour = stod(input.substr((posD8+1), (posD9-posD8)));
-		endTimeMin = stod(input.substr((posD9+1), (posD10-posD9)));
+		startTimeHour = stoi(input.substr((posD6+1), (posD7-posD6)));
+		startTimeMin = stoi(input.substr((posD7+1), (posD8-posD7)));
+		endTimeHour = stoi(input.substr((posD8+1), (posD9-posD8)));
+		endTimeMin = stoi(input.substr((posD9+1), (posD10-posD9)));
 		isDone = stoi(input.substr(posD10+1));
 		
 		inputTask = new Task(commandType,taskType,name,year,month,day,startTimeHour,startTimeMin,endTimeHour,endTimeMin,isDone);
@@ -407,7 +407,7 @@ void Storage::executeEditName(string commandType, string s) {
 	addToTracker();
 }
 
-void Storage::executeEditTime(string commandType, double sth, double stm, double eth, double etm) {
+void Storage::executeEditTime(string commandType, int sth, int stm, int eth, int etm) {
 	_previousTaskList.clear();
 	_previousTaskList.push_back(*(_taskIt));
 	setTime(sth, stm, eth, etm);
@@ -416,7 +416,7 @@ void Storage::executeEditTime(string commandType, double sth, double stm, double
 	addToTracker();
 }
 
-void Storage::setTime(double sth, double stm, double eth, double etm) {
+void Storage::setTime(int sth, int stm, int eth, int etm) {
 	_taskIt->setStartTimeHour(sth);
 	_taskIt->setStartTimeMin(stm);
 	_taskIt->setEndTimeHour(eth);
@@ -470,7 +470,7 @@ string Storage::editTaskName(int i, string s) {
 	return toStringTaskDetail(_taskList);
 }
 
-string Storage::editTaskTime(int i, double sth, double stm, double eth, double etm) {
+string Storage::editTaskTime(int i, int sth, int stm, int eth, int etm) {
 	string commandType = "edit";
 	if (isSearched) {
 		if (isValidIndex(i, _searchResultList)) {

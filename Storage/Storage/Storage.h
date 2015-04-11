@@ -104,12 +104,12 @@ public:
 
 	static void storeTask(Task task);
 	static string editTaskName(int i, string s);
-	static string editTaskTime(int i, double sth, double stm, double eth, double etm);
+	static string editTaskTime(int i, int sth, int stm, int eth, int etm);
 	static string editTaskDate(int i, int year, int month, int day);
 	static void executeEditName(string commandType, string name);
-	static void executeEditTime(string commandType, double sth, double stm, double eth, double etm);
+	static void executeEditTime(string commandType, int sth, int stm, int eth, int etm);
 	static void executeEditDate(string commandType, int year, int month, int day);
-	static void setTime(double sth, double stm, double eth, double etm);
+	static void setTime(int sth, int stm, int eth, int etm);
 	static void setDate(int year, int month, int day);
 	static string searchByName(string searchKeyWord);
 	static string markDone(int i);
