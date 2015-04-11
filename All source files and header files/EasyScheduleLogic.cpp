@@ -69,7 +69,7 @@ int EasyScheduleLogic::startTimeMin;
 int EasyScheduleLogic::endTimeHour;
 int EasyScheduleLogic::endTimeMin;
 
-//@author teck kian
+//@author A0111446
 void EasyScheduleLogic::commandFilePath(){
 	storage.setPathName(parser.name);
 		if (storage.isValidDirectory()) {
@@ -491,7 +491,7 @@ string EasyScheduleLogic::addingTask(){
 	}
 }
 
-//teck kian
+//@author A0111446R
 void EasyScheduleLogic::storingTask() {
 	storage.storeTask(task);
 }
@@ -518,7 +518,6 @@ string EasyScheduleLogic::searchingTask() {
 	return storage.searchByName(name);
 }
 
-//teck kian
 string EasyScheduleLogic::markDone() {
 	if (parser.number == -1) {
 		name = parser.name;
