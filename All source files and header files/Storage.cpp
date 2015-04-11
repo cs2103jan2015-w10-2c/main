@@ -183,18 +183,20 @@ void Storage::storeTask(Task task) {
 }
 
 bool Storage::isExistingTask(Task task) {
-	for (_taskIt=_taskList.begin();_taskIt!=_taskList.end();_taskIt++) {
-		if ((_taskIt->getCommandType() == task.getCommandType()) 
-			&& (_taskIt->getTaskType() == task.getTaskType()) 
-			&& (_taskIt->getName() == task.getName())
-			&& (_taskIt->getYear() == task.getYear())
-			&& (_taskIt->getMonth() == task.getMonth())
-			&& (_taskIt->getDay() == task.getDay())
-			&& (_taskIt->getStartTimeHour() == task.getStartTimeHour())
-			&& (_taskIt->getStartTimeMin() == task.getStartTimeMin())
-			&& (_taskIt->getEndTimeHour() == task.getEndTimeHour())
-			&& (_taskIt->getEndTimeMin() == task.getEndTimeMin())
-			&& (_taskIt->getIsDone() == task.getIsDone())) {
+	list<Task>::iterator i;
+	for (i=_taskList.begin();i!=_taskList.end();i++) {
+		if ((i->getCommandType() == task.getCommandType()) 
+			&& (i->getTaskType() == task.getTaskType()) 
+			&& (i->getName() == task.getName())
+			&& (i->getYear() == task.getYear())
+			&& (i->getMonth() == task.getMonth())
+			&& (i->getDay() == task.getDay())
+			&& (i->getStartTimeHour() == task.getStartTimeHour())
+			&& (i->getStartTimeMin() == task.getStartTimeMin())
+			&& (i->getEndTimeHour() == task.getEndTimeHour())
+			&& (i->getEndTimeMin() == task.getEndTimeMin())
+			&& (i->getIsDone() == task.getIsDone())) {
+				_taskIt = i;
 				return true;
 		} 
 	}
@@ -348,7 +350,7 @@ string Storage::executeIndexCommand(int i, string commandType) {
 	if (isSearched) {
 		if (isValidIndex(i, _searchResultList)) {
 			getTaskItFromIndex(i, _searchResultList);
-			if (isExistingTask) {
+			if (isExistingTask(*_taskIt)) {
 				isSuccess = true;
 				executeTaskCommand(commandType);
 			}  
@@ -446,7 +448,7 @@ string Storage::editTaskName(int i, string s) {
 	if (isSearched) {
 		if (isValidIndex(i, _searchResultList)) {
 			getTaskItFromIndex(i, _searchResultList);
-			if (isExistingTask) {
+			if (isExistingTask(*_taskIt)) {
 				isSuccess = true;
 				executeEditName(commandType, s);
 			}  
@@ -473,7 +475,7 @@ string Storage::editTaskTime(int i, double sth, double stm, double eth, double e
 	if (isSearched) {
 		if (isValidIndex(i, _searchResultList)) {
 			getTaskItFromIndex(i, _searchResultList);
-			if (isExistingTask) {
+			if (isExistingTask(*_taskIt)) {
 				isSuccess = true;
 				executeEditTime(commandType, sth, stm, eth, etm);
 			}  
@@ -501,7 +503,7 @@ string Storage::editTaskDate(int i, int year, int month, int day) {
 	if (isSearched) {
 		if (isValidIndex(i, _searchResultList)) {
 			getTaskItFromIndex(i, _searchResultList);
-			if (isExistingTask) {
+			if (isExistingTask(*_taskIt)) {
 				isSuccess = true;
 				executeEditDate(commandType, year, month, day);
 			}  
