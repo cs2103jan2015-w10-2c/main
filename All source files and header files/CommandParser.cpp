@@ -331,6 +331,14 @@ void CommandParser::editTime(string userInput){
 
 void CommandParser::editingTask(string userInput){
 	setDevider(userInput);
+	try{
+		if(!isdigit(userInput.at(pos1+1))){
+			throw -1;
+		}
+	} 
+	catch(int& e){
+		return;
+	}
 	number = stoi(userInput.substr(pos1+1, pos2-pos1-1));
 	attribute = userInput.substr(pos2+1, pos3-pos2-1);
 	transform(attribute.begin(), attribute.end(), attribute.begin(), ::tolower);
