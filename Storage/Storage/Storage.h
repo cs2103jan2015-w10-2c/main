@@ -47,6 +47,7 @@ private:
 public:
 
 	Storage();
+	~Storage();
 	static string _fileName;
 	static string _pathName;
 	static list<Task>_taskList;
@@ -78,7 +79,7 @@ public:
 	static void getTaskIt(Task task);
 
 	static void findTaskInList(string searchKeyWord);
-	static bool isExistingTask(Task task);
+	static bool isExistingTask(Task &task);
 	static bool isValidDate(Task task);
 	static bool isValidTime(Task task);
 	static bool isValidDirectory();
@@ -121,6 +122,7 @@ public:
 
 
 	static string toStringTaskDetail(list <Task> &listToFormat);
+	static string toStringTaskDetail();
 	static Tracker getTracker();
 	static void deleteLastTrackerEntry();
 
