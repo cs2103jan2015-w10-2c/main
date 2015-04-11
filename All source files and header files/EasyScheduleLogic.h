@@ -38,7 +38,6 @@ private:
 	static const string MESSAGE_DELETE_FAIL;
 	static const string MESSAGE_DELETE_CHOOSE;
 	static const string MESSAGE_EDIT;
-	static const string MESSAGE_EDIT_INPUT_ERROR;
 	static const string MESSAGE_EDIT_FAIL;
 	static const string MESSAGE_CLEAR;
 	static const string MESSAGE_SEARCH_FAIL;
@@ -128,13 +127,13 @@ public:
 	static void storingTask();
 	static string addingTask();
 	static string deletingTask();
-	static string searchingTask();
+	static string searchingTask(); ///
 	static string displayingTask();
 	static string autoDisplay();
-	static string displayAllDeadline();
+	static string displayAllDeadline(); ///
 	static string displayAllFloating();
 	static string displayAllTimed();
-	static string displayAllToday();
+	static string displayAllToday(); ///
 	static string displayAllTomorrow();
 	static string displayAllYesterday();
 	static string markDone();
