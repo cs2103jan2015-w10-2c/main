@@ -314,7 +314,7 @@ void EasyScheduleLogic::executeLogic(string userInput) {
 	}
 }
 
-//Nathan???
+//@author A0114255N
 void EasyScheduleLogic::parsingCommand(string userInput) {
 	
 	parser.identifyTask(userInput);
@@ -445,7 +445,7 @@ bool EasyScheduleLogic::undoingEdit(Record recordToUndo){
 	return true;
 }
 
-//nathan???
+//@author A0114255N
 void EasyScheduleLogic::creatingTask() {
 	if(taskType == FLOATING_TASK) {
 		task = Task(commandType, name);
@@ -552,7 +552,7 @@ string EasyScheduleLogic::markNotDone() {
 	}
 }
 
-//nathan
+//@author A0114255N
 string EasyScheduleLogic::editingTask(){
 	taskNumber = parser.number;
 	string s;
@@ -641,7 +641,7 @@ bool EasyScheduleLogic::isDuplicate() {
 	return storage.isExistingTask(task);
 }
 
-//nathan
+//@author A0114255N
 #ifndef LOGICTEST
 Task EasyScheduleLogic::getTask(){
 	return task;
