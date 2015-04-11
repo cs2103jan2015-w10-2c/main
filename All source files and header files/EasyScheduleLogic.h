@@ -39,6 +39,7 @@ private:
 	static const string MESSAGE_DELETE_CHOOSE;
 	static const string MESSAGE_EDIT;
 	static const string MESSAGE_EDIT_FAIL;
+	static const string MESSAGE_EDIT_INPUT_ERROR;
 	static const string MESSAGE_CLEAR;
 	static const string MESSAGE_SEARCH_FAIL;
 	static const string MESSAGE_SORT;
