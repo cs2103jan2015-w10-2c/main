@@ -1,10 +1,10 @@
 #pragma once
 #include "EasyScheduleLogic.h"
 #include <string>
-#include <cliext/vector>
-//#include <assert.h>
+//#include <cliext/vector>
 #include <msclr\marshal_cppstd.h>
 #using <mscorlib.dll>
+#include <ctype.h>
 
 //change to exception: because it is user's fault.
 
@@ -12,7 +12,7 @@ namespace UI {
 
 	using namespace System;
 	using namespace std;
-	using namespace cliext;
+//	using namespace cliext;
 	using namespace System::ComponentModel;
 	using namespace System::Collections;
 	using namespace System::Windows::Forms;
@@ -44,7 +44,7 @@ namespace UI {
 			bool determineMultilineNeeded(string taskInfo);
 			void displayMultilineTaskString(ListView^  listOutput, string remainingPieces, int feedbackIndex, bool isDone);
 			void changeEditedRowColor(int feedbackIndex);
-			void  iterateTaskComponentInfo(string feedbackTasks, size_t start, size_t end, string componentInfo);
+			void iterateTaskComponentInfo(string feedbackTasks, size_t start, size_t end, string componentInfo);
 			void skipRow(string feedbackTasks, size_t start, size_t end, int NumberOfIter);
 		}
 
@@ -342,9 +342,9 @@ namespace UI {
 			this->Controls->Add(this->enterButton);
 			this->Cursor = System::Windows::Forms::Cursors::Default;
 			this->ForeColor = System::Drawing::SystemColors::ControlText;
-			this->FormBorderStyle = System::Windows::Forms::FormBorderStyle::FixedToolWindow;
+			this->FormBorderStyle = System::Windows::Forms::FormBorderStyle::FixedSingle;
 			this->Name = L"EasyScheduleGUI";
-			this->Text = L"EasyScheduleGUI";
+			this->Text = L"Welcome to EasySchedule!";
 			this->Load += gcnew System::EventHandler(this, &EasyScheduleGUI::EasyScheduleGUI_Load);
 			this->ResumeLayout(false);
 			this->PerformLayout();
@@ -354,13 +354,10 @@ namespace UI {
 	
 	//When users loads (opens) the programme
 	private: System::Void EasyScheduleGUI_Load(System::Object^  sender, System::EventArgs^  e) {
-				
-				//show today's agenda and upcoming deadlines
-				string allFeedbackTasks = EasyScheduleLogic::autoDisplay();
-				//temporary: display in dealine listView box
-				displayInitial(allFeedbackTasks); 
-
-				this->feedbackBox->Text = "Hello Jim. Welcome to EasySchedule!\r\nPlease enter the file name to open: ";
+				/*string allFeedbackTasks = EasyScheduleLogic::autoDisplay();
+				displayInitial(allFeedbackTasks); */
+				this->feedbackBox->Text = 
+					"Hello Jim. Welcome to EasySchedule!\r\nPlease enter the filepath or filename: ";
 		}
 
 	//User press "Enter" key after typing to replace clicking "Enter" button
@@ -369,7 +366,6 @@ namespace UI {
 				if(e->KeyCode == Keys::Enter) {
 					enterButton->PerformClick();
 				}
-
 		}
 
 	//Actions happen after user clicks the "Enter" button 
@@ -377,22 +373,27 @@ namespace UI {
 				
 				String^ stringUserInput = this->inputBox->Text;
 				this->inputBox->Clear();
-
-				//convert from System::String to std::string and pass to logic
+				/****convert from System::String to std::string and pass to logic****/
 				msclr::interop::marshal_context context;
 				string userInput = context.marshal_as<std::string>(stringUserInput);
-				EasyScheduleLogic::executeLogic(userInput);
 
+				/****Execute user's input****/
+				EasyScheduleLogic::executeLogic(userInput);
 				string feedbackMessage = EasyScheduleLogic::tellUIReturnMessage();
 				string allFeedbackTasks = EasyScheduleLogic::tellUIDisplay();
 				int feedbackIndex = EasyScheduleLogic::tellUIReturnIndex();
+				
+				/****Return feedbacks to user****/
 				String^ stringFeedbackMessage = gcnew String(feedbackMessage.c_str());
+				this->previousCommandBox->Text = stringUserInput;
 				this->feedbackBox->Text = stringFeedbackMessage;
-				if(userInput != "exit") {
-					this->previousCommandBox->Text = stringUserInput;
+				/****Initially show today's agenda and upcoming deadlines****/
+				transform(userInput.begin(), userInput.end(), userInput.begin(), ::tolower);
+				if (userInput.substr(0, 8) == "filename") {
+					displayInitial(allFeedbackTasks); 
+				} else {
+					displayTaskString(allFeedbackTasks, feedbackIndex);
 				}
-
-				displayTaskString(allFeedbackTasks, feedbackIndex);
 		}
 
 	private: System::Void inputBox_TextChanged(System::Object^  sender, System::EventArgs^  e) {
@@ -429,7 +430,7 @@ namespace UI {
 				String^ stringEmptyToken = gcnew String(emptyToken.c_str());
 				String^ STRING_MESSAGE_TODAY_AGENDA = gcnew String(MESSAGE_TODAY_AGENDA.c_str());
 
-				/****Adding a message line before today/s agenda****/
+				/****Adding a message line before today's agenda****/
 				listViewItems = gcnew Windows::Forms::ListViewItem(stringEmptyToken); //empty index
 				listViewItems->SubItems->Add(stringEmptyToken); //empty mark
 				listViewItems->SubItems->Add(stringEmptyToken); //empty task typw
@@ -440,7 +441,6 @@ namespace UI {
 				listViewItems->ForeColor = System::Drawing::SystemColors::HotTrack;
 				listOutputMain->Items->Add(this->listViewItems);
 
-				//why algorithm count() doesn't work
 				int count = 0;
 				for(int i=0; i<int(feedbackTasks.size());i++) {
 					if (feedbackTasks.at(i) == ']') {
@@ -561,7 +561,6 @@ namespace UI {
 				bool isDifferentDate = false;
 				bool isDone = false;
 
-				//why algorithm count() doesn't work
 				int count = 0;
 				for(int i=0; i<int(feedbackTasks.size());i++) {
 					if (feedbackTasks.at(i) == ']') {
@@ -572,7 +571,6 @@ namespace UI {
 				while(count > 0) {
 
 					feedbackIndex--;
-					
 					/****Index****/
 					start = end+1;
 					end = feedbackTasks.find_first_of("]", start);
@@ -706,14 +704,14 @@ namespace UI {
 				end = feedbackTasks.find_first_of("]", start);
 				componentInfo = feedbackTasks.substr(start, end-start);
 		}
-
+	//can't work
 	private: void changeDoneTaskColor(bool isDone) {
 				if(isDone) {
 					listViewItems->ForeColor = System::Drawing::SystemColors::GrayText;
 					isDone = false;
 				}
 		}
-
+	//can't work
 	private: void changeEditedRowColor(int feedbackIndex) {
 				if(feedbackIndex == 0) {
 					listViewItems->BackColor = System::Drawing::SystemColors::Highlight;
