@@ -31,6 +31,7 @@ private:
 	static const string MESSAGE_DIRECTORY_OPENED;
 	static const string MESSAGE_DIRECTORY_NOT_FOUND;
 	static const string MESSAGE_PROGRAM_READY;
+	static const string MESSAGE_FILE_ERROR;
 	static const string MESSAGE_ADD;
 	static const string MESSAGE_ADD_FAIL;
 	static const string MESSAGE_DELETE;

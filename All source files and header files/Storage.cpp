@@ -111,7 +111,7 @@ void Storage::readFile() {
 
 	string pathName = _pathName;
 	string combined = pathName + "/" + _fileName;
-	_fRead.open(combined);
+	_fRead.open(combined, ios_base::app);
 
 	size_t posStart;
 	size_t posD1;
@@ -140,14 +140,24 @@ void Storage::readFile() {
 
 	string devider = "/";
 	Task* inputTask;
+	int num;
+	isSuccess = true;
 
 	while (getline(_fRead,input)) {
-	/*	try {
-			if (getDeviderNum(input)!=10) {
-				throw ();
-			}*/
-			posStart = 0;
-			posD1 = input.find(devider);
+		try { 
+			num = (getDeviderNum(input));
+			if (num != 10) {
+				throw num;
+			}
+		} catch (...) {
+			_taskList.clear();
+			_fRead.close();	
+			isSuccess = false;
+			return;
+		}
+
+		posStart = 0;
+		posD1 = input.find(devider);
 		posD2 = input.find(devider, posD1+1);
 		posD3 = input.find(devider, posD2+1);
 		posD4 = input.find(devider, posD3+1);
@@ -174,8 +184,7 @@ void Storage::readFile() {
 		_taskList.push_back(*inputTask);
 		delete inputTask;
 	}
-	_fRead.close();
-		
+	_fRead.close();	
 }
 
 bool Storage::isValidTaskInput(Task task) {
