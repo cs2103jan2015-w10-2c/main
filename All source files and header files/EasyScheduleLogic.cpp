@@ -393,15 +393,6 @@ string EasyScheduleLogic::callUndoingEdit(Record recordToUndo){
 
 Record EasyScheduleLogic::getLastRecord(){
 	Record recordToUndo;
-	try{
-		if(storage.getTracker().isEmptyTracker()){
-			throw 0;
-		}
-	}
-	catch(int& e){
-		returnDisplay = MESSAGE_UNDO_FAIL;
-	}
-
 	recordToUndo = storage.getTracker().getNewestRecord();
 	storage.deleteLastTrackerEntry();
 
@@ -411,31 +402,32 @@ Record EasyScheduleLogic::getLastRecord(){
 //@author A0115131B
 string EasyScheduleLogic::undoingTask() {
 	string message;
-	/*
-	if(storage.getTracker().isEmptyTracker()) {
-		throw 0;
-		//message = MESSAGE_UNDO_FAIL;
-	}else{*/
-		Record recordToUndo;
-		recordToUndo = getLastRecord();
 
-		if(recordToUndo.getCommandType() == "add") {
-			message = callUndoingAdd(recordToUndo);
-		}else if(recordToUndo.getCommandType() == "delete") {
-			message = callUndoingDelete(recordToUndo);
-		}else if(recordToUndo.getCommandType() == "done") {
-			message = callUndoingDone(recordToUndo);
-		}else if(recordToUndo.getCommandType() == "notdone") {
-			message = callUndoingNotDone(recordToUndo);
-		}else if(recordToUndo.getCommandType() == "edit"){
-			message = callUndoingEdit(recordToUndo);
+	try{
+		if(storage.getTracker().isEmptyTracker()) {
+			throw 0;
 		}
-	
-/*
-	catch(int& e){
-		message == MESSAGE_UNDO_FAIL;
 	}
-	*/
+	catch(int& e){
+		message = MESSAGE_UNDO_FAIL;
+		return message;
+	}
+
+	Record recordToUndo;
+	recordToUndo = getLastRecord();
+
+	if(recordToUndo.getCommandType() == "add") {
+		message = callUndoingAdd(recordToUndo);
+	}else if(recordToUndo.getCommandType() == "delete") {
+		message = callUndoingDelete(recordToUndo);
+	}else if(recordToUndo.getCommandType() == "done") {
+		message = callUndoingDone(recordToUndo);
+	}else if(recordToUndo.getCommandType() == "notdone") {
+		message = callUndoingNotDone(recordToUndo);
+	}else if(recordToUndo.getCommandType() == "edit"){
+		message = callUndoingEdit(recordToUndo);
+	}
+
 	return message;
 }
 
