@@ -241,7 +241,7 @@ bool isByName(string userInput){
 void CommandParser::addingTask(string userInput){
 	if(isFloating()) {
 		taskType = FLOATING_TASK;
-		name = userInput.substr(pos1+1);
+		name = userInput.substr(3);
 		return;
 	} else {
 		if (isUsingEasyAdd(userInput)){

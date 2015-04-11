@@ -449,7 +449,12 @@ bool EasyScheduleLogic::undoingEdit(Record recordToUndo){
 
 void EasyScheduleLogic::creatingTask() {
 	if(taskType == FLOATING_TASK) {
-		task = Task(commandType, name);			
+		task = Task(commandType, name);
+		if((task.getName()).find_first_not_of(' ') != std::string::npos){
+			isInvalidTaskType = false;
+		} else {
+			isInvalidTaskType = true;	
+		}
 	} else {
 		
 		endTimeHour = parser.endTimeHour;
