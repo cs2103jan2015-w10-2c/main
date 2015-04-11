@@ -35,18 +35,18 @@ const string EasyScheduleLogic::MESSAGE_EXIT = "Program exiting now.";
 const string EasyScheduleLogic::MESSAGE_UNDO_FAIL = "Undo fail. End of command history reached.";
 const string EasyScheduleLogic::MESSAGE_UNDO_SUCCESS = "Undo successfully.";
 const string EasyScheduleLogic::MESSAGE_UNDO_ERROR = "Error occured within undo function.";
-const string EasyScheduleLogic::MESSAGE_EMPTY_DEADLINE;
-const string EasyScheduleLogic::MESSAGE_EMPTY_FLOATING;
-const string EasyScheduleLogic::MESSAGE_EMPTY_TIMED;
-const string EasyScheduleLogic::MESSAGE_EMPTY_TODAY;
-const string EasyScheduleLogic::MESSAGE_EMPTY_TOMORROW;
-const string EasyScheduleLogic::MESSAGE_EMPTY_YESTERDAY;
-const string EasyScheduleLogic::MESSAGE_VIEW_DEADLINE_ALL;
-const string EasyScheduleLogic::MESSAGE_VIEW_FLOATING_ALL;
-const string EasyScheduleLogic::MESSAGE_VIEW_TIMED_ALL;
-const string EasyScheduleLogic::MESSAGE_VIEW_TODAY_ALL;
-const string EasyScheduleLogic::MESSAGE_VIEW_TOMORROW_ALL;
-const string EasyScheduleLogic::MESSAGE_VIEW_YESTERDAY_ALL;;
+const string EasyScheduleLogic::MESSAGE_EMPTY_DEADLINE = "There is no deadline task stored";
+const string EasyScheduleLogic::MESSAGE_EMPTY_FLOATING = "There is no floating task stored";
+const string EasyScheduleLogic::MESSAGE_EMPTY_TIMED = "There is no deadline task stored";
+const string EasyScheduleLogic::MESSAGE_EMPTY_TODAY = "There is no task stored for today";
+const string EasyScheduleLogic::MESSAGE_EMPTY_TOMORROW = "There is no task stored for tomorrow";
+const string EasyScheduleLogic::MESSAGE_EMPTY_YESTERDAY = "There is no task stored for yesterday";
+const string EasyScheduleLogic::MESSAGE_VIEW_DEADLINE_ALL = "All deadline tasks";
+const string EasyScheduleLogic::MESSAGE_VIEW_FLOATING_ALL = "All floating tasks";
+const string EasyScheduleLogic::MESSAGE_VIEW_TIMED_ALL = "All timed tasks";
+const string EasyScheduleLogic::MESSAGE_VIEW_TODAY_ALL = "All today's tasks";
+const string EasyScheduleLogic::MESSAGE_VIEW_TOMORROW_ALL = "All tomorrow's tasks";
+const string EasyScheduleLogic::MESSAGE_VIEW_YESTERDAY_ALL = "All yesterday's tasks";
 
 
 string EasyScheduleLogic::returnMessage;
@@ -69,7 +69,7 @@ int EasyScheduleLogic::startTimeMin;
 int EasyScheduleLogic::endTimeHour;
 int EasyScheduleLogic::endTimeMin;
 
-//@author teck kian
+//@author A0111446
 void EasyScheduleLogic::commandFilePath(){
 	storage.setPathName(parser.name);
 		if (storage.isValidDirectory()) {
@@ -491,7 +491,7 @@ string EasyScheduleLogic::addingTask(){
 	}
 }
 
-//teck kian
+//@author A0111446R
 void EasyScheduleLogic::storingTask() {
 	storage.storeTask(task);
 }
@@ -518,7 +518,6 @@ string EasyScheduleLogic::searchingTask() {
 	return storage.searchByName(name);
 }
 
-//teck kian
 string EasyScheduleLogic::markDone() {
 	if (parser.number == -1) {
 		name = parser.name;
