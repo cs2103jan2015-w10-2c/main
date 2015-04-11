@@ -441,6 +441,7 @@ void Storage::setDate(int year, int month, int day) {
 	_taskIt->setYear(year);
 	_taskIt->setMonth(month);
 	_taskIt->setDay(day);
+
 }
 
 string Storage::editTaskName(int i, string s) {
@@ -786,6 +787,7 @@ void Storage::undoingReverseAdd(list<Task> listToUndo){
 				}
 			}
 			_taskList = newTaskList;
+			sortList();
 		}
 	}
 	
@@ -798,6 +800,7 @@ void Storage::undoingReverseDelete(list<Task> listToUndo){
 	for(it = listToUndo.begin(); it != listToUndo.end(); it++ ){
 		_taskList.push_back(*it);
 	}
+	sortList();
 }
 
 void Storage::undoingReverseDone(list<Task> listToUndo){
@@ -837,6 +840,7 @@ void Storage::undoingReverseEdit(list<Task> listToUndo){
 		newTaskList.push_back(*(listToUndo.begin()));
 		_taskList = newTaskList;
 	}
+	sortList();
 }
 
 bool Storage::isValidDate(Task task){
