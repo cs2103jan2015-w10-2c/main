@@ -1,7 +1,7 @@
 //This class takes in userinput from GUI,
 //call Command Parser to pass command,
 //call Task and create the task
-//and call Storage to storethe created task
+//and call Storage to store the created task
 
 
 #pragma once

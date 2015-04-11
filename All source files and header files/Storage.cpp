@@ -246,6 +246,7 @@ bool Storage::isExistingTask(Task &task) {
 	return false;
 }
 
+
 bool cmpTime(Task a, Task b){
 	string s1, s2;
 

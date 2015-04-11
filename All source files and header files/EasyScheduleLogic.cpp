@@ -70,34 +70,7 @@ int EasyScheduleLogic::startTimeMin;
 int EasyScheduleLogic::endTimeHour;
 int EasyScheduleLogic::endTimeMin;
 
-//int EasyScheduleLogic::localYear;
-//int EasyScheduleLogic::localMonth;
-//int EasyScheduleLogic::localDay;
-//int EasyScheduleLogic::localHour;
-//int EasyScheduleLogic::localMin;
-
-//here
-/*
-int main () {
-	EasyScheduleLogic::main();
-}
-
-void EasyScheduleLogic::main() {
-	string input;
-	getline(cin, input);
-
-	while (input!="exit") {
-		executeLogic(input);
-		getline(cin, input);
-	}
-	
-	storage.writeToFile();
-	exit(0);
-	}
-//here
-*/
-
-
+//@author A0111446R
 void EasyScheduleLogic::commandFilePath(){
 	storage.setPathName(parser.name);
 		if (storage.isValidDirectory()) {
@@ -210,6 +183,7 @@ void EasyScheduleLogic::commandView(){
 		}
 }
 
+//@author A0111446R
 void EasyScheduleLogic::commandDelete(){
 	returnDisplay = deletingTask();
 	returnIndex = 0;
