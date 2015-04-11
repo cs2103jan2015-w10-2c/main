@@ -53,7 +53,6 @@ string EasyScheduleLogic::returnMessage;
 string EasyScheduleLogic::returnDisplay;
 int EasyScheduleLogic::returnIndex;
 char EasyScheduleLogic::buffer[1000];
-//bool EasyScheduleLogic::isInvalidCommandType = false;
 bool EasyScheduleLogic::isInvalidTaskType = false;
 CommandParser EasyScheduleLogic::parser;
 Storage EasyScheduleLogic::storage;
@@ -70,7 +69,7 @@ int EasyScheduleLogic::startTimeMin;
 int EasyScheduleLogic::endTimeHour;
 int EasyScheduleLogic::endTimeMin;
 
-//@author Peisen?
+//@author teck kian
 void EasyScheduleLogic::commandFilePath(){
 	storage.setPathName(parser.name);
 		if (storage.isValidDirectory()) {
@@ -99,16 +98,6 @@ void EasyScheduleLogic::commandFileName(){
 void EasyScheduleLogic::writeFile() {
 	storage.openFile();
 	storage.writeToFile();
-}
-
-void EasyScheduleLogic::commandAdd(){
-	returnMessage = addingTask();
-		returnDisplay = displayingTask();
-		if (storage.isSuccess) {
-			returnIndex = storage.getIndex();
-		} else {
-			returnIndex = 0;
-		}
 }
 
 //@author A0115131B
@@ -182,6 +171,18 @@ void EasyScheduleLogic::commandView(){
 			viewYesterday();
 		}
 }
+
+//peisen
+void EasyScheduleLogic::commandAdd(){
+	returnMessage = addingTask();
+		returnDisplay = displayingTask();
+		if (storage.isSuccess) {
+			returnIndex = storage.getIndex();
+		} else {
+			returnIndex = 0;
+		}
+}
+
 
 //@author Peisen?
 void EasyScheduleLogic::commandDelete(){
@@ -313,6 +314,7 @@ void EasyScheduleLogic::executeLogic(string userInput) {
 	}
 }
 
+//Nathan???
 void EasyScheduleLogic::parsingCommand(string userInput) {
 	
 	parser.identifyTask(userInput);
@@ -443,6 +445,7 @@ bool EasyScheduleLogic::undoingEdit(Record recordToUndo){
 	return true;
 }
 
+//nathan???
 void EasyScheduleLogic::creatingTask() {
 	if(taskType == FLOATING_TASK) {
 		task = Task(commandType, name);
@@ -469,11 +472,6 @@ void EasyScheduleLogic::creatingTask() {
 	}
 }
 
-//identify commandType and required parameters
-void EasyScheduleLogic::storingTask() {
-	storage.storeTask(task);
-}
-
 string EasyScheduleLogic::addingTask(){
 	creatingTask(); 
 	if(isInvalidTaskType) {
@@ -491,6 +489,11 @@ string EasyScheduleLogic::addingTask(){
 			return MESSAGE_ADD;
 		}
 	}
+}
+
+//teck kian
+void EasyScheduleLogic::storingTask() {
+	storage.storeTask(task);
 }
 
 string EasyScheduleLogic::deletingTask() {
@@ -515,6 +518,7 @@ string EasyScheduleLogic::searchingTask() {
 	return storage.searchByName(name);
 }
 
+//teck kian
 string EasyScheduleLogic::markDone() {
 	if (parser.number == -1) {
 		name = parser.name;
@@ -549,6 +553,7 @@ string EasyScheduleLogic::markNotDone() {
 	}
 }
 
+//nathan
 string EasyScheduleLogic::editingTask(){
 	taskNumber = parser.number;
 	string s;
@@ -619,6 +624,7 @@ string EasyScheduleLogic::sortingTask() {
 	return MESSAGE_SORT;
 }
 
+//peisen
 //receive bool from storeFloat and create output message
 string EasyScheduleLogic::tellUIReturnMessage() {
 	return returnMessage;
@@ -636,18 +642,7 @@ bool EasyScheduleLogic::isDuplicate() {
 	return storage.isExistingTask(task);
 }
 
-
-//void EasyScheduleLogic::getLocalDateTime(){
-//	time_t now = time(0);
-//	struct tm time;
-//	localtime_s(&time, &now);
-//	localDay = time.tm_mday;
-//	localMonth  = time.tm_mon + 1;
-//	localYear = time.tm_year + 1900;
-//	localHour = time.tm_hour;
-//	localMin  = time.tm_min;
-//}
-
+//nathan
 #ifndef LOGICTEST
 Task EasyScheduleLogic::getTask(){
 	return task;

@@ -22,7 +22,6 @@ class Storage {
 private:
 
 	static const string LINE_BUFFER;
-	static const string COMMANDLIST;
 	static const string FLOATING_TASK;
 	static const string DEADLINE_TASK;
 	static const string TIMED_TASK;
@@ -108,7 +107,6 @@ public:
 	static int getIndex();
 	static int getDeviderNum(string input);
 	static string toLower(string text);
-	static string getCommandList();
 	static bool compareTask(Task task);
 	static bool isExistingTask(Task &task);
 	static bool isValidDate(Task task);

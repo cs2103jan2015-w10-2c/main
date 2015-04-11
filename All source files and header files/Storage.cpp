@@ -27,7 +27,6 @@ const string Storage::DEADLINE_TASK = "DeadlineTask";
 const string Storage::TIMED_TASK = "TimedTask";
 
 const string Storage::LINE_BUFFER = "%s/%s/%s/%s/%s/%s/%s/%s/%s/%s/%s";
-const string Storage::COMMANDLIST = "List of commands:\n1. add\n2. display\n3. delete\n4. search\n5. done\n6. undone";
 
 char Storage::buffer[1000];
 list<Task> Storage::_taskList;
@@ -246,7 +245,7 @@ bool Storage::isExistingTask(Task &task) {
 	return false;
 }
 
-
+//Jingyi
 bool cmpTime(Task a, Task b){
 	string s1, s2;
 
@@ -779,6 +778,7 @@ void Storage::searchUpcomingDeadline(int day, int month, int year){
 	}
 }
 
+//peisen
 string Storage::toStringTaskDetail(list <Task> &listToFormat){
 	ostringstream s;
 	if(listToFormat.empty()) {
@@ -788,28 +788,22 @@ string Storage::toStringTaskDetail(list <Task> &listToFormat){
 		list <Task>::iterator iter;
 		int index = 0;
 		for (iter = listToFormat.begin(); iter != listToFormat.end(); iter++) {
-			/****Index****/
 			index++;
 			s << index << "]"; // "]" as a divider to divide each component
-			/****check if Mark as Done****/
 			if(iter->getIsDone()) {
 				s << "Yes" << "]";
 			} else {
 				s << "No" << "]";
 			}
-			/****For floating task****/
 			if (iter->getTaskType() == "FloatingTask") {
 				s << "Float]" << iter->getName() << "]N.A.]N.A.]N.A.]";
 			} else { //for other 2 types of tasks
-				/****Task Type****/
 				if (iter->getTaskType() == "TimedTask") {
 					s << "Timed]";
 				} else {
 					s << "Deadline]";
 				}
-				/****Task name and date****/
 				s << iter->getName() << "]" << iter->getAlphabetDate() << "]";
-				/****start and end time****/
 				if (iter->getTaskType() == "TimedTask") {
 					if(iter->getStartTimeHour() < 10) {
 						s << "0" << iter->getStartTimeHour() <<":";
@@ -903,10 +897,6 @@ string Storage::toStringTaskDetail(){
 		}
 		return s.str();
 	}
-}
-
-string Storage::getCommandList(){
-	return COMMANDLIST;
 }
 
 //@author A0115131B
@@ -1008,6 +998,7 @@ void Storage::undoingReverseEdit(list<Task> listToUndo){
 	sortList();
 }
 
+//Nathan
 bool Storage::isValidDate(Task task){
 	isDateValid = true;
 	if ((task.getTaskType() != FLOATING_TASK) && 
