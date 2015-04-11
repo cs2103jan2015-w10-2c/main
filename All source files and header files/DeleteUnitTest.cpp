@@ -5,10 +5,10 @@ using namespace Microsoft::VisualStudio::CppUnitTestFramework;
 
 namespace DeleteUnitTest {
 
+	//@author A0116707H Dong Peisen
 	TEST_CLASS(DeleteUnitTest) {
 	public:
 		
-		//@author A0116707H Dong Peisen
 		TEST_METHOD(DeleteFailTest) {
 			EasyScheduleLogic logic;
 
@@ -16,7 +16,7 @@ namespace DeleteUnitTest {
 			logic.executeLogic(addFloatTaskCommand);
 			string deleteTaskCommand = "delete 2";
 			logic.executeLogic(deleteTaskCommand);
-			string expectedDisplay = "1]No]Float] lunch with friends]N.A.]N.A.]N.A.]";
+			string expectedDisplay = "1]Not Done]Float] lunch with friends]N.A.]N.A.]N.A.]";
 			string actualDisplay = logic.deletingTask();
 
 			Assert::AreEqual(expectedDisplay, actualDisplay);
