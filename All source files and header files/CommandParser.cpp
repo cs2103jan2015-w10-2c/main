@@ -333,6 +333,7 @@ void CommandParser::editingTask(string userInput){
 	setDevider(userInput);
 	number = stoi(userInput.substr(pos1+1, pos2-pos1-1));
 	attribute = userInput.substr(pos2+1, pos3-pos2-1);
+	transform(attribute.begin(), attribute.end(), attribute.begin(), ::tolower);
 		
 	if (attribute == NAME){
 		editName(userInput);
