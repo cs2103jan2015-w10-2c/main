@@ -245,7 +245,7 @@ bool Storage::isExistingTask(Task &task) {
 	return false;
 }
 
-//Jingyi
+//@author A0115131B
 bool cmpTime(Task a, Task b){
 	string s1, s2;
 
@@ -282,9 +282,11 @@ bool cmpTime(Task a, Task b){
 	s1 = Storage::toLower(a.getName());
 	s2 = Storage::toLower(b.getName());
 
-	if (s1 < s2) {
+	if (s1 < s2){
 		return true;
-	} else {return false;}
+	}else{
+		return false;
+	}
 }
 
 bool sortTime(Task a, Task b){
