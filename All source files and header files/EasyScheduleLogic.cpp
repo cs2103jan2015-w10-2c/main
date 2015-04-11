@@ -96,6 +96,7 @@ void EasyScheduleLogic::main() {
 //here
 */
 
+
 void EasyScheduleLogic::commandFilePath(){
 	storage.setPathName(parser.name);
 		if (storage.isValidDirectory()) {
