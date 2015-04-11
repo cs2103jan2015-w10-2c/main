@@ -3,6 +3,7 @@
 #include <algorithm>
 #include <sstream>
 
+#include <assert.h>
 #include <atltime.h>
 #include <math.h>
 #include <locale>
@@ -843,6 +844,7 @@ void Storage::deleteLastTrackerEntry(){
 
 void Storage::undoingReverseAdd(list<Task> listToUndo){
 	//delete the task in the list
+	assert(listToUndo.size() != 0);
 	list<Task>::iterator it1, it2;
 	list<Task> newTaskList;
 
@@ -866,15 +868,24 @@ void Storage::undoingReverseAdd(list<Task> listToUndo){
 
 void Storage::undoingReverseDelete(list<Task> listToUndo){
 	//add the tasks back into the _taskList
+	assert(listToUndo.size() != 0);
+	int a = _taskList.size();
+
 	list<Task>::iterator it;
 	for(it = listToUndo.begin(); it != listToUndo.end(); it++ ){
 		_taskList.push_back(*it);
 	}
+
+	int b = _taskList.size();
+	assert(b > a);
+
 	sortList();
 }
 
 void Storage::undoingReverseDone(list<Task> listToUndo){
 	//mark the task as not done
+	assert(listToUndo.size() != 0);
+
 	list<Task>::iterator it;
 	for(it = listToUndo.begin(); it != listToUndo.end(); it++ ){
 		if(compareTask(*it)){
@@ -885,7 +896,10 @@ void Storage::undoingReverseDone(list<Task> listToUndo){
 
 void Storage::undoingReverseNotDone(list<Task> listToUndo){
 	//mark the task as done
+	assert(listToUndo.size() != 0);
+
 	list<Task>::iterator it;
+
 	for(it = listToUndo.begin(); it != listToUndo.end(); it++ ){
 		if(compareTask(*it)){
 			_taskIt->markDone();
@@ -895,6 +909,9 @@ void Storage::undoingReverseNotDone(list<Task> listToUndo){
 
 void Storage::undoingReverseEdit(list<Task> listToUndo){
 	//undo the edit action
+	assert(listToUndo.size() != 0);
+	int a = _taskList.size();
+
 	list<Task>::iterator it;
 	list<Task> newTaskList;
 
@@ -910,6 +927,8 @@ void Storage::undoingReverseEdit(list<Task> listToUndo){
 		newTaskList.push_back(*(listToUndo.begin()));
 		_taskList = newTaskList;
 	}
+	int b = _taskList.size();
+	assert(a == b);
 	sortList();
 }
 
