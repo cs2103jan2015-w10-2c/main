@@ -3,6 +3,7 @@
 #include <algorithm>
 #include <sstream>
 
+#include <assert.h>
 #include <atltime.h>
 #include <math.h>
 #include <locale>
@@ -110,7 +111,7 @@ void Storage::readFile() {
 
 	string pathName = _pathName;
 	string combined = pathName + "/" + _fileName;
-	_fRead.open(combined);
+	_fRead.open(combined, ios_base::app);
 
 	size_t posStart;
 	size_t posD1;
@@ -139,14 +140,24 @@ void Storage::readFile() {
 
 	string devider = "/";
 	Task* inputTask;
+	int num;
+	isSuccess = true;
 
 	while (getline(_fRead,input)) {
-	/*	try {
-			if (getDeviderNum(input)!=10) {
-				throw ();
-			}*/
-			posStart = 0;
-			posD1 = input.find(devider);
+		try { 
+			num = (getDeviderNum(input));
+			if (num != 10) {
+				throw num;
+			}
+		} catch (...) {
+			_taskList.clear();
+			_fRead.close();	
+			isSuccess = false;
+			return;
+		}
+
+		posStart = 0;
+		posD1 = input.find(devider);
 		posD2 = input.find(devider, posD1+1);
 		posD3 = input.find(devider, posD2+1);
 		posD4 = input.find(devider, posD3+1);
@@ -173,8 +184,7 @@ void Storage::readFile() {
 		_taskList.push_back(*inputTask);
 		delete inputTask;
 	}
-	_fRead.close();
-		
+	_fRead.close();	
 }
 
 bool Storage::isValidTaskInput(Task task) {
@@ -910,6 +920,7 @@ void Storage::deleteLastTrackerEntry(){
 
 void Storage::undoingReverseAdd(list<Task> listToUndo){
 	//delete the task in the list
+	assert(listToUndo.size() != 0);
 	list<Task>::iterator it1, it2;
 	list<Task> newTaskList;
 
@@ -933,15 +944,24 @@ void Storage::undoingReverseAdd(list<Task> listToUndo){
 
 void Storage::undoingReverseDelete(list<Task> listToUndo){
 	//add the tasks back into the _taskList
+	assert(listToUndo.size() != 0);
+	int a = _taskList.size();
+
 	list<Task>::iterator it;
 	for(it = listToUndo.begin(); it != listToUndo.end(); it++ ){
 		_taskList.push_back(*it);
 	}
+
+	int b = _taskList.size();
+	assert(b > a);
+
 	sortList();
 }
 
 void Storage::undoingReverseDone(list<Task> listToUndo){
 	//mark the task as not done
+	assert(listToUndo.size() != 0);
+
 	list<Task>::iterator it;
 	for(it = listToUndo.begin(); it != listToUndo.end(); it++ ){
 		if(compareTask(*it)){
@@ -952,7 +972,10 @@ void Storage::undoingReverseDone(list<Task> listToUndo){
 
 void Storage::undoingReverseNotDone(list<Task> listToUndo){
 	//mark the task as done
+	assert(listToUndo.size() != 0);
+
 	list<Task>::iterator it;
+
 	for(it = listToUndo.begin(); it != listToUndo.end(); it++ ){
 		if(compareTask(*it)){
 			_taskIt->markDone();
@@ -962,6 +985,9 @@ void Storage::undoingReverseNotDone(list<Task> listToUndo){
 
 void Storage::undoingReverseEdit(list<Task> listToUndo){
 	//undo the edit action
+	assert(listToUndo.size() != 0);
+	int a = _taskList.size();
+
 	list<Task>::iterator it;
 	list<Task> newTaskList;
 
@@ -977,6 +1003,8 @@ void Storage::undoingReverseEdit(list<Task> listToUndo){
 		newTaskList.push_back(*(listToUndo.begin()));
 		_taskList = newTaskList;
 	}
+	int b = _taskList.size();
+	assert(a == b);
 	sortList();
 }
 

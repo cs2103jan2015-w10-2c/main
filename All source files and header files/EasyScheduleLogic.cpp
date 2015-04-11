@@ -12,6 +12,7 @@ const string EasyScheduleLogic::MESSAGE_WELCOME = "Welcome to EasySchedule!";
 const string EasyScheduleLogic::MESSAGE_DIRECTORY_OPENED = "Directory opened";
 const string EasyScheduleLogic::MESSAGE_DIRECTORY_NOT_FOUND = "Directory is not found, please respecify file storage location";
 const string EasyScheduleLogic::MESSAGE_PROGRAM_READY = "Program is now ready to be used";
+const string EasyScheduleLogic::MESSAGE_FILE_ERROR = "Specified file is incompatible, please enter a new file name";
 const string EasyScheduleLogic::MESSAGE_ADD = "The task has been stored successfully.";
 const string EasyScheduleLogic::MESSAGE_ADD_FAIL = "Sorry, the task is already in the schedule.";
 const string EasyScheduleLogic::MESSAGE_DELETE = "The task has been deleted.";
@@ -96,6 +97,7 @@ void EasyScheduleLogic::main() {
 //here
 */
 
+
 void EasyScheduleLogic::commandFilePath(){
 	storage.setPathName(parser.name);
 		if (storage.isValidDirectory()) {
@@ -111,9 +113,13 @@ void EasyScheduleLogic::commandFileName(){
 		}
 		storage.setFileName(parser.name);
 		storage.readFile();
-		storage.openFile();
-		returnDisplay = autoDisplay();
-		returnMessage = MESSAGE_PROGRAM_READY; 
+		if (storage.isSuccess) {
+			storage.openFile();
+			returnDisplay = autoDisplay();
+			returnMessage = MESSAGE_PROGRAM_READY; 
+		} else {
+			returnMessage = MESSAGE_FILE_ERROR;
+		}
 		returnIndex = 0;
 }
 
@@ -328,7 +334,9 @@ void EasyScheduleLogic::executeLogic(string userInput) {
 	} else {
 		commandInvalid();
 	}
-	writeFile();
+	if (storage.isSuccess) {
+		writeFile();
+	}
 }
 
 void EasyScheduleLogic::parsingCommand(string userInput) {
@@ -385,6 +393,15 @@ string EasyScheduleLogic::callUndoingEdit(Record recordToUndo){
 
 Record EasyScheduleLogic::getLastRecord(){
 	Record recordToUndo;
+	try{
+		if(storage.getTracker().isEmptyTracker()){
+			throw 0;
+		}
+	}
+	catch(int& e){
+		returnDisplay = MESSAGE_UNDO_FAIL;
+	}
+
 	recordToUndo = storage.getTracker().getNewestRecord();
 	storage.deleteLastTrackerEntry();
 
@@ -394,9 +411,11 @@ Record EasyScheduleLogic::getLastRecord(){
 //@author A0115131B
 string EasyScheduleLogic::undoingTask() {
 	string message;
+	/*
 	if(storage.getTracker().isEmptyTracker()) {
-		message = MESSAGE_UNDO_FAIL;
-	}else{
+		throw 0;
+		//message = MESSAGE_UNDO_FAIL;
+	}else{*/
 		Record recordToUndo;
 		recordToUndo = getLastRecord();
 
@@ -411,7 +430,12 @@ string EasyScheduleLogic::undoingTask() {
 		}else if(recordToUndo.getCommandType() == "edit"){
 			message = callUndoingEdit(recordToUndo);
 		}
+	
+/*
+	catch(int& e){
+		message == MESSAGE_UNDO_FAIL;
 	}
+	*/
 	return message;
 }
 
