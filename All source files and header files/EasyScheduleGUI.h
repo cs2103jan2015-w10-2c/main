@@ -120,10 +120,10 @@ namespace UI {
 			this->enterButton->Font = (gcnew System::Drawing::Font(L"Arial", 11.25F, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point, 
 				static_cast<System::Byte>(0)));
 			this->enterButton->ForeColor = System::Drawing::SystemColors::HotTrack;
-			this->enterButton->Location = System::Drawing::Point(571, 457);
+			this->enterButton->Location = System::Drawing::Point(591, 456);
 			this->enterButton->Name = L"enterButton";
 			this->enterButton->RightToLeft = System::Windows::Forms::RightToLeft::No;
-			this->enterButton->Size = System::Drawing::Size(87, 25);
+			this->enterButton->Size = System::Drawing::Size(81, 25);
 			this->enterButton->TabIndex = 0;
 			this->enterButton->Text = L"Enter";
 			this->enterButton->UseVisualStyleBackColor = true;
@@ -135,10 +135,10 @@ namespace UI {
 			this->inputBox->BorderStyle = System::Windows::Forms::BorderStyle::FixedSingle;
 			this->inputBox->Font = (gcnew System::Drawing::Font(L"Arial", 11.25F, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point, 
 				static_cast<System::Byte>(0)));
-			this->inputBox->Location = System::Drawing::Point(6, 457);
+			this->inputBox->Location = System::Drawing::Point(6, 456);
 			this->inputBox->Multiline = true;
 			this->inputBox->Name = L"inputBox";
-			this->inputBox->Size = System::Drawing::Size(550, 24);
+			this->inputBox->Size = System::Drawing::Size(579, 24);
 			this->inputBox->TabIndex = 1;
 			this->inputBox->TextChanged += gcnew System::EventHandler(this, &EasyScheduleGUI::inputBox_TextChanged);
 			// 
@@ -148,11 +148,11 @@ namespace UI {
 			this->feedbackBox->Font = (gcnew System::Drawing::Font(L"Arial", 9, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point, 
 				static_cast<System::Byte>(0)));
 			this->feedbackBox->ForeColor = System::Drawing::SystemColors::HotTrack;
-			this->feedbackBox->Location = System::Drawing::Point(365, 342);
+			this->feedbackBox->Location = System::Drawing::Point(390, 340);
 			this->feedbackBox->Multiline = true;
 			this->feedbackBox->Name = L"feedbackBox";
 			this->feedbackBox->ScrollBars = System::Windows::Forms::ScrollBars::Vertical;
-			this->feedbackBox->Size = System::Drawing::Size(293, 36);
+			this->feedbackBox->Size = System::Drawing::Size(282, 36);
 			this->feedbackBox->TabIndex = 2;
 			this->feedbackBox->TextAlign = System::Windows::Forms::HorizontalAlignment::Center;
 			this->feedbackBox->UseWaitCursor = true;
@@ -172,7 +172,7 @@ namespace UI {
 			this->listOutputMain->GridLines = true;
 			this->listOutputMain->Location = System::Drawing::Point(6, 28);
 			this->listOutputMain->Name = L"listOutputMain";
-			this->listOutputMain->Size = System::Drawing::Size(652, 273);
+			this->listOutputMain->Size = System::Drawing::Size(666, 263);
 			this->listOutputMain->TabIndex = 3;
 			this->listOutputMain->UseCompatibleStateImageBehavior = false;
 			this->listOutputMain->View = System::Windows::Forms::View::Details;
@@ -181,19 +181,19 @@ namespace UI {
 			// 
 			this->IndexHeaderT->Text = L"Index";
 			this->IndexHeaderT->TextAlign = System::Windows::Forms::HorizontalAlignment::Center;
-			this->IndexHeaderT->Width = 50;
+			this->IndexHeaderT->Width = 43;
 			// 
 			// StatusHeaderT
 			// 
 			this->StatusHeaderT->Text = L"Status";
 			this->StatusHeaderT->TextAlign = System::Windows::Forms::HorizontalAlignment::Center;
-			this->StatusHeaderT->Width = 50;
+			this->StatusHeaderT->Width = 78;
 			// 
 			// TypeHeaderT
 			// 
 			this->TypeHeaderT->Text = L"Type";
 			this->TypeHeaderT->TextAlign = System::Windows::Forms::HorizontalAlignment::Center;
-			this->TypeHeaderT->Width = 80;
+			this->TypeHeaderT->Width = 73;
 			// 
 			// TaskHeaderT
 			// 
@@ -226,7 +226,7 @@ namespace UI {
 			this->feedbackLabel->Font = (gcnew System::Drawing::Font(L"Arial", 9.25F, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point, 
 				static_cast<System::Byte>(0)));
 			this->feedbackLabel->ForeColor = System::Drawing::SystemColors::HotTrack;
-			this->feedbackLabel->Location = System::Drawing::Point(362, 323);
+			this->feedbackLabel->Location = System::Drawing::Point(387, 321);
 			this->feedbackLabel->Name = L"feedbackLabel";
 			this->feedbackLabel->Size = System::Drawing::Size(65, 16);
 			this->feedbackLabel->TabIndex = 4;
@@ -238,10 +238,11 @@ namespace UI {
 			this->previousCommandBox->BackColor = System::Drawing::SystemColors::Info;
 			this->previousCommandBox->Font = (gcnew System::Drawing::Font(L"Arial", 9, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point, 
 				static_cast<System::Byte>(0)));
-			this->previousCommandBox->Location = System::Drawing::Point(365, 411);
+			this->previousCommandBox->Location = System::Drawing::Point(390, 409);
 			this->previousCommandBox->Multiline = true;
 			this->previousCommandBox->Name = L"previousCommandBox";
-			this->previousCommandBox->Size = System::Drawing::Size(292, 36);
+			this->previousCommandBox->ScrollBars = System::Windows::Forms::ScrollBars::Vertical;
+			this->previousCommandBox->Size = System::Drawing::Size(282, 36);
 			this->previousCommandBox->TabIndex = 5;
 			this->previousCommandBox->TextAlign = System::Windows::Forms::HorizontalAlignment::Center;
 			// 
@@ -251,7 +252,7 @@ namespace UI {
 			this->previousCommandLabel->Font = (gcnew System::Drawing::Font(L"Arial", 9.25F, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point, 
 				static_cast<System::Byte>(0)));
 			this->previousCommandLabel->ForeColor = System::Drawing::SystemColors::HotTrack;
-			this->previousCommandLabel->Location = System::Drawing::Point(362, 392);
+			this->previousCommandLabel->Location = System::Drawing::Point(387, 390);
 			this->previousCommandLabel->Name = L"previousCommandLabel";
 			this->previousCommandLabel->Size = System::Drawing::Size(118, 16);
 			this->previousCommandLabel->TabIndex = 6;
@@ -265,9 +266,9 @@ namespace UI {
 			this->listOutputFloat->Font = (gcnew System::Drawing::Font(L"Arial", 8.25F, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point, 
 				static_cast<System::Byte>(0)));
 			this->listOutputFloat->GridLines = true;
-			this->listOutputFloat->Location = System::Drawing::Point(6, 323);
+			this->listOutputFloat->Location = System::Drawing::Point(6, 321);
 			this->listOutputFloat->Name = L"listOutputFloat";
-			this->listOutputFloat->Size = System::Drawing::Size(353, 124);
+			this->listOutputFloat->Size = System::Drawing::Size(378, 124);
 			this->listOutputFloat->TabIndex = 8;
 			this->listOutputFloat->UseCompatibleStateImageBehavior = false;
 			this->listOutputFloat->View = System::Windows::Forms::View::Details;
@@ -276,19 +277,19 @@ namespace UI {
 			// 
 			this->IndexHeaderF->Text = L"Index";
 			this->IndexHeaderF->TextAlign = System::Windows::Forms::HorizontalAlignment::Center;
-			this->IndexHeaderF->Width = 50;
+			this->IndexHeaderF->Width = 43;
 			// 
 			// StatusHeaderF
 			// 
 			this->StatusHeaderF->Text = L"Status";
 			this->StatusHeaderF->TextAlign = System::Windows::Forms::HorizontalAlignment::Center;
-			this->StatusHeaderF->Width = 51;
+			this->StatusHeaderF->Width = 78;
 			// 
 			// TypeHeaderF
 			// 
 			this->TypeHeaderF->Text = L"Type";
 			this->TypeHeaderF->TextAlign = System::Windows::Forms::HorizontalAlignment::Center;
-			this->TypeHeaderF->Width = 67;
+			this->TypeHeaderF->Width = 73;
 			// 
 			// TaskHeaderF
 			// 
@@ -302,7 +303,7 @@ namespace UI {
 			this->FloatTaskLabel->Font = (gcnew System::Drawing::Font(L"Arial", 9.25F, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point, 
 				static_cast<System::Byte>(0)));
 			this->FloatTaskLabel->ForeColor = System::Drawing::SystemColors::HotTrack;
-			this->FloatTaskLabel->Location = System::Drawing::Point(3, 304);
+			this->FloatTaskLabel->Location = System::Drawing::Point(3, 302);
 			this->FloatTaskLabel->Name = L"FloatTaskLabel";
 			this->FloatTaskLabel->Size = System::Drawing::Size(92, 16);
 			this->FloatTaskLabel->TabIndex = 9;
@@ -325,8 +326,9 @@ namespace UI {
 			// 
 			this->AutoScaleDimensions = System::Drawing::SizeF(6, 12);
 			this->AutoScaleMode = System::Windows::Forms::AutoScaleMode::Font;
+			this->AutoSize = true;
 			this->BackColor = System::Drawing::SystemColors::GradientActiveCaption;
-			this->ClientSize = System::Drawing::Size(664, 485);
+			this->ClientSize = System::Drawing::Size(680, 490);
 			this->Controls->Add(this->TimedTaskLabel);
 			this->Controls->Add(this->FloatTaskLabel);
 			this->Controls->Add(this->listOutputFloat);
@@ -428,7 +430,7 @@ namespace UI {
 				String^ STRING_MESSAGE_TODAY_AGENDA = gcnew String(MESSAGE_TODAY_AGENDA.c_str());
 
 				/****Adding a message line before today's agenda****/
-				listViewItems = gcnew System::Windows::Forms::ListViewItem(stringEmptyToken); //empty index
+				listViewItems = gcnew Windows::Forms::ListViewItem(stringEmptyToken); //empty index
 				listViewItems->SubItems->Add(stringEmptyToken); //empty mark
 				listViewItems->SubItems->Add(stringEmptyToken); //empty task typw
 				listViewItems->SubItems->Add(STRING_MESSAGE_TODAY_AGENDA);
@@ -452,7 +454,7 @@ namespace UI {
 					end = feedbackTasks.find_first_of("]", start);
 					componentInfo = feedbackTasks.substr(start, end-start);
 					stringComponentInfo = gcnew String(componentInfo.c_str());
-					listViewItems = gcnew System::Windows::Forms::ListViewItem(stringComponentInfo);
+					listViewItems = gcnew Windows::Forms::ListViewItem(stringComponentInfo);
 
 					/****Mark****/
 					start = end+1;
@@ -534,7 +536,7 @@ namespace UI {
 						string MESSAGE_UPCOMING_DEADLINES = "Upcoming Deadlines:";
 						String^ STRING_MESSAGE_UPCOMING_DEADLINES = gcnew String(MESSAGE_UPCOMING_DEADLINES.c_str());
 						
-						listViewItems = gcnew System::Windows::Forms::ListViewItem(stringEmptyToken); //empty index
+						listViewItems = gcnew Windows::Forms::ListViewItem(stringEmptyToken); //empty index
 						listViewItems->SubItems->Add(stringEmptyToken); //empty mark
 						listViewItems->SubItems->Add(stringEmptyToken); //empty task typw
 						listViewItems->SubItems->Add(STRING_MESSAGE_UPCOMING_DEADLINES);
@@ -576,7 +578,7 @@ namespace UI {
 					end = feedbackTasks.find_first_of("]", start);
 					componentInfo = feedbackTasks.substr(start, end-start);
 					stringComponentInfo = gcnew String(componentInfo.c_str());
-					listViewItems = gcnew System::Windows::Forms::ListViewItem(stringComponentInfo);
+					listViewItems = gcnew Windows::Forms::ListViewItem(stringComponentInfo);
 
 					/****Mark****/
 					start = end+1;
@@ -584,7 +586,7 @@ namespace UI {
 					componentInfo = feedbackTasks.substr(start, end-start);
 					stringComponentInfo = gcnew String(componentInfo.c_str());
 					listViewItems->SubItems->Add(stringComponentInfo); 
-					if(componentInfo == "Yes") {
+					if(componentInfo == "Done") {
 						isDone = true;
 					}
 
@@ -685,7 +687,7 @@ namespace UI {
 						if(isDifferentDate) {
 							string emptyToken = " ";
 							String^ stringEmptyToken = gcnew String(emptyToken.c_str());
-							listViewItems = gcnew System::Windows::Forms::ListViewItem(stringEmptyToken);
+							listViewItems = gcnew Windows::Forms::ListViewItem(stringEmptyToken);
 							for(int i=0; i<6; i++) {
 								listViewItems->SubItems->Add(stringEmptyToken);
 							}
@@ -743,7 +745,7 @@ namespace UI {
 					}
 					string emptyToken = " ";
 					String^ stringEmptyToken = gcnew String(emptyToken.c_str());
-					listViewItems = gcnew System::Windows::Forms::ListViewItem(stringEmptyToken); //empty index
+					listViewItems = gcnew Windows::Forms::ListViewItem(stringEmptyToken); //empty index
 					listViewItems->SubItems->Add(stringEmptyToken); //empty mark
 					listViewItems->SubItems->Add(stringEmptyToken); //empty task typw
 					listViewItems->SubItems->Add(stringEachLine);

@@ -792,9 +792,9 @@ string Storage::toStringTaskDetail(list <Task> &listToFormat){
 			index++;
 			s << index << "]"; // "]" as a divider to divide each component
 			if(iter->getIsDone()) {
-				s << "Yes" << "]";
+				s << "Done" << "]";
 			} else {
-				s << "No" << "]";
+				s << "Not Done" << "]";
 			}
 			if (iter->getTaskType() == "FloatingTask") {
 				s << "Float]" << iter->getName() << "]N.A.]N.A.]N.A.]";
@@ -852,9 +852,9 @@ string Storage::toStringTaskDetail(){
 			s << index << "]"; // "]" as a divider to divide each component
 			/****check if Mark as Done****/
 			if(iter->getIsDone()) {
-				s << "Yes" << "]";
+				s << "Done" << "]";
 			} else {
-				s << "No" << "]";
+				s << "Not Done" << "]";
 			}
 			/****For floating task****/
 			if (iter->getTaskType() == "FloatingTask") {
