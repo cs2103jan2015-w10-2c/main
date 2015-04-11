@@ -116,6 +116,11 @@ void EasyScheduleLogic::commandFileName(){
 		returnIndex = 0;
 }
 
+void EasyScheduleLogic::writeFile() {
+	storage.openFile();
+	storage.writeToFile();
+}
+
 void EasyScheduleLogic::commandAdd(){
 	returnMessage = addingTask();
 		returnDisplay = displayingTask();
@@ -282,7 +287,6 @@ void EasyScheduleLogic::commandUndo(){
 void EasyScheduleLogic::commandExit(){
 	returnMessage = MESSAGE_EXIT;
 	returnDisplay = "";
-	storage.writeToFile();
 	exit(0);
 }
  void EasyScheduleLogic::commandInvalid(){
@@ -323,6 +327,7 @@ void EasyScheduleLogic::executeLogic(string userInput) {
 	} else {
 		commandInvalid();
 	}
+	writeFile();
 }
 
 void EasyScheduleLogic::parsingCommand(string userInput) {
