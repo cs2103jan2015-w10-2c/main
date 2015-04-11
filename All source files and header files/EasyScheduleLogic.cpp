@@ -449,7 +449,12 @@ bool EasyScheduleLogic::undoingEdit(Record recordToUndo){
 
 void EasyScheduleLogic::creatingTask() {
 	if(taskType == FLOATING_TASK) {
-		task = Task(commandType, name);			
+		task = Task(commandType, name);
+		if((task.getName()).find_first_not_of(' ') != std::string::npos){
+			isInvalidTaskType = false;
+		} else {
+			isInvalidTaskType = true;	
+		}
 	} else {
 		
 		endTimeHour = parser.endTimeHour;
@@ -554,9 +559,19 @@ string EasyScheduleLogic::editingTask(){
 	if (parser.attribute == "name"){
 		s = storage.editTaskName(taskNumber, parser.name);
 	} else if (parser.attribute == "date"){
-		s = storage.editTaskDate(taskNumber, parser.year, parser.month, parser.day);
+		if(task.getTaskType() == FLOATING_TASK){
+			s = storage.editTaskDate(taskNumber, parser.year, parser.month, parser.day);
+			s = storage.editTaskTime(taskNumber,parser.startTimeHour, parser.startTimeMin, parser.endTimeHour, parser.endTimeMin);
+		} else {
+			s = storage.editTaskDate(taskNumber, parser.year, parser.month, parser.day);
+		}
 	} else if (parser.attribute == "time"){
-		s = storage.editTaskTime(taskNumber,parser.startTimeHour, parser.startTimeMin, parser.endTimeHour, parser.endTimeMin);
+		if(task.getTaskType() == FLOATING_TASK){
+			s = storage.editTaskDate(taskNumber, parser.year, parser.month, parser.day);
+			s = storage.editTaskTime(taskNumber,parser.startTimeHour, parser.startTimeMin, parser.endTimeHour, parser.endTimeMin);
+		} else {
+			s = storage.editTaskTime(taskNumber,parser.startTimeHour, parser.startTimeMin, parser.endTimeHour, parser.endTimeMin);
+		}
 	}
 
 	if (storage.isSuccess){

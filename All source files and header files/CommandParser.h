@@ -72,6 +72,7 @@ public:
 	void editDate(string userInput);
 	void editName(string userInput);
 	void editTime(string userInput);
+	void editFloatDateTime(string cutInput);
 
 	string getCommandType();
 	string getTaskType();
