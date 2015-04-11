@@ -600,7 +600,7 @@ string Storage::editTaskDateTime(int i, int year, int month, int day, int sth, i
 		if (isValidIndex(i, _taskList)&&isValidDate(month, day)&&isValidTime(sth, stm, eth, etm)) {
 			getTaskItFromIndex(i, _taskList);
 			isSuccess = true;
-			executeEditDate(commandType, year, month, day);
+			executeEditDateTime(commandType, year, month, day, sth, stm, eth, etm);
 		}
 	}
 	sortList();
