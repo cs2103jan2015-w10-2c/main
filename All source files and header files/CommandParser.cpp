@@ -267,68 +267,68 @@ void CommandParser::editName(string userInput){
 
 void CommandParser::editDate(string userInput){
 	//userInput == edit 3 date ......
-		string cutInput = userInput.substr(pos2+1);
-		//cutInput == date .....
-		setDevider(cutInput);
+	string cutInput = userInput.substr(pos2+1);
+	//cutInput == date .....
+	setDevider(cutInput);
 
-		if (taskType == FLOATING_TASK){ //NOTE:NOW CANNOT EDIT DATE FOR FLOATING TASK!!!
-			editFloatDateTime(cutInput); 
-		} else {
-			//DeadlineTask or TimedTask
-			if(isalpha(cutInput.at(pos1+1))){
-				easyAddDate(cutInput);
-			} else{
-				normalAddDate(cutInput);
-			}
+	if (taskType == FLOATING_TASK){
+		editFloatDateTime(cutInput); 
+	} else {
+		//DeadlineTask or TimedTask
+		if(isalpha(cutInput.at(pos1+1))){
+			easyAddDate(cutInput);
+		} else{
+			normalAddDate(cutInput);
 		}
+	}
 }
 
 void CommandParser::editFloatDateTime(string cutInput){
 	if(isalpha(cutInput.at(pos1+1))){
-				//cutInput == date today/9/30
-				easyAddDate(cutInput);
-				if(posD3 == string::npos) {
-					addTimeDeadline(cutInput);
-					return;
-				} else {
-					addTimeTimedTask(cutInput);
-					return;
-				}	
+		//cutInput == date today/9/30
+		easyAddDate(cutInput);
+		if(posD3 == string::npos) {
+			addTimeDeadline(cutInput);
+			return;
+		} else {
+			addTimeTimedTask(cutInput);
+			return;
+		}	
 
-			} else{
-				normalAddDate(cutInput);
-				string cutInput2 = cutInput.substr(posD3);
-				//cutInput2 == /9/30/10/30
-				//cutInput2 == /9/30
-				setDevider(cutInput2);
-				if(posD3 == string::npos) {
-					addTimeDeadline(cutInput2);
-				} else {
-					addTimeTimedTask(cutInput2);
-				}	
-			}
+	} else{
+		normalAddDate(cutInput);
+		string cutInput2 = cutInput.substr(posD3);
+		//cutInput2 == /9/30/10/30
+		// or cutInput2 == /9/30
+		setDevider(cutInput2);
+		if(posD3 == string::npos) {
+		addTimeDeadline(cutInput2);
+		} else {
+			addTimeTimedTask(cutInput2);
+		}	
+	}
 }
 
 void CommandParser::editTime(string userInput){
 	string cutInput = userInput.substr(pos2+1);
-		//cutInput == time .....
-		setDevider(cutInput);
+	//cutInput == time .....
+	setDevider(cutInput);
 
-		if (taskType == FLOATING_TASK){
-			editFloatDateTime(cutInput); 
-		}else{
-			//DeadlineTask or TimedTask
-			//cutInput == time 17/30 || cutInput == time 17/30/18/30
-			string cutInput2 = cutInput.substr(pos1+1);
-			cutInput2 = '/' + cutInput2; // so we can use the addTimeDeadline or addTimeTimedTask
-			//cutInput2 == /17/30 || /17/30/18/30
-			setDevider(cutInput2);
-			if(posD3 == string::npos){
-				addTimeDeadline(cutInput2);
-			} else {
-				addTimeTimedTask(cutInput2);
-			}
+	if (taskType == FLOATING_TASK){
+		editFloatDateTime(cutInput); 
+	}else{
+		//DeadlineTask or TimedTask
+		//cutInput == time 17/30 || cutInput == time 17/30/18/30
+		string cutInput2 = cutInput.substr(pos1+1);
+		cutInput2 = '/' + cutInput2; // so we can use the addTimeDeadline or addTimeTimedTask
+		//cutInput2 == /17/30 || /17/30/18/30
+		setDevider(cutInput2);
+		if(posD3 == string::npos){
+			addTimeDeadline(cutInput2);
+		} else {
+			addTimeTimedTask(cutInput2);
 		}
+	}
 }
 
 void CommandParser::editingTask(string userInput){
