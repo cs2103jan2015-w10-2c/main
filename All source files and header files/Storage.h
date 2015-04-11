@@ -82,8 +82,11 @@ public:
 	static bool isExistingTask(Task &task);
 	static bool isValidDate(Task task);
 	static bool isValidTime(Task task);
+	static bool isValidDate(int month, int day);
+	static bool isValidTime(int sth, int stm, int eth, int etm);
 	static bool isValidDirectory();
 	static bool isValidIndex(int i, list<Task> &taskList);
+	static bool isValidTaskInput(Task task);
 	static void openFile();
 	static void readFile();
 	static void setFileName(string name);
@@ -107,9 +110,11 @@ public:
 	static string editTaskName(int i, string s);
 	static string editTaskTime(int i, int sth, int stm, int eth, int etm);
 	static string editTaskDate(int i, int year, int month, int day);
+	static string editTaskDateTime(int i, int year, int month, int day, int sth, int stm, int eth, int etm);
 	static void executeEditName(string commandType, string name);
 	static void executeEditTime(string commandType, int sth, int stm, int eth, int etm);
 	static void executeEditDate(string commandType, int year, int month, int day);
+	static void executeEditDateTime(string commandType, int year, int month, int day, int sth, int stm, int eth, int etm);
 	static void setTime(int sth, int stm, int eth, int etm);
 	static void setDate(int year, int month, int day);
 	static string searchByName(string searchKeyWord);
@@ -119,6 +124,7 @@ public:
 	static void executeTaskCommand(string commandType);
 	static string deleteByNumber(int i);
 	static int getIndex();
+	static int getDeviderNum(string input);
 
 
 	static string toStringTaskDetail(list <Task> &listToFormat);
