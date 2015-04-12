@@ -6,8 +6,6 @@
 #include <sstream>
 #include <algorithm>
 #include <assert.h>
-//#include "EasyScheduleLogic.h"
-//#include "Task.h"
 
 using namespace std;
 
@@ -34,6 +32,23 @@ private:
 	static const string DATE;
 	static const string NAME;
 	static const string TIME;
+
+	static const string TODAY;
+	static const string TOMORROW;
+	static const string MONDAY;
+	static const string MON;
+	static const string TUESDAY;
+	static const string TUE;
+	static const string WEDNESDAY;
+	static const string WED;
+	static const string THURSDAY;
+	static const string THU;
+	static const string FRIDAY;
+	static const string FRI;
+	static const string SATURDAY;
+	static const string SAT;
+	static const string SUNDAY;
+	static const string SUN;
 
 public:
 	static string taskType;

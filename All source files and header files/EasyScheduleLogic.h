@@ -9,9 +9,7 @@
 #define EASYSCHEDULELOGIC_H
 
 #include "CommandParser.h"
-//#include "Task.h"
 #include "Storage.h"
-//#include <sstream>
 #include <string>
 #include "Tracker.h"
 #include "Record.h"
@@ -25,7 +23,9 @@ private:
 	static const string FLOATING_TASK;
 	static const string DEADLINE_TASK;
 	static const string TIMED_TASK;
-
+	static const string NAME;
+	static const string DATE;
+	static const string TIME;
 	
 	static const string MESSAGE_WELCOME;
 	static const string MESSAGE_DIRECTORY_OPENED;
@@ -91,12 +91,6 @@ private:
 	static int endTimeHour;
 	static int endTimeMin;
 
-	static int localYear;
-	static int localMonth;
-	static int localDay;
-	static int localHour;
-	static int localMin;
-
 public:
 	
 	static void main();
@@ -158,7 +152,6 @@ public:
 	static string tellUIDisplay();
 	static int tellUIReturnIndex();
 	static bool isDuplicate();
-	static void getLocalDateTime();
 
 	static Task getTask();
 	static string getCommandType();

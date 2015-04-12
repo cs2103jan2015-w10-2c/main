@@ -7,6 +7,9 @@
 const string EasyScheduleLogic::FLOATING_TASK = "FloatingTask";
 const string EasyScheduleLogic::DEADLINE_TASK = "DeadlineTask";
 const string EasyScheduleLogic::TIMED_TASK = "TimedTask";
+const string EasyScheduleLogic::NAME = "name";
+const string EasyScheduleLogic::DATE = "date";
+const string EasyScheduleLogic::TIME = "time";
 
 const string EasyScheduleLogic::MESSAGE_WELCOME = "Welcome to EasySchedule!";
 const string EasyScheduleLogic::MESSAGE_DIRECTORY_OPENED = "Directory opened";
@@ -465,7 +468,6 @@ void EasyScheduleLogic::creatingTask() {
 			startTimeHour = parser.startTimeHour;
 			startTimeMin = parser.startTimeMin;
 			task = Task(commandType, name, year, month, day, startTimeHour, startTimeMin, endTimeHour, endTimeMin);
-			task = Task(commandType,  name, year, month, day, startTimeHour, startTimeMin, endTimeHour, endTimeMin);
 		} else {
 			isInvalidTaskType = true; 
 		}
@@ -556,15 +558,15 @@ string EasyScheduleLogic::markNotDone() {
 string EasyScheduleLogic::editingTask(){
 	taskNumber = parser.number;
 	string s;
-	if (parser.attribute == "name"){
+	if (parser.attribute == NAME){
 		s = storage.editTaskName(taskNumber, parser.name);
-	} else if (parser.attribute == "date"){
+	} else if (parser.attribute == DATE){
 		if(parser.taskType == FLOATING_TASK){
 			s = storage.editTaskDateTime(taskNumber, parser.year, parser.month, parser.day,parser.startTimeHour, parser.startTimeMin, parser.endTimeHour, parser.endTimeMin);
 		} else {
 			s = storage.editTaskDate(taskNumber, parser.year, parser.month, parser.day);
 		}
-	} else if (parser.attribute == "time"){
+	} else if (parser.attribute == TIME){
 		if(parser.taskType == FLOATING_TASK){
 			s = storage.editTaskDateTime(taskNumber, parser.year, parser.month, parser.day,parser.startTimeHour, parser.startTimeMin, parser.endTimeHour, parser.endTimeMin);
 		} else {
