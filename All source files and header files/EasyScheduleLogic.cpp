@@ -73,7 +73,7 @@ int EasyScheduleLogic::startTimeMin;
 int EasyScheduleLogic::endTimeHour;
 int EasyScheduleLogic::endTimeMin;
 
-//@author A0111446
+//@author A0111446R
 void EasyScheduleLogic::commandFilePath(){
 	storage.setPathName(parser.name);
 		if (storage.isValidDirectory()) {
