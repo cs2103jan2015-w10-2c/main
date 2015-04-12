@@ -9,9 +9,7 @@
 #define EASYSCHEDULELOGIC_H
 
 #include "CommandParser.h"
-//#include "Task.h"
 #include "Storage.h"
-//#include <sstream>
 #include <string>
 #include "Tracker.h"
 #include "Record.h"
