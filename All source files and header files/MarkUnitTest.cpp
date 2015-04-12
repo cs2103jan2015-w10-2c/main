@@ -25,6 +25,7 @@ namespace MarkUnitTest {
 			expectedDisplay = "1]Not Done]Float] lunch with friends]N.A.]N.A.]N.A.]";
 			Assert::AreEqual(expectedDisplay, actualDisplay);
 
+			/****Clear the data storage****/
 			string deleteTaskCommand = "delete 1";
 			while(logic.displayingTask() != "") {
 				logic.executeLogic(deleteTaskCommand);

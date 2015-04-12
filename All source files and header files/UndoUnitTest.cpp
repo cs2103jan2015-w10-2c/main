@@ -12,6 +12,9 @@ namespace UndoUnitTest {
 		
 		TEST_METHOD(FailUndoTest) {
 			EasyScheduleLogic logic;
+			string displayTaskCommand = "display";
+			logic.executeLogic(displayTaskCommand);
+			logic.executeLogic(displayTaskCommand);
 			string actualMessage = logic.undoingTask();
 			string expectedFailMessage = "Undo fail. End of command history reached.";
 			Assert::AreEqual(expectedFailMessage, actualMessage);

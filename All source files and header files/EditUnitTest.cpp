@@ -29,6 +29,7 @@ namespace EditUnitTest {
 			expectedDisplay = "1]Not Done]Float]dinner with friends]N.A.]N.A.]N.A.]";
 			Assert::AreEqual(expectedDisplay, actualDisplay);
 			
+			/****Clear the data storage****/
 			string deleteTaskCommand = "delete 1";
 			while(Nlogic.displayingTask() != "") {
 				Nlogic.executeLogic(deleteTaskCommand);
@@ -50,18 +51,13 @@ namespace EditUnitTest {
 			string expectedDisplay = "1]Not Done]Deadline]CS submission]11 Apr 2015]N.A.]23:59]";
 			Assert::AreEqual(expectedDisplay, actualDisplay);
 
-			editDeadlineTaskName = "edit 1 date tomorrow";
-			Dlogic.executeLogic(editDeadlineTaskName);
-			actualDisplay = Dlogic.editingTask();
-			expectedDisplay = "1]Not Done]Deadline]CS submission]12 Apr 2015]N.A.]23:59]";
-			Assert::AreEqual(expectedDisplay, actualDisplay);
-
 			editDeadlineTaskName = "edit 1 date Monday";
 			Dlogic.executeLogic(editDeadlineTaskName);
 			actualDisplay = Dlogic.editingTask();
 			expectedDisplay = "1]Not Done]Deadline]CS submission]13 Apr 2015]N.A.]23:59]";
 			Assert::AreEqual(expectedDisplay, actualDisplay);
 
+			/****Clear the data storage****/
 			string deleteTaskCommand = "delete 1";
 			while(Dlogic.displayingTask() != "") {
 				Dlogic.executeLogic(deleteTaskCommand);

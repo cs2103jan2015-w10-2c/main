@@ -20,7 +20,6 @@ const string EasyScheduleLogic::MESSAGE_DELETE_FAIL = "There is no task \"%s\" i
 const string EasyScheduleLogic::MESSAGE_DELETE_CHOOSE = "Please enter 'delete [index]' to delete the task.";
 const string EasyScheduleLogic::MESSAGE_EDIT = "The task has been edited";
 const string EasyScheduleLogic::MESSAGE_EDIT_FAIL = "There is no such task. Please check from display of all tasks.";
-const string EasyScheduleLogic::MESSAGE_EDIT_INPUT_ERROR = "Invalid edit format.";
 const string EasyScheduleLogic::MESSAGE_CLEAR = "All tasks have been deleted.";
 const string EasyScheduleLogic::MESSAGE_SEARCH_FAIL = "There is no task containing the keyword. Please check from display of all tasks.";
 const string EasyScheduleLogic::MESSAGE_SORT = "All tasks have been sorted by task type.";
@@ -105,54 +104,54 @@ void EasyScheduleLogic::writeFile() {
 void EasyScheduleLogic::viewDeadline(){
 	returnDisplay = displayAllDeadline();
 	if(displayAllDeadline() == ""){
-		returnMessage = MESSAGE_EMPTY_DEADLINE;
+		returnMessage == MESSAGE_EMPTY_DEADLINE;
 	}else {
-		returnMessage = MESSAGE_VIEW_DEADLINE_ALL;
+		returnMessage == MESSAGE_VIEW_DEADLINE_ALL;
 	}
 }
 
 void EasyScheduleLogic::viewFloating(){
 		returnDisplay = displayAllFloating();
 		if(displayAllFloating() == ""){
-			returnMessage = MESSAGE_EMPTY_FLOATING;
+			returnMessage == MESSAGE_EMPTY_FLOATING;
 		}else {
-			returnMessage = MESSAGE_VIEW_FLOATING_ALL;
+			returnMessage == MESSAGE_VIEW_FLOATING_ALL;
 		}
 }
 
 void EasyScheduleLogic::viewTimed(){
 		returnDisplay = displayAllTimed();
 		if(displayAllTimed() == ""){
-			returnMessage = MESSAGE_EMPTY_TIMED;			
+			returnMessage == MESSAGE_EMPTY_TIMED;			
 		}else {
-			returnMessage = MESSAGE_VIEW_TIMED_ALL;
+			returnMessage == MESSAGE_VIEW_TIMED_ALL;
 		}
 }
 
 void EasyScheduleLogic::viewToday(){
 		returnDisplay = displayAllToday();
 		if(displayAllToday() == ""){
-			returnMessage = MESSAGE_EMPTY_TODAY;
+			returnMessage == MESSAGE_EMPTY_TODAY;
 		}else {
-			returnMessage = MESSAGE_VIEW_TODAY_ALL;
+			returnMessage == MESSAGE_VIEW_TODAY_ALL;
 		}
 }
 
 void EasyScheduleLogic::viewTomorrow(){
 		returnDisplay = displayAllTomorrow();
 		if(displayAllTomorrow() == ""){
-			returnMessage = MESSAGE_EMPTY_TOMORROW;
+			returnMessage == MESSAGE_EMPTY_TOMORROW;
 		}else {
-			returnMessage = MESSAGE_VIEW_TOMORROW_ALL;
+			returnMessage == MESSAGE_VIEW_TOMORROW_ALL;
 		}
 }
 
 void EasyScheduleLogic::viewYesterday(){
 	returnDisplay = displayAllYesterday();
 		if(displayAllYesterday() == ""){
-			returnMessage = MESSAGE_EMPTY_YESTERDAY;
+			returnMessage == MESSAGE_EMPTY_YESTERDAY;
 		}else {
-			returnMessage = MESSAGE_VIEW_YESTERDAY_ALL;
+			returnMessage == MESSAGE_VIEW_YESTERDAY_ALL;
 		}
 }
 
@@ -274,7 +273,7 @@ void EasyScheduleLogic::commandExit(){
 }
  void EasyScheduleLogic::commandInvalid(){
 	 	returnMessage = MESSAGE_INVALID_INPUT_COMMAND;
-		returnDisplay = displayingTask();
+		returnDisplay = "";
  }
 
  //@author A0115131B
@@ -571,9 +570,6 @@ string EasyScheduleLogic::editingTask(){
 		} else {
 			s = storage.editTaskTime(taskNumber,parser.startTimeHour, parser.startTimeMin, parser.endTimeHour, parser.endTimeMin);
 		}
-	} else{
-		returnMessage = MESSAGE_EDIT_INPUT_ERROR;
-		return (s = displayingTask());
 	}
 
 	if (!storage.isDateValid){

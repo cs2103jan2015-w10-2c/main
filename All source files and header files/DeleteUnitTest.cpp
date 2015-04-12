@@ -18,8 +18,13 @@ namespace DeleteUnitTest {
 			logic.executeLogic(deleteTaskCommand);
 			string expectedDisplay = "1]Not Done]Float] lunch with friends]N.A.]N.A.]N.A.]";
 			string actualDisplay = logic.deletingTask();
-
 			Assert::AreEqual(expectedDisplay, actualDisplay);
+
+			/****Clear the data storage****/
+			deleteTaskCommand = "delete 1";
+			while(logic.displayingTask() != "") {
+				logic.executeLogic(deleteTaskCommand);
+			}
 		}
 
 		TEST_METHOD(DeleteTaskTest) {
@@ -31,8 +36,13 @@ namespace DeleteUnitTest {
 			logic.executeLogic(deleteTaskCommand);
 			string expectedDisplay = "";
 			string actualDisplay = logic.deletingTask();
-
 			Assert::AreEqual(expectedDisplay, actualDisplay);
+
+			/****Clear the data storage****/
+			deleteTaskCommand = "delete 1";
+			while(logic.displayingTask() != "") {
+				logic.executeLogic(deleteTaskCommand);
+			}
 		}
 
 	};

@@ -128,10 +128,10 @@ public:
 	static void storingTask();
 	static string addingTask();
 	static string deletingTask();
-	static string searchingTask(); ///
+	static string searchingTask();
 	static string displayingTask();
 	static string autoDisplay();
-	static string displayAllDeadline(); ///
+	static string displayAllDeadline(); 
 	static string displayAllFloating();
 	static string displayAllTimed();
 	static string displayAllToday(); ///
