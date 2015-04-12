@@ -23,6 +23,7 @@ const string EasyScheduleLogic::MESSAGE_DELETE_FAIL = "There is no task \"%s\" i
 const string EasyScheduleLogic::MESSAGE_DELETE_CHOOSE = "Please enter 'delete [index]' to delete the task.";
 const string EasyScheduleLogic::MESSAGE_EDIT = "The task has been edited";
 const string EasyScheduleLogic::MESSAGE_EDIT_FAIL = "There is no such task. Please check from display of all tasks.";
+const string EasyScheduleLogic::MESSAGE_EDIT_INPUT_ERROR = "Invalid edit format.";
 const string EasyScheduleLogic::MESSAGE_CLEAR = "All tasks have been deleted.";
 const string EasyScheduleLogic::MESSAGE_SEARCH_FAIL = "There is no task containing the keyword. Please check from display of all tasks.";
 const string EasyScheduleLogic::MESSAGE_SORT = "All tasks have been sorted by task type.";
@@ -571,7 +572,10 @@ string EasyScheduleLogic::editingTask(){
 			s = storage.editTaskDateTime(taskNumber, parser.year, parser.month, parser.day,parser.startTimeHour, parser.startTimeMin, parser.endTimeHour, parser.endTimeMin);
 		} else {
 			s = storage.editTaskTime(taskNumber,parser.startTimeHour, parser.startTimeMin, parser.endTimeHour, parser.endTimeMin);
-		}
+		} 
+	} else{
+        returnMessage = MESSAGE_EDIT_INPUT_ERROR;
+        return (s = "");
 	}
 
 	if (!storage.isDateValid){
