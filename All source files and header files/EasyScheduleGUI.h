@@ -136,12 +136,11 @@ namespace UI {
 			this->inputBox->Font = (gcnew System::Drawing::Font(L"Arial", 11.25F, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point, 
 				static_cast<System::Byte>(0)));
 			this->inputBox->Location = System::Drawing::Point(6, 456);
-			this->inputBox->Multiline = true;
 			this->inputBox->Name = L"inputBox";
-			this->inputBox->Size = System::Drawing::Size(579, 24);
+			this->inputBox->Size = System::Drawing::Size(579, 25);
 			this->inputBox->TabIndex = 1;
 			this->inputBox->TextChanged += gcnew System::EventHandler(this, &EasyScheduleGUI::inputBox_TextChanged);
-			this->inputBox->KeyUp += gcnew System::Windows::Forms::KeyEventHandler(this, &EasyScheduleGUI::inputBox_KeyUp);
+			this->inputBox->KeyDown += gcnew System::Windows::Forms::KeyEventHandler(this, &EasyScheduleGUI::inputBox_KeyDown);
 			// 
 			// feedbackBox
 			// 
@@ -361,11 +360,11 @@ namespace UI {
 		}
 
 	//User press "Enter" key after typing to replace clicking "Enter" button
-	private: System::Void inputBox_KeyUp(System::Object^  sender, System::Windows::Forms::KeyEventArgs^  e) {
-
+	private: System::Void inputBox_KeyDown(System::Object^  sender, System::Windows::Forms::KeyEventArgs^  e) {
+				
 				if(e->KeyCode == Keys::Enter) {
 					enterButton->PerformClick();
-					this->inputBox->Clear(); //to clear the newline char.
+					this->inputBox->Clear();
 				}
 		}
 

@@ -83,6 +83,7 @@ namespace EditUnitTest {
 			expectedDisplay = "1]Not Done]Timed]watch musical show]5 Apr 2015]08:00]10:00]";
 			Assert::AreEqual(expectedDisplay, actualDisplay);
 
+			/****Clear the data storage****/
 			string deleteTaskCommand = "delete 1";
 			while(Tlogic.displayingTask() != "") {
 				Tlogic.executeLogic(deleteTaskCommand);
@@ -115,6 +116,7 @@ namespace EditUnitTest {
 			expectedDisplay = "1]Not Done]Deadline] lunch with friends]5 Apr 2015]N.A.]13:00]";
 			Assert::AreEqual(expectedDisplay, actualDisplay);
 
+			/****Clear the data storage****/
 			string deleteTaskCommand = "delete 1";
 			while(Ylogic.displayingTask() != "") {
 				Ylogic.executeLogic(deleteTaskCommand);

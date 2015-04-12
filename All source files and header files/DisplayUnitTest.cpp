@@ -35,17 +35,11 @@ namespace DisplayUnitTest {
 			expectedDisplay = "1]Not Done]Deadline]CS submission]13 Apr 2015]N.A.]23:59]";
 			Assert::AreEqual(expectedDisplay, actualDisplay);
 
-			/****display by date****/ //Incomplete
-			viewTaskCommand = "view deadline";
+			/****display today****/ 
+			viewTaskCommand = "view tomorrow";
 			logic.executeLogic(viewTaskCommand);
-			actualDisplay = logic.displayAllDeadline();
+			actualDisplay = logic.displayAllTomorrow();
 			expectedDisplay = "1]Not Done]Deadline]CS submission]13 Apr 2015]N.A.]23:59]";
-			Assert::AreEqual(expectedDisplay, actualDisplay);
-
-			viewTaskCommand = "view deadline";
-			logic.executeLogic(viewTaskCommand);
-			actualDisplay = logic.displayAllDeadline();
-			expectedDisplay = "";
 			Assert::AreEqual(expectedDisplay, actualDisplay);
 
 			/****Clear the data storage****/

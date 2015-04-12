@@ -34,6 +34,12 @@ namespace SearchUnitTest {
 			actualDisplay = logic.searchingTask();
 			expectedDisplay = "";
 			Assert::AreEqual(expectedDisplay, actualDisplay);
+
+			/****Clear the data storage****/
+			string deleteTaskCommand = "delete 1";
+			while(logic.displayingTask() != "") {
+				logic.executeLogic(deleteTaskCommand);
+			}
 		}
 
 	};
