@@ -172,7 +172,7 @@ void EasyScheduleLogic::commandView(){
 		}
 }
 
-//peisen
+//@author A0116707H Dong Peisen
 void EasyScheduleLogic::commandAdd(){
 	returnMessage = addingTask();
 		returnDisplay = displayingTask();
@@ -184,7 +184,7 @@ void EasyScheduleLogic::commandAdd(){
 }
 
 
-//@author Peisen?
+//@author A0116707H Dong Peisen
 void EasyScheduleLogic::commandDelete(){
 	returnDisplay = deletingTask();
 	returnIndex = 0;
@@ -623,7 +623,7 @@ string EasyScheduleLogic::sortingTask() {
 	return MESSAGE_SORT;
 }
 
-//peisen
+//@author A0116707H Dong Peisen
 //receive bool from storeFloat and create output message
 string EasyScheduleLogic::tellUIReturnMessage() {
 	return returnMessage;

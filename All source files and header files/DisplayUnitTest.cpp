@@ -4,6 +4,8 @@
 using namespace Microsoft::VisualStudio::CppUnitTestFramework;
 
 namespace DisplayUnitTest {
+
+	//@author A0116707H Dong Peisen
 	TEST_CLASS(DisplayUnitTest) {
 	public:
 		
