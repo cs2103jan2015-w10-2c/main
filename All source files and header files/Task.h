@@ -1,3 +1,4 @@
+//author A0114255N
 #pragma once
 #ifndef TASK_H
 #define TASK_H
@@ -7,6 +8,8 @@ using namespace std;
 
 class Task {
 private:
+	static const string NAME_OF_MONTH[12];
+	
 	string _commandType;
 	string _taskType;
 	string  _name;
@@ -18,9 +21,6 @@ private:
 	int _endTimeHour;
 	int _endTimeMin;
 	bool _isDone;
-
-	static const string NAME_OF_MONTH[12];
-
 
 public:
 	Task();

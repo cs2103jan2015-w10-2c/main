@@ -29,6 +29,22 @@ const string CommandParser::VIEW = "view";
 const string CommandParser::DATE = "date";
 const string CommandParser::NAME = "name";
 const string CommandParser::TIME = "time";
+const string CommandParser::TODAY = "today";
+const string CommandParser::TOMORROW = "tomorrow";
+const string CommandParser::MONDAY = "monday";
+const string CommandParser::MON = "mon";
+const string CommandParser::TUESDAY = "tuesday";
+const string CommandParser::TUE = "tue";
+const string CommandParser::WEDNESDAY = "wednesday";
+const string CommandParser::WED = "wed";
+const string CommandParser::THURSDAY = "thursday";
+const string CommandParser::THU = "thu";
+const string CommandParser::FRIDAY = "friday";
+const string CommandParser::FRI = "fri";
+const string CommandParser::SATURDAY = "saturday";
+const string CommandParser::SAT = "sat";
+const string CommandParser::SUNDAY = "sunday";
+const string CommandParser::SUN = "sun";
 
 string CommandParser::taskType="";
 string CommandParser::commandType="";
@@ -83,19 +99,19 @@ void CommandParser::normalAddDate(string userInput){
 
 void CommandParser::getDayOfWeekNo(string dayOfWeek){
 	transform(dayOfWeek.begin(), dayOfWeek.end(), dayOfWeek.begin(), ::tolower);
-	if (dayOfWeek == "monday" || dayOfWeek == "mon"){
+	if (dayOfWeek == MONDAY || dayOfWeek == MON){
 		dayOfWeekNo = 1;
-	} else if (dayOfWeek == "tuesday" || dayOfWeek == "tue"){
+	} else if (dayOfWeek == TUESDAY || dayOfWeek == TUE){
 		dayOfWeekNo = 2;
-	} else if (dayOfWeek == "wednesday" || dayOfWeek =="wed"){
+	} else if (dayOfWeek == WEDNESDAY || dayOfWeek == WED){
 		dayOfWeekNo = 3;
-	} else if (dayOfWeek == "thursday" || dayOfWeek =="thu"){
+	} else if (dayOfWeek == THURSDAY || dayOfWeek == THU){
 		dayOfWeekNo = 4;
-	} else if (dayOfWeek == "friday" || dayOfWeek =="fri"){
+	} else if (dayOfWeek == FRIDAY || dayOfWeek == FRI){
 		dayOfWeekNo = 5;
-	} else if (dayOfWeek == "saturday" || dayOfWeek =="sat"){
+	} else if (dayOfWeek == SATURDAY || dayOfWeek == SAT){
 		dayOfWeekNo = 6;
-	} else if (dayOfWeek == "sunday" || dayOfWeek =="sun"){
+	} else if (dayOfWeek == SUNDAY || dayOfWeek == SUN){
 		dayOfWeekNo = 0;
 	}
 }
@@ -149,9 +165,9 @@ void CommandParser::easyAddDate(string userInput){
 	string todayOrTomorrow = userInput.substr(pos1+1, (posD1-pos1-1));
 	transform(todayOrTomorrow.begin(), todayOrTomorrow.end(), todayOrTomorrow.begin(), ::tolower);
 	
-	if (todayOrTomorrow == "today"){
+	if (todayOrTomorrow == TODAY){
 		setTodayDate();
-	} else if (todayOrTomorrow == "tomorrow"){
+	} else if (todayOrTomorrow == TOMORROW){
 		setTomorrowDate();	
 	} else {
 		dayOfWeek = userInput.substr(pos1+1, (posD1-pos1-1));

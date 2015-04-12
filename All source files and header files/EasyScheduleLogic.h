@@ -25,7 +25,9 @@ private:
 	static const string FLOATING_TASK;
 	static const string DEADLINE_TASK;
 	static const string TIMED_TASK;
-
+	static const string NAME;
+	static const string DATE;
+	static const string TIME;
 	
 	static const string MESSAGE_WELCOME;
 	static const string MESSAGE_DIRECTORY_OPENED;
