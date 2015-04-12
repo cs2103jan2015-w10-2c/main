@@ -91,12 +91,6 @@ private:
 	static int endTimeHour;
 	static int endTimeMin;
 
-	static int localYear;
-	static int localMonth;
-	static int localDay;
-	static int localHour;
-	static int localMin;
-
 public:
 	
 	static void main();
@@ -158,7 +152,6 @@ public:
 	static string tellUIDisplay();
 	static int tellUIReturnIndex();
 	static bool isDuplicate();
-	static void getLocalDateTime();
 
 	static Task getTask();
 	static string getCommandType();
