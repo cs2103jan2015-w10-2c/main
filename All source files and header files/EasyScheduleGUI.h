@@ -148,7 +148,7 @@ namespace UI {
 			this->feedbackBox->Font = (gcnew System::Drawing::Font(L"Arial", 9, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point, 
 				static_cast<System::Byte>(0)));
 			this->feedbackBox->ForeColor = System::Drawing::SystemColors::HotTrack;
-			this->feedbackBox->Location = System::Drawing::Point(390, 340);
+			this->feedbackBox->Location = System::Drawing::Point(393, 409);
 			this->feedbackBox->Multiline = true;
 			this->feedbackBox->Name = L"feedbackBox";
 			this->feedbackBox->ScrollBars = System::Windows::Forms::ScrollBars::Vertical;
@@ -226,7 +226,7 @@ namespace UI {
 			this->feedbackLabel->Font = (gcnew System::Drawing::Font(L"Arial", 9.25F, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point, 
 				static_cast<System::Byte>(0)));
 			this->feedbackLabel->ForeColor = System::Drawing::SystemColors::HotTrack;
-			this->feedbackLabel->Location = System::Drawing::Point(387, 321);
+			this->feedbackLabel->Location = System::Drawing::Point(390, 390);
 			this->feedbackLabel->Name = L"feedbackLabel";
 			this->feedbackLabel->Size = System::Drawing::Size(65, 16);
 			this->feedbackLabel->TabIndex = 4;
@@ -238,7 +238,7 @@ namespace UI {
 			this->previousCommandBox->BackColor = System::Drawing::SystemColors::Info;
 			this->previousCommandBox->Font = (gcnew System::Drawing::Font(L"Arial", 9, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point, 
 				static_cast<System::Byte>(0)));
-			this->previousCommandBox->Location = System::Drawing::Point(390, 409);
+			this->previousCommandBox->Location = System::Drawing::Point(393, 340);
 			this->previousCommandBox->Multiline = true;
 			this->previousCommandBox->Name = L"previousCommandBox";
 			this->previousCommandBox->ScrollBars = System::Windows::Forms::ScrollBars::Vertical;
@@ -252,7 +252,7 @@ namespace UI {
 			this->previousCommandLabel->Font = (gcnew System::Drawing::Font(L"Arial", 9.25F, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point, 
 				static_cast<System::Byte>(0)));
 			this->previousCommandLabel->ForeColor = System::Drawing::SystemColors::HotTrack;
-			this->previousCommandLabel->Location = System::Drawing::Point(387, 390);
+			this->previousCommandLabel->Location = System::Drawing::Point(390, 321);
 			this->previousCommandLabel->Name = L"previousCommandLabel";
 			this->previousCommandLabel->Size = System::Drawing::Size(118, 16);
 			this->previousCommandLabel->TabIndex = 6;
@@ -356,7 +356,7 @@ namespace UI {
 				/*string allFeedbackTasks = EasyScheduleLogic::autoDisplay();
 				displayInitial(allFeedbackTasks); */
 				this->feedbackBox->Text = 
-					"Hello Jim. Welcome to EasySchedule!\r\nPlease enter the filepath or filename: ";
+					"Hello Jim. Welcome to EasySchedule!\r\nPlease enter the filepath or filename";
 		}
 
 	//User press "Enter" key after typing to replace clicking "Enter" button
