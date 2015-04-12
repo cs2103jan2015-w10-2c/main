@@ -35,13 +35,6 @@ namespace DisplayUnitTest {
 			expectedDisplay = "1]Not Done]Deadline]CS submission]13 Apr 2015]N.A.]23:59]";
 			Assert::AreEqual(expectedDisplay, actualDisplay);
 
-			/****display today****/ 
-			viewTaskCommand = "view tomorrow";
-			logic.executeLogic(viewTaskCommand);
-			actualDisplay = logic.displayAllTomorrow();
-			expectedDisplay = "1]Not Done]Deadline]CS submission]13 Apr 2015]N.A.]23:59]";
-			Assert::AreEqual(expectedDisplay, actualDisplay);
-
 			/****Clear the data storage****/
 			string deleteTaskCommand = "delete 1";
 			while(logic.displayingTask() != "") {

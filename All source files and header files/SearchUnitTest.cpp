@@ -12,24 +12,24 @@ namespace SearchUnitTest {
 		TEST_METHOD(SearchTest) {
 
 			EasyScheduleLogic logic;
-			string addTaskCommand = "add lunch with friends";
+			string addTaskCommand = "add celebrate Chinese New Year";
 			logic.executeLogic(addTaskCommand);
-			addTaskCommand = "add 2015/4/16/12/00/14/00/lunch outing";
+			addTaskCommand = "add 2015/4/16/12/00/14/00/celebrate birthday";
 			logic.executeLogic(addTaskCommand);
 			
-			string searchTask = "search lunch";
+			string searchTask = "search celebrate";
 			logic.executeLogic(searchTask);
 			string actualDisplay = logic.searchingTask();
-			string expectedDisplay = "1]Not Done]Timed]lunch outing]16 Apr 2015]12:00]14:00]2]Not Done]Float] lunch with friends]N.A.]N.A.]N.A.]";
+			string expectedDisplay = "1]Not Done]Timed]celebrate birthday]16 Apr 2015]12:00]14:00]2]Not Done]Float] celebrate Chinese New Year]N.A.]N.A.]N.A.]";
 			Assert::AreEqual(expectedDisplay, actualDisplay);
 
-			searchTask = "search lunch with";
+			searchTask = "search Chinese New Year";
 			logic.executeLogic(searchTask);
 			actualDisplay = logic.searchingTask();
-			expectedDisplay = "1]Not Done]Float] lunch with friends]N.A.]N.A.]N.A.]";
+			expectedDisplay = "1]Not Done]Float] celebrate Chinese New Year]N.A.]N.A.]N.A.]";
 			Assert::AreEqual(expectedDisplay, actualDisplay);
 
-			searchTask = "search dinner";
+			searchTask = "search happy";
 			logic.executeLogic(searchTask);
 			actualDisplay = logic.searchingTask();
 			expectedDisplay = "";
