@@ -141,6 +141,7 @@ namespace UI {
 			this->inputBox->Size = System::Drawing::Size(579, 24);
 			this->inputBox->TabIndex = 1;
 			this->inputBox->TextChanged += gcnew System::EventHandler(this, &EasyScheduleGUI::inputBox_TextChanged);
+			this->inputBox->KeyUp += gcnew System::Windows::Forms::KeyEventHandler(this, &EasyScheduleGUI::inputBox_KeyUp);
 			// 
 			// feedbackBox
 			// 
@@ -360,10 +361,11 @@ namespace UI {
 		}
 
 	//User press "Enter" key after typing to replace clicking "Enter" button
-	//Debug: Now it doesn't work. Why???
-	private: System::Void inputBox_KeyDown(System::Object^  sender, System::Windows::Forms::KeyEventArgs^  e) {
+	private: System::Void inputBox_KeyUp(System::Object^  sender, System::Windows::Forms::KeyEventArgs^  e) {
+
 				if(e->KeyCode == Keys::Enter) {
 					enterButton->PerformClick();
+					this->inputBox->Clear(); //to clear the newline char.
 				}
 		}
 
@@ -372,11 +374,11 @@ namespace UI {
 				
 				String^ stringUserInput = this->inputBox->Text;
 				this->inputBox->Clear();
-				/****convert from System::String to std::string and pass to logic****/
+				/****convert from System::String to std::string****/
 				msclr::interop::marshal_context context;
 				string userInput = context.marshal_as<std::string>(stringUserInput);
-
-				/****Execute user's input****/
+				cout << userInput<<endl;
+				/****Execute user's input in logic****/
 				EasyScheduleLogic::executeLogic(userInput);
 				string feedbackMessage = EasyScheduleLogic::tellUIReturnMessage();
 				string allFeedbackTasks = EasyScheduleLogic::tellUIDisplay();
@@ -407,6 +409,7 @@ namespace UI {
 
 				decomposeTaskString(feedbackTasks, feedbackIndex);
 		}
+
 	private: void displayInitial(string feedbackTasks) {
 				listOutputMain->Items->Clear();
 				listOutputFloat->Items->Clear();
@@ -430,7 +433,7 @@ namespace UI {
 				String^ STRING_MESSAGE_TODAY_AGENDA = gcnew String(MESSAGE_TODAY_AGENDA.c_str());
 
 				/****Adding a message line before today's agenda****/
-				listViewItems = gcnew System::Windows::Forms::ListViewItem(stringEmptyToken); //empty index
+				listViewItems = gcnew Windows::Forms::ListViewItem(stringEmptyToken); //empty index
 				listViewItems->SubItems->Add(stringEmptyToken); //empty mark
 				listViewItems->SubItems->Add(stringEmptyToken); //empty task typw
 				listViewItems->SubItems->Add(STRING_MESSAGE_TODAY_AGENDA);
@@ -454,7 +457,7 @@ namespace UI {
 					end = feedbackTasks.find_first_of("]", start);
 					componentInfo = feedbackTasks.substr(start, end-start);
 					stringComponentInfo = gcnew String(componentInfo.c_str());
-					listViewItems = gcnew System::Windows::Forms::ListViewItem(stringComponentInfo);
+					listViewItems = gcnew Windows::Forms::ListViewItem(stringComponentInfo);
 
 					/****Mark****/
 					start = end+1;
@@ -500,7 +503,7 @@ namespace UI {
 				//	skipRow(feedbackTasks, tempStart, tempEnd, 7);
 					for(int i=0; i<7; i++) {
 						tempStart = tempEnd + 1;
-						tempEnd = feedbackTasks.find_first_of("]", start);
+						tempEnd = feedbackTasks.find_first_of("]", tempStart);
 					}
 					nextTaskDate = feedbackTasks.substr(tempStart, tempEnd-tempStart);
 					if(componentInfo != nextTaskDate) {
@@ -536,7 +539,7 @@ namespace UI {
 						string MESSAGE_UPCOMING_DEADLINES = "Upcoming Deadlines:";
 						String^ STRING_MESSAGE_UPCOMING_DEADLINES = gcnew String(MESSAGE_UPCOMING_DEADLINES.c_str());
 						
-						listViewItems = gcnew System::Windows::Forms::ListViewItem(stringEmptyToken); //empty index
+						listViewItems = gcnew Windows::Forms::ListViewItem(stringEmptyToken); //empty index
 						listViewItems->SubItems->Add(stringEmptyToken); //empty mark
 						listViewItems->SubItems->Add(stringEmptyToken); //empty task typw
 						listViewItems->SubItems->Add(STRING_MESSAGE_UPCOMING_DEADLINES);
@@ -578,7 +581,7 @@ namespace UI {
 					end = feedbackTasks.find_first_of("]", start);
 					componentInfo = feedbackTasks.substr(start, end-start);
 					stringComponentInfo = gcnew String(componentInfo.c_str());
-					listViewItems = gcnew System::Windows::Forms::ListViewItem(stringComponentInfo);
+					listViewItems = gcnew Windows::Forms::ListViewItem(stringComponentInfo);
 
 					/****Mark****/
 					start = end+1;
@@ -687,7 +690,7 @@ namespace UI {
 						if(isDifferentDate) {
 							string emptyToken = " ";
 							String^ stringEmptyToken = gcnew String(emptyToken.c_str());
-							listViewItems = gcnew System::Windows::Forms::ListViewItem(stringEmptyToken);
+							listViewItems = gcnew Windows::Forms::ListViewItem(stringEmptyToken);
 							for(int i=0; i<6; i++) {
 								listViewItems->SubItems->Add(stringEmptyToken);
 							}
@@ -745,7 +748,7 @@ namespace UI {
 					}
 					string emptyToken = " ";
 					String^ stringEmptyToken = gcnew String(emptyToken.c_str());
-					listViewItems = gcnew System::Windows::Forms::ListViewItem(stringEmptyToken); //empty index
+					listViewItems = gcnew Windows::Forms::ListViewItem(stringEmptyToken); //empty index
 					listViewItems->SubItems->Add(stringEmptyToken); //empty mark
 					listViewItems->SubItems->Add(stringEmptyToken); //empty task typw
 					listViewItems->SubItems->Add(stringEachLine);
