@@ -5,6 +5,7 @@ using namespace Microsoft::VisualStudio::CppUnitTestFramework;
 
 namespace MarkUnitTest {
 
+	//@author A0116707H Dong Peisen
 	TEST_CLASS(MarkUnitTest) {
 	public:
 		

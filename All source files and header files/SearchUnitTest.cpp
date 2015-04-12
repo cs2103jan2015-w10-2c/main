@@ -3,10 +3,10 @@
 
 using namespace Microsoft::VisualStudio::CppUnitTestFramework;
 
-namespace SearchUnitTest
-{
-	TEST_CLASS(SearchUnitTest)
-	{
+namespace SearchUnitTest {
+
+	//@author A0116707H Dong Peisen
+	TEST_CLASS(SearchUnitTest) {
 	public:
 		
 		TEST_METHOD(SearchTest) {

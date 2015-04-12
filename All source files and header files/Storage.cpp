@@ -779,7 +779,7 @@ void Storage::searchUpcomingDeadline(int day, int month, int year){
 	}
 }
 
-//peisen
+//@author A0116707H Dong Peisen
 string Storage::toStringTaskDetail(list <Task> &listToFormat){
 	ostringstream s;
 	if(listToFormat.empty()) {
@@ -836,7 +836,7 @@ string Storage::toStringTaskDetail(list <Task> &listToFormat){
 	}
 }
 
-
+//@author A0116707H Dong Peisen
 string Storage::toStringTaskDetail(){
 	ostringstream s;
 	isSearched = false;
