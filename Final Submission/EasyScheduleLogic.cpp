@@ -556,46 +556,39 @@ string EasyScheduleLogic::markNotDone() {
 
 //@author A0114255N
 string EasyScheduleLogic::editingTask(){
-	taskNumber = parser.number;
-	string s;
-	if (parser.attribute == NAME){
-		s = storage.editTaskName(taskNumber, parser.name);
-	} else if (parser.attribute == DATE){
-		if(parser.taskType == FLOATING_TASK){
-			s = storage.editTaskDateTime(taskNumber, parser.year, parser.month, parser.day,parser.startTimeHour, parser.startTimeMin, parser.endTimeHour, parser.endTimeMin);
-		} else {
-			s = storage.editTaskDate(taskNumber, parser.year, parser.month, parser.day);
-		}
-
-		if(s ==""){
-			returnMessage = MESSAGE_INVALID_DATE;
-		}
-	} else if (parser.attribute == TIME){
-		if(parser.taskType == FLOATING_TASK){
-			s = storage.editTaskDateTime(taskNumber, parser.year, parser.month, parser.day,parser.startTimeHour, parser.startTimeMin, parser.endTimeHour, parser.endTimeMin);
-		} else {
-			s = storage.editTaskTime(taskNumber,parser.startTimeHour, parser.startTimeMin, parser.endTimeHour, parser.endTimeMin);
-		} 
-
-		if(s ==""){
-			returnMessage = MESSAGE_INVALID_DATE;
-		}
-	} else{
+    taskNumber = parser.number;
+    string s;
+    if (parser.attribute == NAME){
+        s = storage.editTaskName(taskNumber, parser.name);
+    } else if (parser.attribute == DATE){
+        if(parser.taskType == FLOATING_TASK){
+            s = storage.editTaskDateTime(taskNumber, parser.year, parser.month, parser.day,parser.startTimeHour, parser.startTimeMin, parser.endTimeHour, parser.endTimeMin);
+        } else {
+            s = storage.editTaskDate(taskNumber, parser.year, parser.month, parser.day);
+        }
+    } else if (parser.attribute == TIME){
+        if(parser.taskType == FLOATING_TASK){
+            s = storage.editTaskDateTime(taskNumber, parser.year, parser.month, parser.day,parser.startTimeHour, parser.startTimeMin, parser.endTimeHour, parser.endTimeMin);
+        } else {
+            s = storage.editTaskTime(taskNumber,parser.startTimeHour, parser.startTimeMin, parser.endTimeHour, parser.endTimeMin);
+        } 
+    } else{
         returnMessage = MESSAGE_EDIT_INPUT_ERROR;
         return (s = "");
-	}
-/*
-	if (!storage.isDateValid){
-			returnMessage = MESSAGE_INVALID_DATE;
-		} else if(!storage.isTimeValid){
-			returnMessage = MESSAGE_INVALID_TIME;
-		} else*/ if (!storage.isSuccess){
-			returnMessage = MESSAGE_EDIT_FAIL;
-		} else {
-			returnMessage = MESSAGE_EDIT;
-		}
-	return s;
+    }
+
+    if (!storage.isDateValid){
+            returnMessage = MESSAGE_INVALID_DATE;
+        } else if(!storage.isTimeValid){
+            returnMessage = MESSAGE_INVALID_TIME;
+        } else if (!storage.isSuccess){
+            returnMessage = MESSAGE_EDIT_FAIL;
+        } else {
+            returnMessage = MESSAGE_EDIT;
+        }
+    return s;
 }
+
 
 //@author A0115131B
 string EasyScheduleLogic::displayAllDeadline(){
