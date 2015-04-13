@@ -1,0 +1,1260 @@
+//@author: a0115131b
+
+
+
+	/**
+	 * origin: C:\Users\nathan\Documents\CS2103\Final Submission\EasyScheduleLogic.cpp
+	 */
+
+void EasyScheduleLogic::viewDeadline(){
+	returnDisplay = displayAllDeadline();
+	if(displayAllDeadline() == ""){
+		returnMessage = MESSAGE_EMPTY_DEADLINE;
+	}else {
+		returnMessage = MESSAGE_VIEW_DEADLINE_ALL;
+	}
+}
+
+void EasyScheduleLogic::viewFloating(){
+		returnDisplay = displayAllFloating();
+		if(displayAllFloating() == ""){
+			returnMessage = MESSAGE_EMPTY_FLOATING;
+		}else {
+			returnMessage = MESSAGE_VIEW_FLOATING_ALL;
+		}
+}
+
+void EasyScheduleLogic::viewTimed(){
+		returnDisplay = displayAllTimed();
+		if(displayAllTimed() == ""){
+			returnMessage = MESSAGE_EMPTY_TIMED;			
+		}else {
+			returnMessage = MESSAGE_VIEW_TIMED_ALL;
+		}
+}
+
+void EasyScheduleLogic::viewToday(){
+		returnDisplay = displayAllToday();
+		if(displayAllToday() == ""){
+			returnMessage = MESSAGE_EMPTY_TODAY;
+		}else {
+			returnMessage = MESSAGE_VIEW_TODAY_ALL;
+		}
+}
+
+void EasyScheduleLogic::viewTomorrow(){
+		returnDisplay = displayAllTomorrow();
+		if(displayAllTomorrow() == ""){
+			returnMessage = MESSAGE_EMPTY_TOMORROW;
+		}else {
+			returnMessage = MESSAGE_VIEW_TOMORROW_ALL;
+		}
+}
+
+void EasyScheduleLogic::viewYesterday(){
+	returnDisplay = displayAllYesterday();
+		if(displayAllYesterday() == ""){
+			returnMessage = MESSAGE_EMPTY_YESTERDAY;
+		}else {
+			returnMessage = MESSAGE_VIEW_YESTERDAY_ALL;
+		}
+}
+
+	// End of segment: C:\Users\nathan\Documents\CS2103\Final Submission\EasyScheduleLogic.cpp
+
+
+
+
+
+	/**
+	 * origin: C:\Users\nathan\Documents\CS2103\Final Submission\EasyScheduleLogic.cpp
+	 */
+
+void EasyScheduleLogic::commandView(){
+	if(parser.name == "deadline"){
+			viewDeadline();
+		} else if(parser.name == "floating"){
+			viewFloating();
+		} else if(parser.name == "timed"){
+			viewTimed();
+		} else if(parser.name == "today"){
+			viewToday();
+		} else if(parser.name == "tomorrow"){
+			viewTomorrow();
+		} else if(parser.name == "yesterday"){
+			viewYesterday();
+		}
+}
+
+	// End of segment: C:\Users\nathan\Documents\CS2103\Final Submission\EasyScheduleLogic.cpp
+
+
+
+
+
+	/**
+	 * origin: C:\Users\nathan\Documents\CS2103\Final Submission\EasyScheduleLogic.cpp
+	 */
+
+void EasyScheduleLogic::executeLogic(string userInput) {
+	parsingCommand(userInput);
+	returnIndex = 0;
+	if(parser.commandType == "filepath"){
+		commandFilePath();
+	} else if(parser.commandType == "filename"){
+		commandFileName();
+	} else if (parser.commandType == "add") {
+		commandAdd();
+	} else if (parser.commandType == "view"){
+		commandView();
+	} else if (parser.commandType == "delete") {
+		commandDelete();
+	} else if (parser.commandType == "display") {
+		commandDisplay();
+	} else if (parser.commandType == "search") {
+		commandSearch();
+	} else if (parser.commandType == "sort") {
+		commandSort();
+	} else if (parser.commandType == "done") {
+		commandDone();
+	} else if (commandType == "notdone") {
+		commandNotDone();
+	} else if(parser.commandType == "edit"){
+		commandEdit();
+	} else if (parser.commandType == "exit") {
+		commandExit();
+	} else if (parser.commandType == "undo") {  
+		commandUndo();
+	} else {
+		commandInvalid();
+	}
+	if (storage.isSuccess) {
+		writeFile();
+	}
+}
+
+	// End of segment: C:\Users\nathan\Documents\CS2103\Final Submission\EasyScheduleLogic.cpp
+
+
+
+
+
+	/**
+	 * origin: C:\Users\nathan\Documents\CS2103\Final Submission\EasyScheduleLogic.cpp
+	 */
+
+string EasyScheduleLogic::callUndoingAdd(Record recordToUndo){
+		if(undoingAdd(recordToUndo)) {
+			return MESSAGE_UNDO_SUCCESS;
+		}else{
+			return MESSAGE_UNDO_ERROR;
+		}
+}
+
+string EasyScheduleLogic::callUndoingDelete(Record recordToUndo){
+	if(undoingDelete(recordToUndo)) {
+		return MESSAGE_UNDO_SUCCESS;
+	}else{
+			return MESSAGE_UNDO_ERROR;
+	}
+}
+
+string EasyScheduleLogic::callUndoingDone(Record recordToUndo){
+	if(undoingDone(recordToUndo)) {
+		return MESSAGE_UNDO_SUCCESS;
+	}else{
+			return MESSAGE_UNDO_ERROR;
+	}
+}
+
+string EasyScheduleLogic::callUndoingNotDone(Record recordToUndo){
+	if(undoingNotDone(recordToUndo)) {
+		return MESSAGE_UNDO_SUCCESS;
+	}else{
+		return MESSAGE_UNDO_ERROR;
+	}
+}
+
+string EasyScheduleLogic::callUndoingEdit(Record recordToUndo){
+	if(undoingEdit(recordToUndo)){
+		return MESSAGE_UNDO_SUCCESS;
+	}else{
+		return MESSAGE_UNDO_ERROR;
+	}
+}
+
+Record EasyScheduleLogic::getLastRecord(){
+	Record recordToUndo;
+	recordToUndo = storage.getTracker().getNewestRecord();
+	storage.deleteLastTrackerEntry();
+
+	return recordToUndo;
+}
+
+	// End of segment: C:\Users\nathan\Documents\CS2103\Final Submission\EasyScheduleLogic.cpp
+
+
+
+
+
+	/**
+	 * origin: C:\Users\nathan\Documents\CS2103\Final Submission\EasyScheduleLogic.cpp
+	 */
+
+string EasyScheduleLogic::undoingTask() {
+	string message;
+
+	try{
+		if(storage.getTracker().isEmptyTracker()) {
+			throw 0;
+		}
+	}
+	catch(int& e){
+		message = MESSAGE_UNDO_FAIL;
+		return message;
+	}
+
+	Record recordToUndo;
+	recordToUndo = getLastRecord();
+
+	if(recordToUndo.getCommandType() == "add") {
+		message = callUndoingAdd(recordToUndo);
+	}else if(recordToUndo.getCommandType() == "delete") {
+		message = callUndoingDelete(recordToUndo);
+	}else if(recordToUndo.getCommandType() == "done") {
+		message = callUndoingDone(recordToUndo);
+	}else if(recordToUndo.getCommandType() == "notdone") {
+		message = callUndoingNotDone(recordToUndo);
+	}else if(recordToUndo.getCommandType() == "edit"){
+		message = callUndoingEdit(recordToUndo);
+	}
+
+	return message;
+}
+
+	// End of segment: C:\Users\nathan\Documents\CS2103\Final Submission\EasyScheduleLogic.cpp
+
+
+
+
+
+	/**
+	 * origin: C:\Users\nathan\Documents\CS2103\Final Submission\EasyScheduleLogic.cpp
+	 */
+
+bool  EasyScheduleLogic::undoingDone(Record recordToUndo){
+	list <Task> listToUndo;
+	listToUndo = recordToUndo.getTaskRecord();
+	storage.undoingReverseDone(listToUndo);
+	return true;
+}
+
+bool  EasyScheduleLogic::undoingNotDone(Record recordToUndo){
+	list <Task> listToUndo;
+	listToUndo = recordToUndo.getTaskRecord();
+	storage.undoingReverseNotDone(listToUndo);
+	return true;
+}
+
+bool EasyScheduleLogic::undoingDelete(Record recordToUndo){
+	list <Task> listToUndo;
+	listToUndo = recordToUndo.getTaskRecord();
+	storage.undoingReverseDelete(listToUndo);
+	return true;
+}
+
+bool EasyScheduleLogic::undoingAdd(Record recordToUndo){
+	//delete the added tasks
+	list <Task> listToUndo;
+	listToUndo = recordToUndo.getTaskRecord();
+	storage.undoingReverseAdd(listToUndo);
+	return true;
+}
+
+bool EasyScheduleLogic::undoingEdit(Record recordToUndo){
+	//undo the edit action
+	list <Task> listToUndo;
+	listToUndo = recordToUndo.getTaskRecord();
+	storage.undoingReverseEdit(listToUndo);
+	return true;
+}
+
+	// End of segment: C:\Users\nathan\Documents\CS2103\Final Submission\EasyScheduleLogic.cpp
+
+
+
+
+
+	/**
+	 * origin: C:\Users\nathan\Documents\CS2103\Final Submission\EasyScheduleLogic.cpp
+	 */
+
+string EasyScheduleLogic::displayAllDeadline(){
+	return storage.toStringTaskDetail(storage.allDeadline());
+}
+
+string EasyScheduleLogic::displayAllFloating(){
+	return storage.toStringTaskDetail(storage.allFloating());
+}
+
+string EasyScheduleLogic::displayAllTimed(){
+	return storage.toStringTaskDetail(storage.allTimed());
+}
+
+string EasyScheduleLogic::displayAllToday(){
+	return storage.toStringTaskDetail(storage.allToday());
+}
+
+string EasyScheduleLogic::displayAllTomorrow(){
+	return storage.toStringTaskDetail(storage.allTomorrow());
+}
+
+string EasyScheduleLogic::displayAllYesterday(){
+	return storage.toStringTaskDetail(storage.allYesterday());
+}
+
+string EasyScheduleLogic::autoDisplay(){
+	return storage.toStringTaskDetail(storage.autoInitialDisplay());
+}
+
+string EasyScheduleLogic::displayingTask() {
+	return storage.toStringTaskDetail();
+}
+
+string EasyScheduleLogic::sortingTask() {
+	storage.sortList();
+	return MESSAGE_SORT;
+}
+
+	// End of segment: C:\Users\nathan\Documents\CS2103\Final Submission\EasyScheduleLogic.cpp
+
+
+
+
+
+	/**
+	 * origin: C:\Users\nathan\Documents\CS2103\Final Submission\EasyScheduleLogic.h
+	 */
+
+	static void executeLogic(string userInput);
+	// End of segment: C:\Users\nathan\Documents\CS2103\Final Submission\EasyScheduleLogic.h
+
+
+
+
+
+	/**
+	 * origin: C:\Users\nathan\Documents\CS2103\Final Submission\EasyScheduleLogic.h
+	 */
+
+	static void commandView();
+	static void viewDeadline();
+	static void viewFloating();
+	static void viewTimed();
+	static void viewToday();
+	static void viewTomorrow();
+	static void viewYesterday();
+	
+	// End of segment: C:\Users\nathan\Documents\CS2103\Final Submission\EasyScheduleLogic.h
+
+
+
+
+
+	/**
+	 * origin: C:\Users\nathan\Documents\CS2103\Final Submission\EasyScheduleLogic.h
+	 */
+
+	static string displayingTask();
+	static string autoDisplay();
+	static string displayAllDeadline(); 
+	static string displayAllFloating();
+	static string displayAllTimed();
+	static string displayAllToday();
+	static string displayAllTomorrow();
+	static string displayAllYesterday();
+	// End of segment: C:\Users\nathan\Documents\CS2103\Final Submission\EasyScheduleLogic.h
+
+
+
+
+
+	/**
+	 * origin: C:\Users\nathan\Documents\CS2103\Final Submission\EasyScheduleLogic.h
+	 */
+
+	static string undoingTask();
+	static Record getLastRecord();
+	static string callUndoingAdd(Record recordToUndo);
+	static string callUndoingDelete(Record recordToUndo);
+	static string callUndoingEdit(Record recordToUndo);
+	static string callUndoingDone(Record recordToUndo);
+	static string callUndoingNotDone(Record recordToUndo);
+	static bool undoingAdd(Record recordToUndo);
+	static bool undoingDelete(Record recordToUndo);
+	static bool undoingDone(Record recordToUndo);
+	static bool undoingNotDone(Record recordToUndo);
+	static bool undoingEdit(Record recordToUndo);
+	static string sortingTask();
+
+	// End of segment: C:\Users\nathan\Documents\CS2103\Final Submission\EasyScheduleLogic.h
+
+
+
+
+
+	/**
+	 * origin: C:\Users\nathan\Documents\CS2103\Final Submission\Record.cpp
+	 */
+
+#include "Record.h"
+#include <assert.h>
+
+Record::Record(void) { }
+Record::~Record(void) { }
+
+Record::Record(string commandType, Task newTask) {
+	_commandType = commandType;
+	_taskRecord.clear();
+	_taskRecord.push_back(newTask);
+}
+
+Record::Record(string commandType, list<Task> newTaskList){
+	_commandType = commandType;
+	_taskRecord.clear();
+	_taskRecord = newTaskList;
+}
+
+void Record::setCommandTypeRecord(string commandTypeRecord){
+	_commandType = commandTypeRecord;
+}
+
+void Record::setlistTaskRecord(Task taskRecord){
+	_taskRecord.push_back(taskRecord);
+}
+
+string Record::getCommandType(){
+	return _commandType;
+}
+
+void Record::clear(){
+	_commandType = "";
+	_taskRecord.clear();
+
+	assert(_commandType == "");
+	assert(_taskRecord.size() == 0);
+}
+
+list<Task> Record::getTaskRecord(){
+	return _taskRecord;
+}
+
+	// End of segment: C:\Users\nathan\Documents\CS2103\Final Submission\Record.cpp
+
+
+
+
+
+	/**
+	 * origin: C:\Users\nathan\Documents\CS2103\Final Submission\Record.h
+	 */
+
+#pragma once
+#ifndef RECORD_H
+#define RECORD_H
+#include <string>
+#include <list>
+#include "Task.h"
+
+
+using namespace std;
+
+class Record {
+private:
+	string _commandType;
+	list <Task> _taskRecord;
+
+public:
+	Record();
+	Record(string commandType, Task newTask);
+	Record(string commandType, list<Task> newTaskList);
+	~Record();
+
+	void setCommandTypeRecord(string commandTypeRecord);
+	void setlistTaskRecord(Task taskRecord);
+	void clear();
+
+	string getCommandType();
+	list<Task> getTaskRecord();
+
+};
+
+#endif
+
+	// End of segment: C:\Users\nathan\Documents\CS2103\Final Submission\Record.h
+
+
+
+
+
+	/**
+	 * origin: C:\Users\nathan\Documents\CS2103\Final Submission\Storage.cpp
+	 */
+
+bool cmpTime(Task a, Task b){
+	string s1, s2;
+
+	if(a.getYear() < b.getYear()){
+		return true;
+	} else if (a.getYear() > b.getYear()){
+		return false;
+	}
+
+	if(a.getMonth() < b.getMonth()){
+		return true;
+	} else if(a.getMonth() > b.getMonth()){
+		return false;
+	}
+
+	if(a.getDay() < b.getDay()){
+		return true;
+	} else if (a.getDay() > b.getDay()){
+		return false;
+	}
+
+	if(a.getStartTimeHour() < b.getStartTimeHour()){
+		return true;
+	} else if (a.getStartTimeHour() > b.getStartTimeHour()){
+		return false;
+	}
+
+	if(a.getStartTimeMin() < b.getStartTimeMin()){
+		return true;
+	} else if(a.getStartTimeMin() > b.getStartTimeMin()) {
+		return false;
+	}
+
+	s1 = Storage::toLower(a.getName());
+	s2 = Storage::toLower(b.getName());
+
+	if (s1 < s2){
+		return true;
+	}else{
+		return false;
+	}
+}
+
+bool sortTime(Task a, Task b){
+	return (cmpTime(a,b));
+}
+
+void Storage::sortList(){
+	_taskList.sort(sortTime);
+	return;
+}
+
+	// End of segment: C:\Users\nathan\Documents\CS2103\Final Submission\Storage.cpp
+
+
+
+
+
+	/**
+	 * origin: C:\Users\nathan\Documents\CS2103\Final Submission\Storage.cpp
+	 */
+
+void Storage::creatRecordAdd(Task task) {
+	_record = Record( "add", task);
+	addToTracker();
+}
+
+void Storage::addToTracker() {
+		_tracker.addRecord(_record);
+		_record.clear();
+}
+
+
+	// End of segment: C:\Users\nathan\Documents\CS2103\Final Submission\Storage.cpp
+
+
+
+
+
+	/**
+	 * origin: C:\Users\nathan\Documents\CS2103\Final Submission\Storage.cpp
+	 */
+
+//record edited task item for undo function
+void Storage::storePreviousTask(string commandType) {
+	//creat a list storing tasks being editted
+	_previousTaskList.clear();
+	_previousTaskList.push_back(*_taskIt);
+
+	//create a record to store commandType and the list of tasks
+	//add the record to tracker
+	_record = Record(commandType, _previousTaskList);
+	addToTracker();
+}
+
+list<Task> Storage::getPreviousTaskList(){
+	return _previousTaskList;
+}
+
+list<Task> Storage::allDeadline(){
+	_searchResultList.clear();
+
+	for(_taskIt = _taskList.begin(); _taskIt != _taskList.end(); _taskIt++){
+		if( (*_taskIt).getTaskType() == "DeadlineTask"){
+				_searchResultList.push_back(*_taskIt);
+		}
+	}
+
+	if(!_searchResultList.empty()){
+		isSearched = true;
+	}
+	
+	return _searchResultList;
+}
+	
+list<Task> Storage::allFloating(){
+	_searchResultList.clear();
+
+	for(_taskIt = _taskList.begin(); _taskIt != _taskList.end(); _taskIt++){
+		if( (*_taskIt).getTaskType() == "FloatingTask"){
+				_searchResultList.push_back(*_taskIt);
+		}
+	}
+
+	if(!_searchResultList.empty()){
+		isSearched = true;
+	}
+	
+	return _searchResultList;
+}
+
+list<Task> Storage::allTimed(){
+	_searchResultList.clear();
+
+	for(_taskIt = _taskList.begin(); _taskIt != _taskList.end(); _taskIt++){
+		if( (*_taskIt).getTaskType() == "TimedTask"){
+				_searchResultList.push_back(*_taskIt);
+		}
+	}
+
+	if(!_searchResultList.empty()){
+		isSearched = true;
+	}
+	
+	return _searchResultList;
+}
+
+list<Task> Storage::allToday(){
+	//set year, month, day as today
+	time_t now = time(0);	
+	struct tm time;
+	localtime_s(&time, &now);
+	int day =  time.tm_mday;
+	int month = time.tm_mon + 1;
+	int year = time.tm_year + 1900;
+
+	searchTodayTask(day, month, year);
+
+	return _searchResultList;
+}
+
+list<Task> Storage::allTomorrow(){
+	//set year, month, day as tomorrow
+	time_t now = time(0);	
+	struct tm time;
+	localtime_s(&time, &now);
+	time.tm_mday += 1;
+	mktime(&time);
+	int day =  time.tm_mday;
+	int month = time.tm_mon + 1;
+	int year = time.tm_year + 1900;
+
+	searchTodayTask(day, month, year);
+
+	return _searchResultList;
+}
+
+list<Task> Storage::allYesterday(){
+	//set year, month, day as yesterday
+	time_t now = time(0);	
+	struct tm time;
+	localtime_s(&time, &now);
+	time.tm_mday -= 1;
+	mktime(&time);
+	int day =  time.tm_mday;
+	int month = time.tm_mon + 1;
+	int year = time.tm_year + 1900;
+
+	searchTodayTask(day, month, year);
+
+	return _searchResultList;
+}
+
+list<Task> Storage::autoInitialDisplay(){
+	//set year, month, day as system's today time
+	time_t now = time(0);	
+	struct tm time;
+	localtime_s(&time, &now);
+	int day =  time.tm_mday;
+	int month = time.tm_mon + 1;
+	int year = time.tm_year + 1900;
+
+	//search for all tasks happening in today
+	//store today's tasks in a list
+	searchTodayTask(day, month, year);
+	searchUpcomingDeadline(day, month, year);
+	return _searchResultList;
+}
+
+//return tasks happening in today into _searchResultList
+void Storage::searchTodayTask(int day, int month, int year){
+	_searchResultList.clear();
+
+	for(_taskIt = _taskList.begin(); _taskIt != _taskList.end(); _taskIt++){
+		if( (*_taskIt).getYear() == year 
+			&& (*_taskIt).getMonth() == month 
+			&& (*_taskIt).getDay() == day){
+				_searchResultList.push_back(*_taskIt);
+		}
+	}
+	if(!_searchResultList.empty()){
+		isSearched = true;
+	}
+}
+
+void Storage::searchUpcomingDeadline(int day, int month, int year){
+	for(_taskIt = _taskList.begin(); _taskIt != _taskList.end(); _taskIt++){
+		if( (*_taskIt).getTaskType() == "DeadlineTask"
+			&& ((*_taskIt).getYear() > year || (*_taskIt).getYear() == year)
+			&& ((*_taskIt).getMonth() > month || (*_taskIt).getMonth() == month)
+			&& ((*_taskIt).getDay() > day)){
+				_searchResultList.push_back(*_taskIt);
+		}
+	}
+
+	if(!_searchResultList.empty()){
+		isSearched = true;
+	}
+}
+
+	// End of segment: C:\Users\nathan\Documents\CS2103\Final Submission\Storage.cpp
+
+
+
+
+
+	/**
+	 * origin: C:\Users\nathan\Documents\CS2103\Final Submission\Storage.cpp
+	 */
+
+Tracker Storage::getTracker(){
+	return _tracker;
+}
+
+void Storage::deleteLastTrackerEntry(){
+	_tracker.deleteLastTrackerEntry();
+}
+
+void Storage::undoingReverseAdd(list<Task> listToUndo){
+	//delete the task in the list
+	assert(listToUndo.size() != 0);
+	list<Task>::iterator it1, it2;
+	list<Task> newTaskList;
+
+	for(it1 = listToUndo.begin(); it1 != listToUndo.end(); it1++ ){
+		//compare the tasks in the listToUndo with tasks inside _taskList for exact match
+		if(compareTask(*it1)){
+			//if there is exact match
+			//delete the exact matched task from _taskList
+			for(it2 = _taskList.begin(); it2 != _taskList.end(); it2++){
+				if(it2 != _taskIt){
+					newTaskList.push_back(*it2);
+				}
+			}
+			_taskList = newTaskList;
+			sortList();
+		}
+	}
+	
+}
+
+
+void Storage::undoingReverseDelete(list<Task> listToUndo){
+	//add the tasks back into the _taskList
+	assert(listToUndo.size() != 0);
+	int a = _taskList.size();
+
+	list<Task>::iterator it;
+	for(it = listToUndo.begin(); it != listToUndo.end(); it++ ){
+		_taskList.push_back(*it);
+	}
+
+	int b = _taskList.size();
+	assert(b > a);
+
+	sortList();
+}
+
+void Storage::undoingReverseDone(list<Task> listToUndo){
+	//mark the task as not done
+	assert(listToUndo.size() != 0);
+
+	list<Task>::iterator it;
+	for(it = listToUndo.begin(); it != listToUndo.end(); it++ ){
+		if(compareTask(*it)){
+			_taskIt->markNotDone();
+		}
+	}
+}
+
+void Storage::undoingReverseNotDone(list<Task> listToUndo){
+	//mark the task as done
+	assert(listToUndo.size() != 0);
+
+	list<Task>::iterator it;
+
+	for(it = listToUndo.begin(); it != listToUndo.end(); it++ ){
+		if(compareTask(*it)){
+			_taskIt->markDone();
+		}
+	}
+}
+
+void Storage::undoingReverseEdit(list<Task> listToUndo){
+	//undo the edit action
+	assert(listToUndo.size() != 0);
+	int a = _taskList.size();
+
+	list<Task>::iterator it;
+	list<Task> newTaskList;
+
+	Task taskAfterEdit = listToUndo.back();
+	if(compareTask(taskAfterEdit)){
+		//delete the editted copy
+		for (it = _taskList.begin(); it != _taskList.end(); it++){
+			if(it != _taskIt){
+				newTaskList.push_back(*it);
+			}
+		}
+		//add the before edit copy back
+		newTaskList.push_back(*(listToUndo.begin()));
+		_taskList = newTaskList;
+	}
+	int b = _taskList.size();
+	assert(a == b);
+	sortList();
+}
+
+	// End of segment: C:\Users\nathan\Documents\CS2103\Final Submission\Storage.cpp
+
+
+
+
+
+	/**
+	 * origin: C:\Users\nathan\Documents\CS2103\Final Submission\Storage.h
+	 */
+
+	static list<Task> getPreviousTaskList();
+	static list<Task> autoInitialDisplay();
+	static list<Task> allDeadline();
+	static list<Task> allFloating();
+	static list<Task> allTimed();
+	static list<Task> allToday();
+	static list<Task> allTomorrow();
+	static list<Task> allYesterday();
+	
+	// End of segment: C:\Users\nathan\Documents\CS2103\Final Submission\Storage.h
+
+
+
+
+
+	/**
+	 * origin: C:\Users\nathan\Documents\CS2103\Final Submission\Storage.h
+	 */
+
+	//Supporting functions
+	static void searchTodayTask(int day, int month, int year);
+	static void searchUpcomingDeadline(int day, int month, int year);
+	// End of segment: C:\Users\nathan\Documents\CS2103\Final Submission\Storage.h
+
+
+
+
+
+	/**
+	 * origin: C:\Users\nathan\Documents\CS2103\Final Submission\Storage.h
+	 */
+
+	static void sortList();
+	// End of segment: C:\Users\nathan\Documents\CS2103\Final Submission\Storage.h
+
+
+
+
+
+	/**
+	 * origin: C:\Users\nathan\Documents\CS2103\Final Submission\Storage.h
+	 */
+
+	//Undo functions
+	static void creatRecordAdd(Task task);
+	static void addToTracker();
+	static void undoingReverseAdd(list<Task> listToUndo);
+	static void undoingReverseDelete(list<Task> listToUndo);
+	static void undoingReverseNotDone(list<Task> listToUndo);
+	static void undoingReverseDone(list<Task> listToUndo);
+	static void undoingReverseEdit(list<Task> listToUndo);
+	static void storePreviousTask(string commandType);
+	static Tracker getTracker();
+	static void deleteLastTrackerEntry();
+
+};
+
+
+#endif	
+
+	// End of segment: C:\Users\nathan\Documents\CS2103\Final Submission\Storage.h
+
+
+
+
+
+	/**
+	 * origin: C:\Users\nathan\Documents\CS2103\Final Submission\Tracker.cpp
+	 */
+
+#include "Tracker.h"
+#include <assert.h>
+
+Tracker::Tracker(void) { }
+Tracker::~Tracker(void) { }
+
+void Tracker::addRecord(Record newRecord) {
+	int a = _recordTracker.size();
+
+	_recordTracker.push(newRecord);
+
+	int b = _recordTracker.size();
+	assert(a+1 == b);
+}
+
+bool Tracker:: isEmptyTracker() {
+	if(_recordTracker.size() == 0) {
+		return true;
+	} else {
+		return false;
+	}
+}
+
+Record Tracker::getNewestRecord() {
+	Record record = _recordTracker.top();
+	return record;
+}
+
+void Tracker::deleteLastTrackerEntry(){
+	int a = _recordTracker.size();
+
+	_recordTracker.pop();
+	
+	int b =_recordTracker.size();
+	assert(b == a-1);
+}
+	// End of segment: C:\Users\nathan\Documents\CS2103\Final Submission\Tracker.cpp
+
+
+
+
+
+	/**
+	 * origin: C:\Users\nathan\Documents\CS2103\Final Submission\Tracker.h
+	 */
+
+#pragma once
+#ifndef TRACKER_H
+#define TRACKER_H
+#include <string>
+#include <stack>
+#include <list>
+#include "Record.h"
+#include "Task.h"
+
+using namespace std;
+
+class Tracker{
+private:
+	stack <Record> _recordTracker;
+
+public:
+	Tracker();
+	~Tracker();
+
+	void addRecord(Record newRecord);
+	bool isEmptyTracker();
+	Record getNewestRecord();
+	void deleteLastTrackerEntry();
+}; 
+
+#endif
+	// End of segment: C:\Users\nathan\Documents\CS2103\Final Submission\Tracker.h
+
+
+
+
+
+	/**
+	 * origin: C:\Users\nathan\Documents\CS2103\Final Submission\UnitTest.cpp
+	 */
+
+	TEST_CLASS(RecordTest)
+	{
+	public:
+
+		TEST_METHOD(RecordConstructorTest){
+			// TODO: Your test code here
+			string name1, name2, command1, command2;
+			name1 = "CS meeting";
+			name2 = "Cs lecture";
+			command1 = "add";
+			command2 = "add";
+			Task task1 = Task(command1, name1);
+			Task task2 = Task(command2, name2);
+
+			list<Task> taskList1, taskList2;
+			taskList1.push_back(task1);
+
+			taskList2.push_back(task1);
+			taskList2.push_back(task2);
+
+			string commandType1, commandType2;
+			commandType1 = "add";
+			commandType2 = "delete";
+
+			Record record1 = Record(commandType1, task1);
+			Record record2 = Record(commandType2, taskList2);
+
+			list<Task> record1List, record2List;
+			record1List = record1.getTaskRecord();
+			record2List = record2.getTaskRecord();
+
+			Assert::AreEqual(record1.getCommandType(), commandType1);
+			Assert::AreEqual(record2.getCommandType(), commandType2);
+			
+			list<Task>::iterator it;
+			it = record1List.begin();
+			string name = it->getName();
+			Assert::AreEqual(name, name1);
+
+			it = record2List.begin();
+			name = it->getName();
+			Assert::AreEqual(name, name1);
+			it++;
+			name = it->getName();
+			Assert::AreEqual(name, name2);
+		}
+
+		TEST_METHOD(RecordSetCommandTypeTest){
+			string name1, name2, command1, command2;
+			name1 = "CS meeting";
+			name2 = "Cs lecture";
+			command1 = "add";
+			command2 = "add";
+			Task task1 = Task(command1, name1);
+			Task task2 = Task(command2, name2);
+
+			list<Task> taskList1, taskList2;
+			taskList1.push_back(task1);
+
+			taskList2.push_back(task1);
+			taskList2.push_back(task2);
+
+			string commandType1, commandType2;
+			commandType1 = "add";
+			commandType2 = "delete";
+
+			Record record1 = Record(commandType1, task1);
+			Record record2 = Record(commandType2, taskList2);
+
+			string command3, command4;
+			command3 = "done";
+			command4 = "edit";
+			record1.setCommandTypeRecord(command3);
+			record2.setCommandTypeRecord(command4);
+
+			Assert::AreEqual(record1.getCommandType(), command3);
+			Assert::AreEqual(record2.getCommandType(), command4);
+		}
+
+		TEST_METHOD(RecordsetlistTaskTest){
+			string name1, name2, name3, command1, command2, command3;
+			name1 = "CS meeting";
+			name2 = "Cs lecture";
+			name3 = "Presentation";
+			command1 = "add";
+			command2 = "add";
+			command3 = "add";
+			Task task1 = Task(command1,name1);
+			Task task2 = Task(command2,name2);
+			Task task3 = Task(command3,name3);
+
+			list<Task> taskList1, taskList2;
+			taskList1.push_back(task1);
+
+			taskList2.push_back(task1);
+			taskList2.push_back(task2);
+			
+			string commandType1, commandType2;
+			commandType1 = "add";
+			commandType2 = "delete";
+
+			Record record1 = Record(commandType1, task1);
+			Record record2 = Record(commandType2, taskList2);
+
+			record1.setlistTaskRecord(task3);
+			record2.setlistTaskRecord(task3);
+
+			int record1Size = record1.getTaskRecord().size();
+			int record2Size = record2.getTaskRecord().size();
+
+			Assert::AreEqual(record1Size, 2);
+			Assert::AreEqual(record2Size, 3);
+		}
+	};
+	
+	// End of segment: C:\Users\nathan\Documents\CS2103\Final Submission\UnitTest.cpp
+
+
+
+
+
+	/**
+	 * origin: C:\Users\nathan\Documents\CS2103\Final Submission\UnitTest.cpp
+	 */
+
+	TEST_CLASS(TrackerTest)
+	{
+	public:
+		
+		TEST_METHOD(TrackerIsEmptyTest)
+		{
+			string name1, name2, command1, command2;
+			name1 = "CS meeting";
+			name2 = "Cs lecture";
+			command1 = "add";
+			command2 = "add";
+			Task task1 = Task(command1, name1);
+			Task task2 = Task(command2, name2);
+
+			list<Task> taskList1, taskList2;
+			taskList1.push_back(task1);
+
+			taskList2.push_back(task1);
+			taskList2.push_back(task2);
+
+			string commandType1, commandType2;
+			commandType1 = "add";
+			commandType2 = "delete";
+
+			Record record1 = Record(commandType1, task1);
+			Record record2 = Record(commandType2, taskList2);
+
+			Tracker tracker1;
+			Assert::IsTrue(tracker1.isEmptyTracker());
+
+			tracker1.addRecord(record1);
+			Assert::IsFalse(tracker1.isEmptyTracker());
+			tracker1.addRecord(record2);
+			Assert::IsFalse(tracker1.isEmptyTracker());
+		}
+
+		TEST_METHOD(TrackerGetNewestRecordTest){
+			string name1, name2, command1, command2;
+			name1 = "CS meeting";
+			name2 = "Cs lecture";
+			command1 = "add";
+			command2 = "add";
+			Task task1 = Task(command1, name1);
+			Task task2 = Task(command2, name2);
+
+			list<Task> taskList1, taskList2;
+			taskList1.push_back(task1);
+
+			taskList2.push_back(task1);
+			taskList2.push_back(task2);
+
+			string commandType1, commandType2;
+			commandType1 = "add";
+			commandType2 = "delete";
+
+			Record record1 = Record(commandType1, task1);
+			Record record2 = Record(commandType2, taskList2);
+
+			Tracker tracker1;
+			tracker1.addRecord(record1);
+			Record record3 = tracker1.getNewestRecord();
+			string name3, name4, name5, commandType3, commandType4;
+			name3 = record3.getTaskRecord().begin()->getName();
+			commandType3 = record3.getCommandType();
+			Assert::AreEqual(name3, name1);
+			Assert::AreEqual(commandType3, commandType1);
+
+
+			tracker1.addRecord(record2);
+			Record record4 = tracker1.getNewestRecord();
+			name4 = record4.getTaskRecord().begin()->getName();
+			Assert::AreEqual(name4, name1);
+			name5 = record4.getTaskRecord().back().getName();
+			Assert::AreEqual(name5, name2);
+			commandType4 = record4.getCommandType();
+			Assert::AreEqual(commandType4, commandType2);
+		}
+
+		TEST_METHOD(deleteLastTrackerEntryTest){
+			string name1, name2, command1, command2;
+			name1 = "CS meeting";
+			name2 = "Cs lecture";
+			command1 = "add";
+			command2 = "add";
+			Task task1 = Task(command1, name1);
+			Task task2 = Task(command2, name2);
+
+			list<Task> taskList1, taskList2;
+			taskList1.push_back(task1);
+
+			taskList2.push_back(task1);
+			taskList2.push_back(task2);
+			
+			string commandType1, commandType2;
+			commandType1 = "add";
+			commandType2 = "delete";
+
+			Record record1 = Record(commandType1, task1);
+			Record record2 = Record(commandType2, taskList2);
+
+			Tracker tracker1;
+			tracker1.addRecord(record1);
+			tracker1.addRecord(record2);
+			
+			tracker1.deleteLastTrackerEntry();
+			Record record3 = tracker1.getNewestRecord();
+			string name3, name4, commandType3;
+			name3 = record3.getTaskRecord().begin()->getName();
+			commandType3 = record3.getCommandType();
+			Assert::AreEqual(name3, name1);
+			Assert::AreEqual(commandType3, commandType1);
+		}
+
+	};
+
+	
+	// End of segment: C:\Users\nathan\Documents\CS2103\Final Submission\UnitTest.cpp
+
+
+
+
+

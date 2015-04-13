@@ -1,0 +1,1214 @@
+//@author: a0111446r
+
+
+
+	/**
+	 * origin: C:\Users\nathan\Documents\CS2103\Final Submission\EasyScheduleLogic.cpp
+	 */
+
+void EasyScheduleLogic::commandFilePath(){
+	storage.setPathName(parser.name);
+		if (storage.isValidDirectory()) {
+			returnMessage = MESSAGE_DIRECTORY_OPENED;
+		} else {
+			returnMessage = MESSAGE_DIRECTORY_NOT_FOUND;
+		}
+}
+
+void EasyScheduleLogic::commandFileName(){
+	if (storage._fileName!="") {
+			storage.writeToFile();
+		}
+		storage.setFileName(parser.name);
+		storage.readFile();
+		if (storage.isSuccess) {
+			storage.openFile();
+			returnDisplay = autoDisplay();
+			returnMessage = MESSAGE_PROGRAM_READY; 
+		} else {
+			returnMessage = MESSAGE_FILE_ERROR;
+		}
+		returnIndex = 0;
+}
+
+void EasyScheduleLogic::writeFile() {
+	storage.openFile();
+	storage.writeToFile();
+}
+
+	// End of segment: C:\Users\nathan\Documents\CS2103\Final Submission\EasyScheduleLogic.cpp
+
+
+
+
+
+	/**
+	 * origin: C:\Users\nathan\Documents\CS2103\Final Submission\EasyScheduleLogic.cpp
+	 */
+
+void EasyScheduleLogic::storingTask() {
+	storage.storeTask(task);
+}
+
+string EasyScheduleLogic::deletingTask() {
+	if(parser.number == -1) {
+		name = parser.name;
+		returnMessage = MESSAGE_DELETE_CHOOSE;
+		return storage.searchByName(name);
+	} else {
+		taskNumber = parser.number;
+		string s = storage.deleteByNumber(taskNumber);
+		if (storage.isSuccess) {
+			returnMessage = MESSAGE_DELETE;
+		} else {
+			returnMessage = MESSAGE_INVALID_NUMBER;
+			}
+		return s;
+	}
+}
+
+string EasyScheduleLogic::searchingTask() {
+	name = parser.name;
+	return storage.searchByName(name);
+}
+
+string EasyScheduleLogic::markDone() {
+	if (parser.number == -1) {
+		name = parser.name;
+		returnMessage = MESSAGE_MARK_CHOOSE;
+		return storage.searchByName(name);
+	} else {
+		taskNumber = parser.number;
+		string s = storage.markDone(taskNumber);
+		if (storage.isSuccess) {
+			returnMessage = "";
+		} else {
+			returnMessage = MESSAGE_INVALID_NUMBER;
+			}
+		return s;
+	}
+}
+
+string EasyScheduleLogic::markNotDone() {
+	if (parser.number == -1) {
+		name = parser.name;
+		returnMessage = MESSAGE_MARK_CHOOSE;
+		return storage.searchByName(name);
+	} else {
+		taskNumber = parser.number;
+		string s = storage.markNotDone(taskNumber);
+		if (storage.isSuccess) {
+			returnMessage = "";
+		} else {
+			returnMessage = MESSAGE_INVALID_NUMBER;
+			}
+		return s;
+	}
+}
+
+	// End of segment: C:\Users\nathan\Documents\CS2103\Final Submission\EasyScheduleLogic.cpp
+
+
+
+
+
+	/**
+	 * origin: C:\Users\nathan\Documents\CS2103\Final Submission\EasyScheduleLogic.h
+	 */
+
+	static void writeFile();
+	// End of segment: C:\Users\nathan\Documents\CS2103\Final Submission\EasyScheduleLogic.h
+
+
+
+
+
+	/**
+	 * origin: C:\Users\nathan\Documents\CS2103\Final Submission\EasyScheduleLogic.h
+	 */
+
+	static void commandFilePath();
+	static void commandFileName();
+	// End of segment: C:\Users\nathan\Documents\CS2103\Final Submission\EasyScheduleLogic.h
+
+
+
+
+
+	/**
+	 * origin: C:\Users\nathan\Documents\CS2103\Final Submission\EasyScheduleLogic.h
+	 */
+
+	static void storingTask();
+	// End of segment: C:\Users\nathan\Documents\CS2103\Final Submission\EasyScheduleLogic.h
+
+
+
+
+
+	/**
+	 * origin: C:\Users\nathan\Documents\CS2103\Final Submission\EasyScheduleLogic.h
+	 */
+
+	static string deletingTask();
+	static string searchingTask();
+	// End of segment: C:\Users\nathan\Documents\CS2103\Final Submission\EasyScheduleLogic.h
+
+
+
+
+
+	/**
+	 * origin: C:\Users\nathan\Documents\CS2103\Final Submission\EasyScheduleLogic.h
+	 */
+
+	static string markDone();
+	static string markNotDone();
+	// End of segment: C:\Users\nathan\Documents\CS2103\Final Submission\EasyScheduleLogic.h
+
+
+
+
+
+	/**
+	 * origin: C:\Users\nathan\Documents\CS2103\Final Submission\Storage.cpp
+	 */
+
+Storage::Storage() {
+isSearched = false;
+isSuccess = false;
+}
+
+Storage::~Storage() {
+}
+
+//checks for number of deviders in file
+int Storage::getDeviderNum(string input) {
+	size_t num = count(input.begin(), input.end(), '/');
+	return static_cast<int>(num);
+}
+
+//all file types have to be txt files
+//.txt filetype is automatically added if user doesnt specify filetype
+void Storage::setFileName(string name) {
+	_fileName = name;
+	string fileType = ".txt";
+	size_t findPos = name.find(fileType);
+	if (findPos==std::string::npos) {
+	_fileName += fileType;
+	} 
+}
+
+void Storage::setPathName(string name) {
+	_pathName =name;
+}
+
+bool Storage::isValidDirectory() {
+	return (((dir = opendir (_pathName.c_str())) != NULL));
+}
+
+void Storage::openFile() {
+	string pathName = _pathName;
+	string combined = pathName + "/" + _fileName;
+	_fWrite.open(combined);
+}
+
+//transfers data from _taskList to into the specified file
+void Storage::writeToFile() {
+	_taskIt = _taskList.begin();
+	for (int i=1;i<=_taskList.size();i++) {
+		sprintf_s(buffer, LINE_BUFFER.c_str(), ((_taskIt->getCommandType()).c_str())
+			, (_taskIt->getTaskType()).c_str(), (_taskIt->getName()).c_str()
+			, to_string(_taskIt->getYear()).c_str(), to_string((_taskIt->getMonth())).c_str()
+			, to_string(_taskIt->getDay()).c_str(), to_string(_taskIt->getStartTimeHour()).c_str()
+			, to_string(_taskIt->getStartTimeMin()).c_str(), to_string(_taskIt->getEndTimeHour()).c_str()
+			, to_string(_taskIt->getEndTimeMin()).c_str(), to_string(_taskIt->getIsDone()).c_str());
+		_fWrite << buffer << "\r\n";
+		_taskIt++;
+	}
+	_fWrite.close();
+}
+
+//reads data from specified file into _taskList
+void Storage::readFile() {
+
+	string pathName = _pathName;
+	string combined = pathName + "/" + _fileName;
+	_fRead.open(combined, ios_base::app);
+
+	size_t posStart;
+	size_t posD1;
+	size_t posD2;
+	size_t posD3;
+	size_t posD4;
+	size_t posD5;
+	size_t posD6;
+	size_t posD7;
+	size_t posD8;
+	size_t posD9;
+	size_t posD10;
+	string input;
+
+	string commandType;
+	string taskType;
+	string  name;
+	int year;
+	int month;
+	int day;
+	int startTimeHour;
+	int startTimeMin;
+	int endTimeHour;
+	int endTimeMin;
+	bool isDone;
+
+	string devider = "/";
+	Task* inputTask;
+	int num;
+	isSuccess = true;
+
+	while (getline(_fRead,input)) {
+
+		//throws exception if file input does not contain the correct number of deviders
+		try { 
+			num = (getDeviderNum(input));
+			if (num != 10) {
+				throw num;
+			}
+		} catch (...) {
+			_taskList.clear();
+			_fRead.close();	
+			isSuccess = false;
+			return;
+		}
+
+		posStart = 0;
+		posD1 = input.find(devider);
+		posD2 = input.find(devider, posD1+1);
+		posD3 = input.find(devider, posD2+1);
+		posD4 = input.find(devider, posD3+1);
+		posD5 = input.find(devider, posD4+1);
+		posD6 = input.find(devider, posD5+1);
+		posD7 = input.find(devider, posD6+1);
+		posD8 = input.find(devider, posD7+1);
+		posD9 = input.find(devider, posD8+1);
+		posD10 = input.find(devider, posD9+1);
+
+		commandType = (input.substr(posStart, (posD1-posStart)));
+		taskType = (input.substr((posD1+1), (posD2-posD1-1)));
+		name = (input.substr((posD2+1), (posD3-posD2-1)));
+		year = stoi(input.substr((posD3+1), (posD4-posD3)));
+		month = stoi(input.substr((posD4+1), (posD5-posD4)));
+		day = stoi(input.substr((posD5+1), (posD6-posD5)));
+		startTimeHour = stoi(input.substr((posD6+1), (posD7-posD6)));
+		startTimeMin = stoi(input.substr((posD7+1), (posD8-posD7)));
+		endTimeHour = stoi(input.substr((posD8+1), (posD9-posD8)));
+		endTimeMin = stoi(input.substr((posD9+1), (posD10-posD9)));
+		isDone = stoi(input.substr(posD10+1));
+		
+		inputTask = new Task(commandType,taskType,name,year,month,day,startTimeHour,startTimeMin,endTimeHour,endTimeMin,isDone);
+		_taskList.push_back(*inputTask);
+		delete inputTask;
+	}
+	_fRead.close();	
+}
+
+bool Storage::isValidTaskInput(Task task) {
+	return (isValidDate(task)&&isValidTime(task)&&!isExistingTask(task));
+}
+
+bool Storage::isValidDate(int month, int day) {
+	isDateValid = true;
+	if (month < MIN_MONTHS_IN_A_YEAR || month > MAX_MONTHS_IN_A_YEAR
+		|| day < MIN_DAY_IN_A_MONTH 
+		|| day > MAX_DAYS_IN_A_MONTH[month - SHIFT_BY_ONE]){
+			isDateValid = false;	
+	} 
+	return isDateValid;
+}
+
+bool Storage::isValidTime(int sth, int stm, int eth, int etm) {
+	isTimeValid = true;
+	if (sth < MIN_HOURS_IN_A_DAY || sth > MAX_HOURS_IN_A_DAY ||
+		stm < MIN_MINUTES_IN_AN_HOUR || stm > MAX_MINUTES_IN_AN_HOUR ||
+		eth < MIN_HOURS_IN_A_DAY || eth > MAX_HOURS_IN_A_DAY ||
+		etm < MIN_MINUTES_IN_AN_HOUR || etm > MAX_MINUTES_IN_AN_HOUR ||
+		(sth == eth && etm > stm) || sth > eth ) {
+			isTimeValid = false;
+	}
+	return isTimeValid;
+}
+
+//checks for valid date, time format and duplicates before storing the task
+void Storage::storeTask(Task task) {
+	if (isValidTaskInput(task)) {
+		_taskList.push_back(task);
+		creatRecordAdd(task);
+		sortList();
+		getTaskIt(task);
+		isSuccess = true;
+	} else {
+		isSuccess = false;
+	}
+}
+
+//Checks if input task is already present in _taskList
+bool Storage::isExistingTask(Task &task) {
+	list<Task>::iterator i;
+	for (i=_taskList.begin();i!=_taskList.end();i++) {
+		if ((i->getCommandType() == task.getCommandType()) 
+			&& (i->getTaskType() == task.getTaskType()) 
+			&& (i->getName() == task.getName())
+			&& (i->getYear() == task.getYear())
+			&& (i->getMonth() == task.getMonth())
+			&& (i->getDay() == task.getDay())
+			&& (i->getStartTimeHour() == task.getStartTimeHour())
+			&& (i->getStartTimeMin() == task.getStartTimeMin())
+			&& (i->getEndTimeHour() == task.getEndTimeHour())
+			&& (i->getEndTimeMin() == task.getEndTimeMin())
+			&& (i->getIsDone() == task.getIsDone())) {
+				_taskIt = i;
+				return true;
+		} 
+	}
+	return false;
+}
+
+	// End of segment: C:\Users\nathan\Documents\CS2103\Final Submission\Storage.cpp
+
+
+
+
+
+	/**
+	 * origin: C:\Users\nathan\Documents\CS2103\Final Submission\Storage.cpp
+	 */
+
+//store all searched tasks into list <Task> _searchResultList 
+void Storage::findTaskInList(string searchKeyWord) {
+	string text;
+	_searchResultList.clear();
+	searchKeyWord = toLower(searchKeyWord);
+	for (_taskIt = _taskList.begin(); _taskIt!= _taskList.end(); _taskIt++) {
+		text = toLower(_taskIt->getName());
+		if (text.find(searchKeyWord) != std::string::npos) {
+			_searchResultList.push_back(*_taskIt);
+		}
+	}
+	if (!(_searchResultList.empty())) {
+		isSearched=true;
+	}
+}
+
+//return and dispay all task items containing the searchKeyWord
+string Storage::searchByName(string searchKeyWord){
+	findTaskInList(searchKeyWord);
+	return toStringTaskDetail(_searchResultList);
+}
+
+
+string Storage::toLower(string text) {
+	transform(text.begin(), text.end(), text.begin(), ::tolower);
+	return text;
+}
+
+int Storage::getIndex() {
+	return(distance(_taskList.begin(), _taskIt)+1);
+}
+
+//Returns true if task can be found in _taskList
+bool Storage::compareTask(Task task) {
+	list<Task>::iterator i;
+	for (i=_taskList.begin();i!=_taskList.end();i++) {		
+		if ((i->getCommandType() == task.getCommandType()) 
+			&& (i->getTaskType() == task.getTaskType()) 
+			&& (i->getName() == task.getName())
+			&& (i->getYear() == task.getYear())
+			&& (i->getMonth() == task.getMonth())
+			&& (i->getDay() == task.getDay())
+			&& (i->getStartTimeHour() == task.getStartTimeHour())
+			&& (i->getStartTimeMin() == task.getStartTimeMin())
+			&& (i->getEndTimeHour() == task.getEndTimeHour())
+			&& (i->getEndTimeMin() == task.getEndTimeMin())) {
+				_taskIt = i;
+				return true;
+		}
+	}
+	return false;
+}
+
+bool Storage::isValidIndex(int i, list<Task> &taskList) {
+	return (i<=taskList.size()&&i>0);
+}
+
+void Storage::getTaskItFromIndex(int i, list<Task> &taskList) {
+	_taskIt = taskList.begin();
+	while (i>1) {
+		_taskIt++;
+		i--;
+	}
+}
+
+void Storage::getTaskItFromIndex(int i) {
+	_taskIt = _taskList.begin();
+	while (i>1) {
+		_taskIt++;
+		i--;
+	}
+}
+
+void Storage::getTaskIt(Task task) {
+	list<Task>::iterator i;
+	for (i=_taskList.begin();i!=_taskList.end();i++) {		
+		if ((i->getCommandType() == task.getCommandType()) 
+			&& (i->getTaskType() == task.getTaskType()) 
+			&& (i->getName() == task.getName())
+			&& (i->getYear() == task.getYear())
+			&& (i->getMonth() == task.getMonth())
+			&& (i->getDay() == task.getDay())
+			&& (i->getStartTimeHour() == task.getStartTimeHour())
+			&& (i->getStartTimeMin() == task.getStartTimeMin())
+			&& (i->getEndTimeHour() == task.getEndTimeHour())
+			&& (i->getEndTimeMin() == task.getEndTimeMin())) {
+				_taskIt = i;
+		}
+	}
+}
+
+//Checks for validity of int i before executing the command
+string Storage::executeIndexCommand(int i, string commandType) {
+	if (isSearched) {
+		if (isValidIndex(i, _searchResultList)) {
+			getTaskItFromIndex(i, _searchResultList);
+			if (isExistingTask(*_taskIt)) {
+				isSuccess = true;
+				executeTaskCommand(commandType);
+			}  
+		} else {
+			isSuccess = false;
+			return toStringTaskDetail(_searchResultList);
+		}
+	} else {
+		if (isValidIndex(i, _taskList)) {
+			getTaskItFromIndex(i);
+			isSuccess = true;
+			executeTaskCommand(commandType);
+		} else {
+			isSuccess = false;
+		}
+	}
+	return toStringTaskDetail();
+}
+
+void Storage::executeTaskCommand(string commandType) {
+	storePreviousTask(commandType);
+	if (commandType == "done") {
+		_taskIt->markDone();
+	}
+	if (commandType == "notdone") {
+		_taskIt->markNotDone();
+	}
+	if (commandType == "delete") {
+		_taskList.erase(_taskIt);
+	}
+}
+	
+string Storage::markDone(int i) {
+	string commandType = "done";
+	return executeIndexCommand(i, commandType);
+}
+
+string Storage::markNotDone(int i) {
+	string commandType = "notdone";
+	return executeIndexCommand(i, commandType);
+}
+
+string Storage::deleteByNumber(int i) {
+	string commandType = "delete";
+	return executeIndexCommand(i, commandType);
+}
+
+void Storage::executeEditName(string commandType, string s) {
+	_previousTaskList.clear();
+	_previousTaskList.push_back(*(_taskIt));
+	_taskIt->setName(s);
+	_previousTaskList.push_back(*(_taskIt));
+	_record = Record(commandType, _previousTaskList);
+	addToTracker();
+}
+
+void Storage::executeEditTime(string commandType, int sth, int stm, int eth, int etm) {
+	_previousTaskList.clear();
+	_previousTaskList.push_back(*(_taskIt));
+	setTime(sth, stm, eth, etm);
+	_previousTaskList.push_back(*(_taskIt));
+	_record = Record(commandType, _previousTaskList);
+	addToTracker();
+}
+
+//if start time is set to 0, task will be converted into a deadline task
+void Storage::setTime(int sth, int stm, int eth, int etm) {
+	_taskIt->setStartTimeHour(sth);
+	_taskIt->setStartTimeMin(stm);
+	_taskIt->setEndTimeHour(eth);
+	_taskIt->setEndTimeMin(etm);
+	if (sth==0&&stm==0) {
+		_taskIt->setTaskType("DeadlineTask");
+	} else {
+		_taskIt->setTaskType("TimedTask");
+	}
+}
+
+void Storage::executeEditDate(string commandType, int year, int month, int day) {
+	_previousTaskList.clear();
+	_previousTaskList.push_back(*(_taskIt));
+	setDate(year, month, day);
+	_previousTaskList.push_back(*(_taskIt));
+	_record = Record(commandType, _previousTaskList);
+	addToTracker();
+}
+
+void Storage::setDate(int year, int month, int day) {
+	_taskIt->setYear(year);
+	_taskIt->setMonth(month);
+	_taskIt->setDay(day);
+
+}
+
+void Storage::executeEditDateTime(string commandType, int year, int month, int day, int sth, int stm, int eth, int etm) {
+	_previousTaskList.clear();
+	_previousTaskList.push_back(*(_taskIt));
+	setDate(year, month, day);
+	setTime(sth, stm, eth, etm);
+	_previousTaskList.push_back(*(_taskIt));
+	_record = Record(commandType, _previousTaskList);
+	addToTracker();
+}
+
+
+string Storage::editTaskName(int i, string s) {
+	string commandType = "edit";
+	if (isSearched) {
+		if (isValidIndex(i, _searchResultList)) {
+			getTaskItFromIndex(i, _searchResultList);
+			if (isExistingTask(*_taskIt)) {
+				isSuccess = true;
+				executeEditName(commandType, s);
+			}  
+		} else {
+			isSuccess = false;
+			return toStringTaskDetail(_searchResultList);
+		}
+	} else {
+		if (isValidIndex(i, _taskList)) {
+			getTaskItFromIndex(i, _taskList);
+			isSuccess = true;
+			executeEditName(commandType, s);
+		} else {
+			isSuccess = false;
+		}
+	}
+	sortList();
+	getTaskIt(*_taskIt);
+	return toStringTaskDetail();
+}
+
+string Storage::editTaskTime(int i, int sth, int stm, int eth, int etm) {
+	string commandType = "edit";
+	isSuccess = false;
+	if (isSearched) {
+
+		if(isValidTime(sth, stm, eth, etm)){
+			if (isValidIndex(i, _searchResultList)) {
+				getTaskItFromIndex(i, _searchResultList);
+				if (isExistingTask(*_taskIt) && _taskIt->getTaskType()!=FLOATING_TASK) {
+					isSuccess = true;
+				executeEditTime(commandType, sth, stm, eth, etm);
+			}  
+		}else {
+			return toStringTaskDetail(_searchResultList);
+			}
+		}else{
+			return "";
+		}
+	} else {
+		if(isValidTime(sth, stm, eth, etm)){
+		if (isValidIndex(i, _taskList)) {
+			getTaskItFromIndex(i, _taskList);
+			if (_taskIt->getTaskType()!=FLOATING_TASK) {
+				isSuccess = true;
+				executeEditTime(commandType, sth, stm, eth, etm);
+			}
+		}
+		}else{
+			return "";
+		}
+	}
+	sortList();
+	getTaskIt(*_taskIt);
+	return toStringTaskDetail();
+}
+
+
+string Storage::editTaskDate(int i, int year, int month, int day) {
+	string commandType = "edit";
+	isSuccess = false;
+	if (isSearched) {
+		if(isValidDate(month, day)){
+		if (isValidIndex(i, _searchResultList)) {
+			getTaskItFromIndex(i, _searchResultList);
+			if (isExistingTask(*_taskIt) && _taskIt->getTaskType()!=FLOATING_TASK) {
+				isSuccess = true;
+				executeEditDate(commandType, year, month, day);
+			}  
+		} else {
+			return toStringTaskDetail(_searchResultList);
+		}
+		}else{
+			return "";
+		}
+	} else {
+		if(isValidDate(month, day)){
+		if (isValidIndex(i, _taskList)) {
+			getTaskItFromIndex(i, _taskList);
+			if (_taskIt->getTaskType()!=FLOATING_TASK) {
+				isSuccess = true;
+				executeEditDate(commandType, year, month, day);
+			}
+		}
+		}else {
+			return "";
+		}
+	}
+	sortList();
+	getTaskIt(*_taskIt);
+	return toStringTaskDetail();
+}
+
+
+string Storage::editTaskDateTime(int i, int year, int month, int day, int sth, int stm, int eth, int etm) {
+	string commandType = "edit";
+	isSuccess = false;
+	if (isSearched) {
+		if (isValidIndex(i, _searchResultList)&&isValidDate(month, day)&&isValidTime(sth, stm, eth, etm)) {
+			getTaskItFromIndex(i, _searchResultList);
+			if (isExistingTask(*_taskIt)) {
+				isSuccess = true;
+				executeEditDate(commandType, year, month, day);
+			}  
+		} else {
+			isSuccess = false;
+			return toStringTaskDetail(_searchResultList);
+		}
+	} else {
+		if (isValidIndex(i, _taskList)&&isValidDate(month, day)&&isValidTime(sth, stm, eth, etm)) {
+			getTaskItFromIndex(i, _taskList);
+			isSuccess = true;
+			executeEditDateTime(commandType, year, month, day, sth, stm, eth, etm);
+		}
+	}
+	sortList();
+	getTaskIt(*_taskIt);
+	return toStringTaskDetail();
+}
+
+
+	// End of segment: C:\Users\nathan\Documents\CS2103\Final Submission\Storage.cpp
+
+
+
+
+
+	/**
+	 * origin: C:\Users\nathan\Documents\CS2103\Final Submission\Storage.h
+	 */
+
+#pragma once
+#ifndef STORAGE_H_
+#define STORAGE_H_
+
+#include <iostream>
+#include <fstream>
+#include <string>
+#include <algorithm>
+#include <sstream>
+#include <stdio.h>
+#include <iterator>
+#include <list>
+
+#include "Task.h"
+#include "Record.h"
+#include "Tracker.h"
+
+using namespace std;
+
+class Storage {
+
+private:
+
+	static const string LINE_BUFFER;
+	static const string FLOATING_TASK;
+	static const string DEADLINE_TASK;
+	static const string TIMED_TASK;
+
+	static const int MIN_MONTHS_IN_A_YEAR;
+	static const int MAX_MONTHS_IN_A_YEAR;
+	static const int MIN_DAY_IN_A_MONTH;
+	static const int MAX_DAYS_IN_A_MONTH[12];
+	static const int MIN_HOURS_IN_A_DAY;
+	static const int MAX_HOURS_IN_A_DAY;
+	static const int MIN_MINUTES_IN_AN_HOUR;
+	static const int MAX_MINUTES_IN_AN_HOUR;
+	static const int SHIFT_BY_ONE;
+
+public:
+
+	Storage();
+	~Storage();
+
+	static string _fileName;
+	static string _pathName;
+	static list<Task>_taskList;
+	static list<Task>_searchResultList;
+	static ofstream _fWrite;
+	static ifstream _fRead;
+	static char buffer[1000];
+	static int _index;
+	static bool isSuccess;
+	static bool isSearched;
+	static bool isDateValid;
+	static bool isTimeValid;
+	static list<Task>_previousTaskList;
+	static list<Task>::iterator _taskIt;
+	static Tracker _tracker;
+	static Record _record;
+
+	//File functions
+	static void openFile();
+	static void readFile();
+	static void setFileName(string name);
+	static void setPathName(string name);
+	static void writeToFile();
+
+	//Task functions
+	static void storeTask(Task task);
+	static string editTaskName(int i, string s);
+	static string editTaskTime(int i, int sth, int stm, int eth, int etm);
+	static string editTaskDate(int i, int year, int month, int day);
+	static string editTaskDateTime(int i, int year, int month, int day, int sth, int stm, int eth, int etm);
+	static void executeTaskCommand(string commandType);
+	static void executeEditName(string commandType, string name);
+	static void executeEditTime(string commandType, int sth, int stm, int eth, int etm);
+	static void executeEditDate(string commandType, int year, int month, int day);
+	static void executeEditDateTime(string commandType, int year, int month, int day, int sth, int stm, int eth, int etm);
+	static void setTime(int sth, int stm, int eth, int etm);
+	static void setDate(int year, int month, int day);
+	static string searchByName(string searchKeyWord);
+	static string markDone(int i);
+	static string markNotDone(int i);
+	static string executeIndexCommand(int i, string commandType);
+	static string deleteByNumber(int i);
+	
+	// End of segment: C:\Users\nathan\Documents\CS2103\Final Submission\Storage.h
+
+
+
+
+
+	/**
+	 * origin: C:\Users\nathan\Documents\CS2103\Final Submission\Storage.h
+	 */
+
+	static void getTaskItFromIndex(int i, list<Task> &taskList);
+	static void getTaskItFromIndex(int i);
+	static void getTaskIt(Task task);
+	static void findTaskInList(string searchKeyWord);
+	// End of segment: C:\Users\nathan\Documents\CS2103\Final Submission\Storage.h
+
+
+
+
+
+	/**
+	 * origin: C:\Users\nathan\Documents\CS2103\Final Submission\Storage.h
+	 */
+
+	static int getIndex();
+	static int getDeviderNum(string input);
+	static string toLower(string text);
+	static bool compareTask(Task task);
+	static bool isExistingTask(Task &task);
+	// End of segment: C:\Users\nathan\Documents\CS2103\Final Submission\Storage.h
+
+
+
+
+
+	/**
+	 * origin: C:\Users\nathan\Documents\CS2103\Final Submission\Storage.h
+	 */
+
+	static bool isValidDate(int month, int day);
+	static bool isValidTime(int sth, int stm, int eth, int etm);
+	static bool isValidDirectory();
+	static bool isValidIndex(int i, list<Task> &taskList);
+	static bool isValidTaskInput(Task task);
+
+	// End of segment: C:\Users\nathan\Documents\CS2103\Final Submission\Storage.h
+
+
+
+
+
+	/**
+	 * origin: C:\Users\nathan\Documents\CS2103\Final Submission\UnitTest.cpp
+	 */
+
+	TEST_CLASS(StorageTest)
+	{
+		
+	public:
+		
+		
+		TEST_METHOD(Readfile)
+		{
+			Storage store;
+			list <Task> expected;
+			list<Task>::iterator it1;
+			list<Task>::iterator it2;
+
+			expected.clear();
+			(store._searchResultList).clear();
+			(store._taskList).clear();
+
+			//Checks if file reads properly
+			store.setPathName("./");
+			store.setFileName("mytestfile");
+			store.readFile();
+
+			Task task3("add", "hello world");
+			Task task1("add", "eat lunch at home", 2015 ,03 ,11 , 13, 00, 14, 30);
+			Task task2("add", "eat breakfast at home", 2015 ,03 ,11 , 14, 30);
+
+
+			expected.push_back(task1);
+			expected.push_back(task2);
+			expected.push_back(task3);
+
+			it1 = expected.begin();
+
+			for (it2 = (store._taskList).begin() ; it2!=(store._taskList).end() ;it2++) {
+				Assert::AreEqual(it1->getName(),it2->getName());
+				it1++;
+		}
+			expected.clear();
+			(store._searchResultList).clear();
+			(store._taskList).clear();
+		}
+
+
+		TEST_METHOD(Sort_TaskType)
+		{
+			Storage store;
+			list <Task> expected;
+			list<Task>::iterator it1;
+			list<Task>::iterator it2;
+			
+			//Order of importance: Deadline > Timed > Float
+
+			Task task3("add", "hello world");
+			Task task2("add", "eat dinner at home", 2015, 03, 11, 18, 00, 19, 00);
+			Task task1("add", "eat lunch at home", 2015 ,03 ,11 ,13 ,00);
+
+			store.storeTask(task3);
+			store.storeTask(task2);
+			store.storeTask(task1);
+
+			expected.push_back(task1);
+			expected.push_back(task2);
+			expected.push_back(task3);
+			store.sortList();
+
+			it1 = expected.begin();
+
+			for (it2 = (store._taskList).begin() ; it2!=(store._taskList).end() ;it2++) {
+				Assert::AreEqual(it2->getName(),it1->getName());
+				it1++;
+		}
+			expected.clear();
+			(store._taskList).clear();
+		}
+
+		TEST_METHOD(Sort_TimedTask)
+		{
+			Storage store;
+			list <Task> expected;
+			list<Task>::iterator it1;
+			list<Task>::iterator it2;
+			
+			//Sorts timed task in order of date then time
+
+			Task task1("add", "eat at home", 2014, 03, 11, 18, 00, 19, 00);
+			Task task2("add", "eat dinner at home", 2015, 03, 11, 18, 00, 19, 00);
+			Task task3("add", "eat lunch at home", 2015 ,03 ,11 ,13 ,00, 14, 30);
+
+			store.storeTask(task3);
+			store.storeTask(task1);
+			store.storeTask(task2);
+
+			expected.push_back(task1);
+			expected.push_back(task3);
+			expected.push_back(task2);
+			store.sortList();
+
+			it1 = expected.begin();
+
+			for (it2 = (store._taskList).begin() ; it2!=(store._taskList).end() ;it2++) {
+				Assert::AreEqual(it2->getName(),it1->getName());
+				it1++;
+		}
+			expected.clear();
+			(store._taskList).clear();
+		}
+
+		TEST_METHOD(Sort_Deadline)
+		{
+			Storage store;
+			list <Task> expected;
+			list<Task>::iterator it1;
+			list<Task>::iterator it2;
+			
+			//Sorts Deadline task in order of date then time
+
+			Task task1("add", "eat at home", 2014, 03, 11, 19, 00);
+			Task task2("add", "eat dinner at home", 2015, 03, 11, 19, 00);
+			Task task3("add", "eat lunch at home", 2015 ,03 ,11 , 14, 30);
+
+			store.storeTask(task3);
+			store.storeTask(task1);
+			store.storeTask(task2);
+
+			expected.push_back(task1);
+			expected.push_back(task3);
+			expected.push_back(task2);
+			store.sortList();
+
+			it1 = expected.begin();
+
+			for (it2 = (store._taskList).begin() ; it2!=(store._taskList).end() ;it2++) {
+				Assert::AreEqual(it2->getName(),it1->getName());
+				it1++;
+		}
+			expected.clear();
+			(store._taskList).clear();
+		}
+
+		TEST_METHOD(Sort_By_Name)
+		{
+			Storage store;
+			list <Task> expected;
+			list<Task>::iterator it1;
+			list<Task>::iterator it2;
+			
+			//Sorts similar timings based on name of task in alphabetical order
+
+			Task task1("add", "dat lunch at home", 2015 ,03 ,11 , 14, 30);
+			Task task2("add", "eat lunch at home", 2015 ,03 ,11 , 14, 30);
+			Task task3("add", "eat breakfast at home", 2015 ,03 ,11 , 14, 30);
+
+			store.storeTask(task3);
+			store.storeTask(task1);
+			store.storeTask(task2);
+
+			expected.push_back(task1);
+			expected.push_back(task3);
+			expected.push_back(task2);
+			store.sortList();
+
+			it1 = expected.begin();
+
+			for (it2 = (store._taskList).begin() ; it2!=(store._taskList).end() ;it2++) {
+				Assert::AreEqual(it2->getName(),it1->getName());
+				it1++;
+		}
+			expected.clear();
+			(store._taskList).clear();
+		}
+
+		TEST_METHOD(Delete_By_Number)
+		{
+			Storage store;
+			list <Task> expected;
+			list<Task>::iterator it1;
+			list<Task>::iterator it2;
+
+			Task task1("add", "dat lunch at home", 2015 ,03 ,11 , 14, 30);
+			Task task2("add", "eat lunch at home", 2015 ,03 ,11 , 14, 30);
+			Task task3("add", "fat breakfast at home", 2015 ,03 ,11 , 14, 30);
+
+			store.storeTask(task1);
+			store.storeTask(task2);
+			store.storeTask(task3);
+
+			expected.push_back(task1);
+			expected.push_back(task3);
+			store.deleteByNumber(2);
+
+			it1 = expected.begin();
+
+			for (it2 = (store._taskList).begin() ; it2!=(store._taskList).end() ;it2++) {
+				Assert::AreEqual(it2->getName(),it1->getName());
+				it1++;
+			}
+			expected.clear();
+			(store._taskList).clear();
+		}
+
+		TEST_METHOD(Done_By_Number)
+		{
+			Storage store;
+			list <Task> expected;
+			list<Task>::iterator it1;
+			list<Task>::iterator it2;
+			
+			Task task1("add", "dat lunch at home", 2015 ,03 ,11 , 14, 30);
+			Task task2("add", "eat lunch at home", 2015 ,03 ,11 , 14, 30, 14, 45);
+			Task task3("add", "eat breakfast at home", 2015 ,03 ,11 , 14, 30);
+			Task task4("add" , "TimedTask" , "eat lunch at home", 2015 ,03 ,11 , 14, 30, 14, 45, 1);
+
+			store.storeTask(task1);
+			store.storeTask(task2);
+			store.storeTask(task3);
+
+			expected.push_back(task1);
+			expected.push_back(task4);
+			expected.push_back(task3);
+
+
+			store.markDone(2);
+
+			it1 = expected.begin();
+
+			for (it2 = (store._taskList).begin() ; it2!=(store._taskList).end() ;it2++) {
+				Assert::AreEqual(it2->getIsDone(),it1->getIsDone());
+				it1++;
+			}
+			expected.clear();
+			(store._taskList).clear();
+		}
+
+		TEST_METHOD(Done_By_Name_Number)
+		{
+			Storage store;
+			list <Task> expected;
+			list<Task>::iterator it1;
+			list<Task>::iterator it2;
+			
+			Task task("add", "aat at home");
+			Task task0("add", "eat lunch at home");
+			Task task1("add", "cat lunch at home", 2015 ,03 ,11 , 14, 30);
+			Task task2("add", "eat lunch at home", 2015 ,03 ,11 , 14, 30, 14, 45);
+			Task task3("add", "fat breakfast at home", 2015 ,03 ,11 , 14, 30);
+			Task task4("add" , "TimedTask" , "eat lunch at home", 2015 ,03 ,11 , 14, 30, 14, 45, 1);
+
+			store.storeTask(task);
+			store.storeTask(task0);
+			store.storeTask(task1);
+			store.storeTask(task3);
+			store.storeTask(task2);
+
+			expected.push_back(task);
+			expected.push_back(task0);
+			expected.push_back(task1);
+			expected.push_back(task3);
+			expected.push_back(task4);
+
+
+			store.searchByName("eat lunch");
+			store.markDone(2);
+
+			it1 = expected.begin();
+
+			for (it2 = (store._taskList).begin() ; it2!=(store._taskList).end() ;it2++) {
+				Assert::AreEqual(it2->getIsDone(),it1->getIsDone());
+				it1++;
+			}
+			expected.clear();
+			(store._searchResultList).clear();
+			(store._taskList).clear();
+		}
+		
+		
+		TEST_METHOD(Search_Name)
+		{
+			Storage store;
+			list <Task> expected;
+			list<Task>::iterator it1;
+			list<Task>::iterator it2;
+			
+			Task task1("add", "dat lunch at home", 2015 ,03 ,11 , 14, 30);
+			Task task2("add", "eat break at home", 2015 ,05 ,11 , 14, 30);
+			Task task4("add", "eat breakfast at home", 2015 ,03 ,11 , 14, 30);
+			Task task3("add", "i eat breakfast home", 2015 ,02 ,11 , 14, 30);
+
+			store.storeTask(task1);
+			store.storeTask(task2);
+			store.storeTask(task3);
+			store.storeTask(task4);
+
+			expected.push_back(task3);
+			expected.push_back(task4);
+			string s;
+			s = store.searchByName("eat breakfast");
+
+			it1 = expected.begin();
+
+			for (it2 = (store._searchResultList).begin() ; it2!=(store._searchResultList).end() ;it2++) {
+				Assert::AreEqual(it2->getName(),it1->getName());
+				it1++;
+			}
+			expected.clear();
+			(store._taskList).clear();
+			(store._searchResultList).clear();
+		}
+
+		TEST_METHOD(Delete_By_Name_Number)
+		{
+			Storage store;
+			list <Task> expected;
+			list<Task>::iterator it1;
+			list<Task>::iterator it2;
+			
+			Task task1("add", "dat lunch at home", 2015 ,03 ,11 , 14, 30);
+			Task task2("add", "eat break at home", 2015 ,03 ,11 , 14, 30);
+			Task task3("add", "eat dreakfast at home", 2015 ,03 ,11 , 14, 30);
+
+			store.storeTask(task1);
+			store.storeTask(task2);
+			store.storeTask(task3);
+
+			expected.push_back(task1);
+			expected.push_back(task3);
+			string s;
+			s = store.searchByName("eat");
+			s = store.deleteByNumber(1);
+
+			it1 = expected.begin();
+
+			for (it2 = (store._taskList).begin() ; it2!=(store._taskList).end() ;it2++) {
+				Assert::AreEqual(it2->getName(),it1->getName());
+				it1++;
+			}
+			expected.clear();
+			(store._taskList).clear();
+		}
+
+
+	};
+}
+
+	// End of segment: C:\Users\nathan\Documents\CS2103\Final Submission\UnitTest.cpp
+
+
+
+
+
