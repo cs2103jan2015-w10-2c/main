@@ -535,22 +535,31 @@ string Storage::editTaskTime(int i, int sth, int stm, int eth, int etm) {
 	string commandType = "edit";
 	isSuccess = false;
 	if (isSearched) {
-		if (isValidIndex(i, _searchResultList)&&isValidTime(sth, stm, eth, etm)) {
-			getTaskItFromIndex(i, _searchResultList);
-			if (isExistingTask(*_taskIt) && _taskIt->getTaskType()!=FLOATING_TASK) {
-				isSuccess = true;
+
+		if(isValidTime(sth, stm, eth, etm)){
+			if (isValidIndex(i, _searchResultList)) {
+				getTaskItFromIndex(i, _searchResultList);
+				if (isExistingTask(*_taskIt) && _taskIt->getTaskType()!=FLOATING_TASK) {
+					isSuccess = true;
 				executeEditTime(commandType, sth, stm, eth, etm);
 			}  
-		} else {
+		}else {
 			return toStringTaskDetail(_searchResultList);
+			}
+		}else{
+			return "";
 		}
 	} else {
-		if (isValidIndex(i, _taskList)&&isValidTime(sth, stm, eth, etm)) {
+		if(isValidTime(sth, stm, eth, etm)){
+		if (isValidIndex(i, _taskList)) {
 			getTaskItFromIndex(i, _taskList);
 			if (_taskIt->getTaskType()!=FLOATING_TASK) {
 				isSuccess = true;
 				executeEditTime(commandType, sth, stm, eth, etm);
 			}
+		}
+		}else{
+			return "";
 		}
 	}
 	sortList();
@@ -563,7 +572,8 @@ string Storage::editTaskDate(int i, int year, int month, int day) {
 	string commandType = "edit";
 	isSuccess = false;
 	if (isSearched) {
-		if (isValidIndex(i, _searchResultList)&&isValidDate(month, day)) {
+		if(isValidTime(sth, stm, eth, etm)){
+		if (isValidIndex(i, _searchResultList)) {
 			getTaskItFromIndex(i, _searchResultList);
 			if (isExistingTask(*_taskIt) && _taskIt->getTaskType()!=FLOATING_TASK) {
 				isSuccess = true;
@@ -572,13 +582,20 @@ string Storage::editTaskDate(int i, int year, int month, int day) {
 		} else {
 			return toStringTaskDetail(_searchResultList);
 		}
+		}else{
+			return "";
+		}
 	} else {
-		if (isValidIndex(i, _taskList)&&isValidDate(month, day)) {
+		if(isValidTime(sth, stm, eth, etm)){
+		if (isValidIndex(i, _taskList)) {
 			getTaskItFromIndex(i, _taskList);
 			if (_taskIt->getTaskType()!=FLOATING_TASK) {
 				isSuccess = true;
 				executeEditDate(commandType, year, month, day);
 			}
+		}
+		}else {
+			return "";
 		}
 	}
 	sortList();
