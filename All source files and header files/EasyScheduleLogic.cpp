@@ -108,54 +108,54 @@ void EasyScheduleLogic::writeFile() {
 void EasyScheduleLogic::viewDeadline(){
 	returnDisplay = displayAllDeadline();
 	if(displayAllDeadline() == ""){
-		returnMessage == MESSAGE_EMPTY_DEADLINE;
+		returnMessage = MESSAGE_EMPTY_DEADLINE;
 	}else {
-		returnMessage == MESSAGE_VIEW_DEADLINE_ALL;
+		returnMessage = MESSAGE_VIEW_DEADLINE_ALL;
 	}
 }
 
 void EasyScheduleLogic::viewFloating(){
 		returnDisplay = displayAllFloating();
 		if(displayAllFloating() == ""){
-			returnMessage == MESSAGE_EMPTY_FLOATING;
+			returnMessage = MESSAGE_EMPTY_FLOATING;
 		}else {
-			returnMessage == MESSAGE_VIEW_FLOATING_ALL;
+			returnMessage = MESSAGE_VIEW_FLOATING_ALL;
 		}
 }
 
 void EasyScheduleLogic::viewTimed(){
 		returnDisplay = displayAllTimed();
 		if(displayAllTimed() == ""){
-			returnMessage == MESSAGE_EMPTY_TIMED;			
+			returnMessage = MESSAGE_EMPTY_TIMED;			
 		}else {
-			returnMessage == MESSAGE_VIEW_TIMED_ALL;
+			returnMessage = MESSAGE_VIEW_TIMED_ALL;
 		}
 }
 
 void EasyScheduleLogic::viewToday(){
 		returnDisplay = displayAllToday();
 		if(displayAllToday() == ""){
-			returnMessage == MESSAGE_EMPTY_TODAY;
+			returnMessage = MESSAGE_EMPTY_TODAY;
 		}else {
-			returnMessage == MESSAGE_VIEW_TODAY_ALL;
+			returnMessage = MESSAGE_VIEW_TODAY_ALL;
 		}
 }
 
 void EasyScheduleLogic::viewTomorrow(){
 		returnDisplay = displayAllTomorrow();
 		if(displayAllTomorrow() == ""){
-			returnMessage == MESSAGE_EMPTY_TOMORROW;
+			returnMessage = MESSAGE_EMPTY_TOMORROW;
 		}else {
-			returnMessage == MESSAGE_VIEW_TOMORROW_ALL;
+			returnMessage = MESSAGE_VIEW_TOMORROW_ALL;
 		}
 }
 
 void EasyScheduleLogic::viewYesterday(){
 	returnDisplay = displayAllYesterday();
 		if(displayAllYesterday() == ""){
-			returnMessage == MESSAGE_EMPTY_YESTERDAY;
+			returnMessage = MESSAGE_EMPTY_YESTERDAY;
 		}else {
-			returnMessage == MESSAGE_VIEW_YESTERDAY_ALL;
+			returnMessage = MESSAGE_VIEW_YESTERDAY_ALL;
 		}
 }
 
