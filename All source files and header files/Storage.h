@@ -97,7 +97,6 @@ public:
 	
 
 	//Supporting functions
-	static void getTask(Task task);
 	static void searchTodayTask(int day, int month, int year);
 	static void searchUpcomingDeadline(int day, int month, int year);
 	static void getTaskItFromIndex(int i, list<Task> &taskList);

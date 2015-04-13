@@ -57,6 +57,7 @@ isSuccess = false;
 Storage::~Storage() {
 }
 
+//checks for number of deviders in file
 int Storage::getDeviderNum(string input) {
 	size_t num = count(input.begin(), input.end(), '/');
 	return static_cast<int>(num);
@@ -141,6 +142,8 @@ void Storage::readFile() {
 	isSuccess = true;
 
 	while (getline(_fRead,input)) {
+
+		//throws exception if file input does not contain the correct number of deviders
 		try { 
 			num = (getDeviderNum(input));
 			if (num != 10) {
@@ -223,6 +226,7 @@ void Storage::storeTask(Task task) {
 	}
 }
 
+//Checks if input task is already present in _taskList
 bool Storage::isExistingTask(Task &task) {
 	list<Task>::iterator i;
 	for (i=_taskList.begin();i!=_taskList.end();i++) {
@@ -299,7 +303,6 @@ void Storage::sortList(){
 
 //@author A0111446R
 //store all searched tasks into list <Task> _searchResultList 
-//bool isSearched = true
 void Storage::findTaskInList(string searchKeyWord) {
 	string text;
 	_searchResultList.clear();
@@ -331,7 +334,7 @@ int Storage::getIndex() {
 	return(distance(_taskList.begin(), _taskIt)+1);
 }
 
-//search task in the _taskList for exact matches
+//Returns true if task can be found in _taskList
 bool Storage::compareTask(Task task) {
 	list<Task>::iterator i;
 	for (i=_taskList.begin();i!=_taskList.end();i++) {		
@@ -390,6 +393,7 @@ void Storage::getTaskIt(Task task) {
 	}
 }
 
+//Checks for validity of int i before executing the command
 string Storage::executeIndexCommand(int i, string commandType) {
 	if (isSearched) {
 		if (isValidIndex(i, _searchResultList)) {
@@ -460,6 +464,7 @@ void Storage::executeEditTime(string commandType, int sth, int stm, int eth, int
 	addToTracker();
 }
 
+//if start time is set to 0, task will be converted into a deadline task
 void Storage::setTime(int sth, int stm, int eth, int etm) {
 	_taskIt->setStartTimeHour(sth);
 	_taskIt->setStartTimeMin(stm);
