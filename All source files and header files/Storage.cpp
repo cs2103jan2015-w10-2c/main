@@ -779,124 +779,133 @@ void Storage::searchUpcomingDeadline(int day, int month, int year){
 	}
 }
 
-//@author A0116707H Dong Peisen
-string Storage::toStringTaskDetail(list <Task> &listToFormat){
-	ostringstream s;
+//@author A0116707H
+//to display selected tasks from storage
+string Storage::toStringTaskDetail(list <Task> &listToFormat) {
+	
+	ostringstream taskString;
 	if(listToFormat.empty()) {
-		s << "";
-		return s.str();
+		taskString << "";
+		return taskString.str();
 	} else {
 		list <Task>::iterator iter;
-		int index = 0;
+		int index = 0;	//the same "index" in GUI, and GUI display windows
 		for (iter = listToFormat.begin(); iter != listToFormat.end(); iter++) {
+			/****Index****/
 			index++;
-			s << index << "]"; // "]" as a divider to divide each component
+			taskString << index << "]"; // "]" as a divider to divide each component
+			/****Check if Mark as Done****/
 			if(iter->getIsDone()) {
-				s << "Done" << "]";
+				taskString << "Done" << "]";
 			} else {
-				s << "Not Done" << "]";
+				taskString << "Not Done" << "]";
 			}
+
 			if (iter->getTaskType() == "FloatingTask") {
-				s << "Float]" << iter->getName() << "]N.A.]N.A.]N.A.]";
-			} else { //for other 2 types of tasks
+				taskString << "Float]" << iter->getName() << "]N.A.]N.A.]N.A.]";
+			} else { //from here onwards: for non-floating tasks
+				/****Task Type****/
 				if (iter->getTaskType() == "TimedTask") {
-					s << "Timed]";
+					taskString << "Timed]";
 				} else {
-					s << "Deadline]";
+					taskString << "Deadline]";
 				}
-				s << iter->getName() << "]" << iter->getAlphabetDate() << "]";
+				/****Task name and date****/
+				taskString << iter->getName() << "]" << iter->getAlphabetDate() << "]";
+				/****Start and end time****/
 				if (iter->getTaskType() == "TimedTask") {
 					if(iter->getStartTimeHour() < 10) {
-						s << "0" << iter->getStartTimeHour() <<":";
+						taskString << "0" << iter->getStartTimeHour() <<":";
 					} else {
-						s << iter->getStartTimeHour() << ":";
+						taskString << iter->getStartTimeHour() << ":";
 					}
 					if(iter->getStartTimeMin() < 10) {
-						s << "0" << iter->getStartTimeMin() << "]";
+						taskString << "0" << iter->getStartTimeMin() << "]";
 					} else {
-						s << iter->getStartTimeMin() << "]";
+						taskString << iter->getStartTimeMin() << "]";
 					}
 				} else {
-					s << "N.A.]"; //start time Non Applicable
+					taskString << "N.A.]"; //start time Non Applicable
 				}
 
 				if(iter->getEndTimeHour() < 10) {
-					s << "0" << iter->getEndTimeHour() <<":";
+					taskString << "0" << iter->getEndTimeHour() <<":";
 				} else {
-					s << iter->getEndTimeHour() << ":";
+					taskString << iter->getEndTimeHour() << ":";
 				}
 				if(iter->getEndTimeMin() < 10){
-					s << "0" << iter->getEndTimeMin() <<"]";
+					taskString << "0" << iter->getEndTimeMin() <<"]";
 				} else {
-					s << iter->getEndTimeMin() << "]";
+					taskString << iter->getEndTimeMin() << "]";
 				}
 			}
 		}
-		return s.str();
+		return taskString.str();
 	}
 }
 
-//@author A0116707H Dong Peisen
-string Storage::toStringTaskDetail(){
-	ostringstream s;
+//to display all tasks from storage
+string Storage::toStringTaskDetail() {
+	
+	ostringstream taskString;
 	isSearched = false;
 	if(_taskList.empty()) {
-		s << "";
-		return s.str();
+		taskString << "";
+		return taskString.str();
 	} else {
 		list <Task>::iterator iter;
-		int index = 0;
+		int index = 0; //the same "index" in GUI, and GUI display windows
 		for (iter = _taskList.begin(); iter != _taskList.end(); iter++) {
 			/****Index****/
 			index++;
-			s << index << "]"; // "]" as a divider to divide each component
-			/****check if Mark as Done****/
+			taskString << index << "]"; // "]" as a divider to divide each component
+			/****check if Mark Done****/
 			if(iter->getIsDone()) {
-				s << "Done" << "]";
+				taskString << "Done" << "]";
 			} else {
-				s << "Not Done" << "]";
+				taskString << "Not Done" << "]";
 			}
-			/****For floating task****/
+			
 			if (iter->getTaskType() == "FloatingTask") {
-				s << "Float]" << iter->getName() << "]N.A.]N.A.]N.A.]";
-			} else { //for other 2 types of tasks
+				taskString << "Float]" << iter->getName() << "]N.A.]N.A.]N.A.]"; //date and time Not Applicable
+			} else {	from here onwards: for non-floating tasks
 				/****Task Type****/
 				if (iter->getTaskType() == "TimedTask") {
-					s << "Timed]";
+					taskString << "Timed]";
 				} else {
-					s << "Deadline]";
+					taskString << "Deadline]";
 				}
 				/****Task name and date****/
-				s << iter->getName() << "]" << iter->getAlphabetDate() << "]";
-				/****start and end time****/
+				taskString << iter->getName() << "]" << iter->getAlphabetDate() << "]";
+				/****Start and end time****/
 				if (iter->getTaskType() == "TimedTask") {
 					if(iter->getStartTimeHour() < 10) {
-						s << "0" << iter->getStartTimeHour() <<":";
+						taskString << "0" << iter->getStartTimeHour() <<":";
 					} else {
-						s << iter->getStartTimeHour() << ":";
+						taskString << iter->getStartTimeHour() << ":";
 					}
 					if(iter->getStartTimeMin() < 10) {
-						s << "0" << iter->getStartTimeMin() << "]";
+						taskString << "0" << iter->getStartTimeMin() << "]";
 					} else {
-						s << iter->getStartTimeMin() << "]";
+						taskString << iter->getStartTimeMin() << "]";
 					}
 				} else {
-					s << "N.A.]"; //start time Non Applicable
+					taskString << "N.A.]"; //start time Not Applicable
 				}
 
 				if(iter->getEndTimeHour() < 10) {
-					s << "0" << iter->getEndTimeHour() <<":";
+					taskString << "0" << iter->getEndTimeHour() <<":";
 				} else {
-					s << iter->getEndTimeHour() << ":";
+					taskString << iter->getEndTimeHour() << ":";
 				}
 				if(iter->getEndTimeMin() < 10){
-					s << "0" << iter->getEndTimeMin() <<"]";
+					taskString << "0" << iter->getEndTimeMin() <<"]";
 				} else {
-					s << iter->getEndTimeMin() << "]";
+					taskString << iter->getEndTimeMin() << "]";
 				}
 			}
 		}
-		return s.str();
+		return taskString.str();
 	}
 }
 

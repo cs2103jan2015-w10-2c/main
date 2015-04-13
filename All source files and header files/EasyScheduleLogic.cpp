@@ -176,7 +176,7 @@ void EasyScheduleLogic::commandView(){
 		}
 }
 
-//@author A0116707H Dong Peisen
+//@author A0116707H
 void EasyScheduleLogic::commandAdd(){
 	returnMessage = addingTask();
 		returnDisplay = displayingTask();
@@ -187,8 +187,6 @@ void EasyScheduleLogic::commandAdd(){
 		}
 }
 
-
-//@author A0116707H Dong Peisen
 void EasyScheduleLogic::commandDelete(){
 	returnDisplay = deletingTask();
 	returnIndex = 0;
@@ -207,7 +205,7 @@ void EasyScheduleLogic::commandDisplay(){
 
 void EasyScheduleLogic::commandSearch(){
 	if(searchingTask() == "") {
-		returnMessage = MESSAGE_SEARCH_FAIL; //Bug: not shown in feedbackBox
+		returnMessage = MESSAGE_SEARCH_FAIL;
 		returnDisplay = displayingTask(); //display all the tasks 
 	} else {
 		returnMessage = "";
@@ -275,12 +273,13 @@ void EasyScheduleLogic::commandExit(){
 	returnDisplay = "";
 	exit(0);
 }
- void EasyScheduleLogic::commandInvalid(){
+
+void EasyScheduleLogic::commandInvalid(){
 	 	returnMessage = MESSAGE_INVALID_INPUT_COMMAND;
 		returnDisplay = "";
  }
 
- //@author A0115131B
+//@author A0115131B
 void EasyScheduleLogic::executeLogic(string userInput) {
 	parsingCommand(userInput);
 	returnIndex = 0;
@@ -330,7 +329,7 @@ void EasyScheduleLogic::parsingCommand(string userInput) {
 	day = parser.day;
 }
 
- //@author A0115131B
+//@author A0115131B
 string EasyScheduleLogic::callUndoingAdd(Record recordToUndo){
 		if(undoingAdd(recordToUndo)) {
 			return MESSAGE_UNDO_SUCCESS;
@@ -590,7 +589,6 @@ string EasyScheduleLogic::editingTask(){
 	return s;
 }
 
-
 //@author A0115131B
 string EasyScheduleLogic::displayAllDeadline(){
 	return storage.toStringTaskDetail(storage.allDeadline());
@@ -629,16 +627,18 @@ string EasyScheduleLogic::sortingTask() {
 	return MESSAGE_SORT;
 }
 
-//@author A0116707H Dong Peisen
-//receive bool from storeFloat and create output message
+//@author A0116707H
+//returns output message
 string EasyScheduleLogic::tellUIReturnMessage() {
 	return returnMessage;
 }
 
+//returns output display
 string EasyScheduleLogic::tellUIDisplay() {
 	return returnDisplay;
 }
 
+//returns output index to identify which task has been edited
 int EasyScheduleLogic::tellUIReturnIndex() {
 	return returnIndex;
 }

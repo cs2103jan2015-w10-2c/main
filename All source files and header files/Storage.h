@@ -1,4 +1,3 @@
-//@author A0111446R
 #pragma once
 #ifndef STORAGE_H_
 #define STORAGE_H_
@@ -83,9 +82,12 @@ public:
 	static string markDone(int i);
 	static string markNotDone(int i);
 	static string executeIndexCommand(int i, string commandType);
-	static string deleteByNumber(int i);	
-	static string toStringTaskDetail(list <Task> &listToFormat);
-	static string toStringTaskDetail();
+	static string deleteByNumber(int i);
+	
+	//@author A0116707H	
+	static string toStringTaskDetail(list <Task> &listToFormat); //for selected tasks display
+	static string toStringTaskDetail(); //for all tasks display
+	
 	static list<Task> getPreviousTaskList();
 	static list<Task> autoInitialDisplay();
 	static list<Task> allDeadline();
