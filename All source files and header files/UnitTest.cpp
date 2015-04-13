@@ -5,114 +5,124 @@ using namespace Microsoft::VisualStudio::CppUnitTestFramework;
 
 namespace UnitTest
 {	
-	//@author A0116707H Dong Peisen
-	TEST_CLASS(UndoUnitTest) {
+	//@author A0116707H
+	TEST_CLASS(EasyScheduleLogicTest) {
 	public:
-		
+
 		TEST_METHOD(FailUndoTest) {
 			EasyScheduleLogic logic;
+
+			/*string displayTaskCommand = "display";
+			logic.executeLogic(displayTaskCommand);*/
+			string undoTaskCommand = "undo";
+			logic.executeLogic(undoTaskCommand);
 			string actualMessage = logic.undoingTask();
-			string expectedFailMessage = "Undo fail. End of command history reached.";
-			Assert::AreEqual(expectedFailMessage, actualMessage);
+			string expectedMessage = "Undo fail. End of command history reached.";
+			Assert::AreEqual(expectedMessage, actualMessage);
+
+			/****Clear the data storage****/
+			string deleteTaskCommand = "delete 1";
+			while(logic.displayingTask() != "") {
+				logic.executeLogic(deleteTaskCommand);
+			}
 		}
-
-		TEST_METHOD(UndoAddTest) {
-			EasyScheduleLogic logic;
-
-			string addFloatTaskCommand = "add lunch with friends";
-			logic.executeLogic(addFloatTaskCommand);
-			string actualMessage = logic.undoingTask();
-			string expectedMessage = "Undo successfully.";
-			Assert::AreEqual(expectedMessage, actualMessage);
-
-			string addTimedTaskCommand = "add 2015/4/5/7/30/9/30/watch musical show.";
-			logic.executeLogic(addTimedTaskCommand);
-			actualMessage = logic.undoingTask();
-			expectedMessage = "Undo successfully.";
-			Assert::AreEqual(expectedMessage, actualMessage);
-
-			string addDeadlineTaskCommand = "add 2015/4/13/23/59/CS submission";
-			logic.executeLogic(addDeadlineTaskCommand);
-			actualMessage = logic.undoingTask();
-			expectedMessage = "Undo successfully.";
-			Assert::AreEqual(expectedMessage, actualMessage);
-		}
+		
 
 		TEST_METHOD(UndoDeleteTest) {
+
 			EasyScheduleLogic logic;
 
-			string addFloatTaskCommand = "add lunch with friends";
-			string addDeadlineTaskCommand = "add 2015/4/13/23/59/CS submission";
+			string addFloatTaskCommand = "add keep calm";
+			string addDeadlineTaskCommand = "add 2015/4/13/23/59/back from the zoo";
 			logic.executeLogic(addFloatTaskCommand);
 			logic.executeLogic(addDeadlineTaskCommand);
 			string deleteCommand = "delete 2";
 			logic.executeLogic(deleteCommand);
+
+			string undoTaskCommand = "undo";
+			logic.executeLogic(undoTaskCommand);
 			string actualMessage = logic.undoingTask();
 			string expectedMessage = "Undo successfully.";
 			Assert::AreEqual(expectedMessage, actualMessage);
+
+			/****Clear the data storage****/
+			string deleteTaskCommand = "delete 1";
+			while(logic.displayingTask() != "") {
+				logic.executeLogic(deleteTaskCommand);
+			}
 		}
 
 		TEST_METHOD(UndoStatusChangeTest) {
+
 			EasyScheduleLogic logic;
 
-			string addFloatTaskCommand = "add lunch with friends";
+			string addFloatTaskCommand = "add keep an eye on him";
 			logic.executeLogic(addFloatTaskCommand);
 			
 			string doneCommand = "done 1";
 			logic.executeLogic(doneCommand);
+			string undoTaskCommand = "undo";
+			logic.executeLogic(undoTaskCommand);
 			string actualMessage = logic.undoingTask();
 			string expectedMessage = "Undo successfully.";
 			Assert::AreEqual(expectedMessage, actualMessage);
 
-			string undoneCommand = "notdone 1";
-			logic.executeLogic(undoneCommand);
+			string notdoneCommand = "notdone 1";
+			logic.executeLogic(notdoneCommand);
+			undoTaskCommand = "undo";
+			logic.executeLogic(undoTaskCommand);
 			actualMessage = logic.undoingTask();
 			expectedMessage = "Undo successfully.";
 			Assert::AreEqual(expectedMessage, actualMessage);
+
+			/****Clear the data storage****/
+			string deleteTaskCommand = "delete 1";
+			while(logic.displayingTask() != "") {
+				logic.executeLogic(deleteTaskCommand);
+			}
 		}
 
 		TEST_METHOD(UndoEditTest) {
+
 			EasyScheduleLogic logic;
 
-			string addFloatTaskCommand = "add lunch with friends";
-			logic.executeLogic(addFloatTaskCommand);
-			string editCommand = "edit 1 name dinner with friends";
+			string addTaskCommand = "add get enough sleep";
+			logic.executeLogic(addTaskCommand);
+			string editCommand = "edit 1 name get much sleep";
 			logic.executeLogic(editCommand);
+			string undoTaskCommand = "undo";
+			logic.executeLogic(undoTaskCommand);
 			string actualMessage = logic.undoingTask();
 			string expectedMessage = "Undo successfully.";
 			Assert::AreEqual(expectedMessage, actualMessage);
-			
-			string addTimedTaskCommand = "add 2015/2/13/12/00/13/00/CS homework";
-			editCommand = "edit 2 time 14/00";
-			logic.executeLogic(editCommand);
-			actualMessage = logic.undoingTask();
-			Assert::AreEqual(expectedMessage, actualMessage);
-		}
-	};
 
-	//@author A0116707H Dong Peisen
-	TEST_CLASS(EditUnitTest) {
-	public:
-		
+			/****Clear the data storage****/
+			string deleteTaskCommand = "delete 1";
+			while(logic.displayingTask() != "") {
+				logic.executeLogic(deleteTaskCommand);
+			}
+		}
+
 		TEST_METHOD(EditTaskNameTest) {
 
 			EasyScheduleLogic Nlogic;
 
-			string addFloatTaskCommand = "add lunch with friends";
+			string addFloatTaskCommand = "add lunch with family";
 			Nlogic.executeLogic(addFloatTaskCommand);
 			
-			string editFloatTaskName = "edit 1 name dinner with friends";
+			string editFloatTaskName = "edit 1 name dinner with family";
 			Nlogic.executeLogic(editFloatTaskName);
 			string actualDisplay = Nlogic.editingTask();
-			string expectedDisplay = "1]Not Done]Float]dinner with friends]N.A.]N.A.]N.A.]";
+			string expectedDisplay = "1]Not Done]Float]dinner with family]N.A.]N.A.]N.A.]";
 			Assert::AreEqual(expectedDisplay, actualDisplay);
 
-			editFloatTaskName = "edit 2 name lunch with friends";
+			editFloatTaskName = "edit 2 name lunch with family";
 			Nlogic.executeLogic(editFloatTaskName);
 			actualDisplay = Nlogic.editingTask();
-			expectedDisplay = "1]Not Done]Float]dinner with friends]N.A.]N.A.]N.A.]";
+			expectedDisplay = "1]Not Done]Float]dinner with family]N.A.]N.A.]N.A.]";
 			Assert::AreEqual(expectedDisplay, actualDisplay);
 			
+			/****Clear the data storage****/
 			string deleteTaskCommand = "delete 1";
 			while(Nlogic.displayingTask() != "") {
 				Nlogic.executeLogic(deleteTaskCommand);
@@ -125,27 +135,22 @@ namespace UnitTest
 
 			EasyScheduleLogic Dlogic;
 
-			string addDeadlineTaskCommand = "add 2015/4/13/23/59/CS submission";
+			string addDeadlineTaskCommand = "add 2015/4/13/23/59/CS homework";
 			Dlogic.executeLogic(addDeadlineTaskCommand);
 			
 			string editDeadlineTaskName = "edit 1 date 2015/4/11";
 			Dlogic.executeLogic(editDeadlineTaskName);
 			string actualDisplay = Dlogic.editingTask();
-			string expectedDisplay = "1]Not Done]Deadline]CS submission]11 Apr 2015]N.A.]23:59]";
-			Assert::AreEqual(expectedDisplay, actualDisplay);
-
-			editDeadlineTaskName = "edit 1 date tomorrow";
-			Dlogic.executeLogic(editDeadlineTaskName);
-			actualDisplay = Dlogic.editingTask();
-			expectedDisplay = "1]Not Done]Deadline]CS submission]12 Apr 2015]N.A.]23:59]";
+			string expectedDisplay = "1]Not Done]Deadline]CS homework]11 Apr 2015]N.A.]23:59]";
 			Assert::AreEqual(expectedDisplay, actualDisplay);
 
 			editDeadlineTaskName = "edit 1 date Monday";
 			Dlogic.executeLogic(editDeadlineTaskName);
 			actualDisplay = Dlogic.editingTask();
-			expectedDisplay = "1]Not Done]Deadline]CS submission]13 Apr 2015]N.A.]23:59]";
+			expectedDisplay = "1]Not Done]Deadline]CS homework]13 Apr 2015]N.A.]23:59]";
 			Assert::AreEqual(expectedDisplay, actualDisplay);
 
+			/****Clear the data storage****/
 			string deleteTaskCommand = "delete 1";
 			while(Dlogic.displayingTask() != "") {
 				Dlogic.executeLogic(deleteTaskCommand);
@@ -156,21 +161,22 @@ namespace UnitTest
 			
 			EasyScheduleLogic Tlogic;
 
-			string addTimedTaskCommand = "add 2015/4/5/7/30/9/30/watch musical show";
+			string addTimedTaskCommand = "add 2015/4/5/7/30/9/30/watch drama show";
 			Tlogic.executeLogic(addTimedTaskCommand);
 			
 			string editTimedTaskTime = "edit 1 time 8/00/10/00";
 			Tlogic.executeLogic(editTimedTaskTime);
 			string actualDisplay = Tlogic.editingTask();
-			string expectedDisplay = "1]Not Done]Timed]watch musical show]5 Apr 2015]08:00]10:00]";
+			string expectedDisplay = "1]Not Done]Timed]watch drama show]5 Apr 2015]08:00]10:00]";
 			Assert::AreEqual(expectedDisplay, actualDisplay);
 
 			editTimedTaskTime = "edit 1 time 11/00/10/00";
 			Tlogic.executeLogic(editTimedTaskTime);
 			actualDisplay = Tlogic.editingTask();
-			expectedDisplay = "1]Not Done]Timed]watch musical show]5 Apr 2015]08:00]10:00]";
+			expectedDisplay = "1]Not Done]Timed]watch drama show]5 Apr 2015]08:00]10:00]";
 			Assert::AreEqual(expectedDisplay, actualDisplay);
 
+			/****Clear the data storage****/
 			string deleteTaskCommand = "delete 1";
 			while(Tlogic.displayingTask() != "") {
 				Tlogic.executeLogic(deleteTaskCommand);
@@ -182,13 +188,13 @@ namespace UnitTest
 			EasyScheduleLogic Ylogic;
 
 			//float to timed
-			string addFloatTaskCommand = "add lunch with friends";
+			string addFloatTaskCommand = "add blind date";
 			Ylogic.executeLogic(addFloatTaskCommand);
 			
 			string editTaskTime = "edit 1 time 2015/4/5/12/00/13/00";
 			Ylogic.executeLogic(editTaskTime);
 			string actualDisplay = Ylogic.editingTask();
-			string expectedDisplay = "1]Not Done]Timed] lunch with friends]5 Apr 2015]12:00]13:00]";
+			string expectedDisplay = "1]Not Done]Timed] blind date]5 Apr 2015]12:00]13:00]";
 			Assert::AreEqual(expectedDisplay, actualDisplay);
 
 			editTaskTime = "edit 1 date 2015/4/5/12/00/13/00";
@@ -200,53 +206,50 @@ namespace UnitTest
 			editTaskTime = "edit 1 time 13/00";
 			Ylogic.executeLogic(editTaskTime);
 			actualDisplay = Ylogic.editingTask();
-			expectedDisplay = "1]Not Done]Deadline] lunch with friends]5 Apr 2015]N.A.]13:00]";
+			expectedDisplay = "1]Not Done]Deadline] blind date]5 Apr 2015]N.A.]13:00]";
 			Assert::AreEqual(expectedDisplay, actualDisplay);
 
+			/****Clear the data storage****/
 			string deleteTaskCommand = "delete 1";
 			while(Ylogic.displayingTask() != "") {
 				Ylogic.executeLogic(deleteTaskCommand);
 			}
 		}
 
-	};
-	
+		TEST_METHOD(DisplayTest) {
+			EasyScheduleLogic logic;
+			string addTaskCommand = "add 2015/4/13/23/59/CS submission";
+			logic.executeLogic(addTaskCommand);
+			addTaskCommand = "add 2015/4/6/10/00/11/00/CS tutorial";
+			logic.executeLogic(addTaskCommand);
+			
+			/****display by task type****/
+			string viewTaskCommand = "view floating";
+			logic.executeLogic(viewTaskCommand);
+			string actualDisplay = logic.displayAllFloating();
+			string expectedDisplay = "";
+			Assert::AreEqual(expectedDisplay, actualDisplay);
 
+			viewTaskCommand = "view timed";
+			logic.executeLogic(viewTaskCommand);
+			actualDisplay = logic.displayAllTimed();
+			expectedDisplay = "1]Not Done]Timed]CS tutorial]6 Apr 2015]10:00]11:00]";
+			Assert::AreEqual(expectedDisplay, actualDisplay);
 
-	//@author A0114255N
-	TEST_CLASS(UnitTest_nathan){
-	public:
+			viewTaskCommand = "view deadline";
+			logic.executeLogic(viewTaskCommand);
+			actualDisplay = logic.displayAllDeadline();
+			expectedDisplay = "1]Not Done]Deadline]CS submission]13 Apr 2015]N.A.]23:59]";
+			Assert::AreEqual(expectedDisplay, actualDisplay);
 
-		TEST_METHOD(ConstructorTest){
-			Task task("add", "TimedTask", "CS Homework", 2015, 3, 25, 6, 30, 7, 30, false);
-			string COMMAND_TYPE = "add";
-			string TASK_TYPE = "TimedTask";
-			int YEAR = 2015;
-			int MONTH = 3;
-			int DAY = 25;
-			int START_TIME_HOUR = 6;
-			int START_TIME_MIN = 30;
-			int END_TIME_HOUR = 7;
-			int END_TIME_MIN = 30;
-		
-			Assert::AreEqual(COMMAND_TYPE, task.getCommandType());
-			Assert::AreEqual(TASK_TYPE, task.getTaskType());
-			Assert::AreEqual(YEAR, task.getYear());
-			Assert::AreEqual(MONTH, task.getMonth());
-			Assert::AreEqual(DAY, task.getDay());
-			Assert::AreEqual(START_TIME_HOUR, task.getStartTimeHour());
-			Assert::AreEqual(START_TIME_MIN, task.getStartTimeMin());
-			Assert::AreEqual(END_TIME_HOUR, task.getEndTimeHour());
-			Assert::AreEqual(END_TIME_MIN, task.getEndTimeMin());
-			Assert::IsFalse(task.getIsDone());
+			/****Clear the data storage****/
+			string deleteTaskCommand = "delete 1";
+			while(logic.displayingTask() != "") {
+				logic.executeLogic(deleteTaskCommand);
+			}
 		}
 
-	};
-	
-	TEST_CLASS(EasyScheduleLogicTest){
-
-	public:
-
+		
 		TEST_METHOD(parsingCommandTest){
 			string userInput = "add 2015/3/25/14/30/submit CS Homework";
 			EasyScheduleLogic es;
@@ -325,6 +328,37 @@ namespace UnitTest
 			Assert::AreEqual(MESSAGE_INVALID_INPUT_NAME, es.addingTask());
 		}
 	};	
+
+
+	//@author A0114255N
+	TEST_CLASS(TaskTest){
+	public:
+
+		TEST_METHOD(ConstructorTest){
+			Task task("add", "TimedTask", "CS Homework", 2015, 3, 25, 6, 30, 7, 30, false);
+			string COMMAND_TYPE = "add";
+			string TASK_TYPE = "TimedTask";
+			int YEAR = 2015;
+			int MONTH = 3;
+			int DAY = 25;
+			int START_TIME_HOUR = 6;
+			int START_TIME_MIN = 30;
+			int END_TIME_HOUR = 7;
+			int END_TIME_MIN = 30;
+		
+			Assert::AreEqual(COMMAND_TYPE, task.getCommandType());
+			Assert::AreEqual(TASK_TYPE, task.getTaskType());
+			Assert::AreEqual(YEAR, task.getYear());
+			Assert::AreEqual(MONTH, task.getMonth());
+			Assert::AreEqual(DAY, task.getDay());
+			Assert::AreEqual(START_TIME_HOUR, task.getStartTimeHour());
+			Assert::AreEqual(START_TIME_MIN, task.getStartTimeMin());
+			Assert::AreEqual(END_TIME_HOUR, task.getEndTimeHour());
+			Assert::AreEqual(END_TIME_MIN, task.getEndTimeMin());
+			Assert::IsFalse(task.getIsDone());
+		}
+
+	};
 
 	//@author A0115131B
 	TEST_CLASS(RecordTest)
@@ -560,7 +594,7 @@ namespace UnitTest
 
 	
 	//@author A0111446R
-	TEST_CLASS(Storage_Test)
+	TEST_CLASS(StorageTest)
 	{
 		
 	public:
