@@ -62,24 +62,37 @@ namespace UI {
 	private: System::Windows::Forms::TextBox^  inputBox;
 	private: System::Windows::Forms::TextBox^  feedbackBox;
 	private: System::Windows::Forms::ListView^  listOutputMain;
-	private: System::Windows::Forms::ColumnHeader^  StatusHeaderT;
-	private: System::Windows::Forms::ColumnHeader^  IndexHeaderT;
-	private: System::Windows::Forms::ColumnHeader^  TaskHeaderT;
-	private: System::Windows::Forms::ColumnHeader^  DateHeaderT;
-	private: System::Windows::Forms::ColumnHeader^  StartTimeHeaderT;
-	private: System::Windows::Forms::ColumnHeader^  EndTimeHeaderT;
-	private: System::Windows::Forms::ColumnHeader^  TypeHeaderT;
+	private: System::Windows::Forms::ColumnHeader^  statusHeaderT;
+
+	private: System::Windows::Forms::ColumnHeader^  indexHeaderT;
+	private: System::Windows::Forms::ColumnHeader^  taskHeaderT;
+	private: System::Windows::Forms::ColumnHeader^  dateHeaderT;
+	private: System::Windows::Forms::ColumnHeader^  startTimeHeaderT;
+	private: System::Windows::Forms::ColumnHeader^  endTimeHeaderT;
+
+
+
+
+
+	private: System::Windows::Forms::ColumnHeader^  typeHeaderT;
+
 	private: System::ComponentModel::IContainer^  components;
 	private: System::Windows::Forms::Label^  feedbackLabel;
 	private: System::Windows::Forms::TextBox^  previousCommandBox;
 	private: System::Windows::Forms::Label^  previousCommandLabel;
 	private: System::Windows::Forms::ListView^  listOutputFloat;
-	private: System::Windows::Forms::ColumnHeader^  IndexHeaderF;
-	private: System::Windows::Forms::ColumnHeader^  StatusHeaderF;
-	private: System::Windows::Forms::ColumnHeader^  TypeHeaderF;
-	private: System::Windows::Forms::ColumnHeader^  TaskHeaderF;
-	private: System::Windows::Forms::Label^  FloatTaskLabel;
-	private: System::Windows::Forms::Label^  TimedTaskLabel;
+	private: System::Windows::Forms::ColumnHeader^  indexHeaderF;
+	private: System::Windows::Forms::ColumnHeader^  statusHeaderF;
+	private: System::Windows::Forms::ColumnHeader^  typeHeaderF;
+	private: System::Windows::Forms::ColumnHeader^  taskHeaderF;
+
+
+
+
+	private: System::Windows::Forms::Label^  floatTaskLabel;
+	private: System::Windows::Forms::Label^  timedTaskLabel;
+
+
 	protected: System::Windows::Forms::ListViewItem^ listViewItems;
 
 	private:
@@ -97,23 +110,23 @@ namespace UI {
 			this->inputBox = (gcnew System::Windows::Forms::TextBox());
 			this->feedbackBox = (gcnew System::Windows::Forms::TextBox());
 			this->listOutputMain = (gcnew System::Windows::Forms::ListView());
-			this->IndexHeaderT = (gcnew System::Windows::Forms::ColumnHeader());
-			this->StatusHeaderT = (gcnew System::Windows::Forms::ColumnHeader());
-			this->TypeHeaderT = (gcnew System::Windows::Forms::ColumnHeader());
-			this->TaskHeaderT = (gcnew System::Windows::Forms::ColumnHeader());
-			this->DateHeaderT = (gcnew System::Windows::Forms::ColumnHeader());
-			this->StartTimeHeaderT = (gcnew System::Windows::Forms::ColumnHeader());
-			this->EndTimeHeaderT = (gcnew System::Windows::Forms::ColumnHeader());
+			this->indexHeaderT = (gcnew System::Windows::Forms::ColumnHeader());
+			this->statusHeaderT = (gcnew System::Windows::Forms::ColumnHeader());
+			this->typeHeaderT = (gcnew System::Windows::Forms::ColumnHeader());
+			this->taskHeaderT = (gcnew System::Windows::Forms::ColumnHeader());
+			this->dateHeaderT = (gcnew System::Windows::Forms::ColumnHeader());
+			this->startTimeHeaderT = (gcnew System::Windows::Forms::ColumnHeader());
+			this->endTimeHeaderT = (gcnew System::Windows::Forms::ColumnHeader());
 			this->feedbackLabel = (gcnew System::Windows::Forms::Label());
 			this->previousCommandBox = (gcnew System::Windows::Forms::TextBox());
 			this->previousCommandLabel = (gcnew System::Windows::Forms::Label());
 			this->listOutputFloat = (gcnew System::Windows::Forms::ListView());
-			this->IndexHeaderF = (gcnew System::Windows::Forms::ColumnHeader());
-			this->StatusHeaderF = (gcnew System::Windows::Forms::ColumnHeader());
-			this->TypeHeaderF = (gcnew System::Windows::Forms::ColumnHeader());
-			this->TaskHeaderF = (gcnew System::Windows::Forms::ColumnHeader());
-			this->FloatTaskLabel = (gcnew System::Windows::Forms::Label());
-			this->TimedTaskLabel = (gcnew System::Windows::Forms::Label());
+			this->indexHeaderF = (gcnew System::Windows::Forms::ColumnHeader());
+			this->statusHeaderF = (gcnew System::Windows::Forms::ColumnHeader());
+			this->typeHeaderF = (gcnew System::Windows::Forms::ColumnHeader());
+			this->taskHeaderF = (gcnew System::Windows::Forms::ColumnHeader());
+			this->floatTaskLabel = (gcnew System::Windows::Forms::Label());
+			this->timedTaskLabel = (gcnew System::Windows::Forms::Label());
 			this->SuspendLayout();
 			// 
 			// enterButton
@@ -165,8 +178,8 @@ namespace UI {
 			this->listOutputMain->AllowColumnReorder = true;
 			this->listOutputMain->BackColor = System::Drawing::SystemColors::ControlLightLight;
 			this->listOutputMain->BorderStyle = System::Windows::Forms::BorderStyle::FixedSingle;
-			this->listOutputMain->Columns->AddRange(gcnew cli::array< System::Windows::Forms::ColumnHeader^  >(7) {this->IndexHeaderT, 
-				this->StatusHeaderT, this->TypeHeaderT, this->TaskHeaderT, this->DateHeaderT, this->StartTimeHeaderT, this->EndTimeHeaderT});
+			this->listOutputMain->Columns->AddRange(gcnew cli::array< System::Windows::Forms::ColumnHeader^  >(7) {this->indexHeaderT, 
+				this->statusHeaderT, this->typeHeaderT, this->taskHeaderT, this->dateHeaderT, this->startTimeHeaderT, this->endTimeHeaderT});
 			this->listOutputMain->Font = (gcnew System::Drawing::Font(L"Arial", 8.25F, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point, 
 				static_cast<System::Byte>(0)));
 			this->listOutputMain->ForeColor = System::Drawing::SystemColors::WindowText;
@@ -179,47 +192,47 @@ namespace UI {
 			this->listOutputMain->UseCompatibleStateImageBehavior = false;
 			this->listOutputMain->View = System::Windows::Forms::View::Details;
 			// 
-			// IndexHeaderT
+			// indexHeaderT
 			// 
-			this->IndexHeaderT->Text = L"Index";
-			this->IndexHeaderT->TextAlign = System::Windows::Forms::HorizontalAlignment::Center;
-			this->IndexHeaderT->Width = 43;
+			this->indexHeaderT->Text = L"Index";
+			this->indexHeaderT->TextAlign = System::Windows::Forms::HorizontalAlignment::Center;
+			this->indexHeaderT->Width = 43;
 			// 
-			// StatusHeaderT
+			// statusHeaderT
 			// 
-			this->StatusHeaderT->Text = L"Status";
-			this->StatusHeaderT->TextAlign = System::Windows::Forms::HorizontalAlignment::Center;
-			this->StatusHeaderT->Width = 78;
+			this->statusHeaderT->Text = L"Status";
+			this->statusHeaderT->TextAlign = System::Windows::Forms::HorizontalAlignment::Center;
+			this->statusHeaderT->Width = 78;
 			// 
-			// TypeHeaderT
+			// typeHeaderT
 			// 
-			this->TypeHeaderT->Text = L"Type";
-			this->TypeHeaderT->TextAlign = System::Windows::Forms::HorizontalAlignment::Center;
-			this->TypeHeaderT->Width = 73;
+			this->typeHeaderT->Text = L"Type";
+			this->typeHeaderT->TextAlign = System::Windows::Forms::HorizontalAlignment::Center;
+			this->typeHeaderT->Width = 73;
 			// 
-			// TaskHeaderT
+			// taskHeaderT
 			// 
-			this->TaskHeaderT->Text = L"Task";
-			this->TaskHeaderT->TextAlign = System::Windows::Forms::HorizontalAlignment::Center;
-			this->TaskHeaderT->Width = 230;
+			this->taskHeaderT->Text = L"Task";
+			this->taskHeaderT->TextAlign = System::Windows::Forms::HorizontalAlignment::Center;
+			this->taskHeaderT->Width = 230;
 			// 
-			// DateHeaderT
+			// dateHeaderT
 			// 
-			this->DateHeaderT->Text = L"Date";
-			this->DateHeaderT->TextAlign = System::Windows::Forms::HorizontalAlignment::Center;
-			this->DateHeaderT->Width = 80;
+			this->dateHeaderT->Text = L"Date";
+			this->dateHeaderT->TextAlign = System::Windows::Forms::HorizontalAlignment::Center;
+			this->dateHeaderT->Width = 80;
 			// 
-			// StartTimeHeaderT
+			// startTimeHeaderT
 			// 
-			this->StartTimeHeaderT->Text = L"Start at";
-			this->StartTimeHeaderT->TextAlign = System::Windows::Forms::HorizontalAlignment::Center;
-			this->StartTimeHeaderT->Width = 82;
+			this->startTimeHeaderT->Text = L"Start at";
+			this->startTimeHeaderT->TextAlign = System::Windows::Forms::HorizontalAlignment::Center;
+			this->startTimeHeaderT->Width = 82;
 			// 
-			// EndTimeHeaderT
+			// endTimeHeaderT
 			// 
-			this->EndTimeHeaderT->Text = L"End at";
-			this->EndTimeHeaderT->TextAlign = System::Windows::Forms::HorizontalAlignment::Center;
-			this->EndTimeHeaderT->Width = 80;
+			this->endTimeHeaderT->Text = L"End at";
+			this->endTimeHeaderT->TextAlign = System::Windows::Forms::HorizontalAlignment::Center;
+			this->endTimeHeaderT->Width = 80;
 			// 
 			// feedbackLabel
 			// 
@@ -263,8 +276,8 @@ namespace UI {
 			// 
 			// listOutputFloat
 			// 
-			this->listOutputFloat->Columns->AddRange(gcnew cli::array< System::Windows::Forms::ColumnHeader^  >(4) {this->IndexHeaderF, 
-				this->StatusHeaderF, this->TypeHeaderF, this->TaskHeaderF});
+			this->listOutputFloat->Columns->AddRange(gcnew cli::array< System::Windows::Forms::ColumnHeader^  >(4) {this->indexHeaderF, 
+				this->statusHeaderF, this->typeHeaderF, this->taskHeaderF});
 			this->listOutputFloat->Font = (gcnew System::Drawing::Font(L"Arial", 8.25F, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point, 
 				static_cast<System::Byte>(0)));
 			this->listOutputFloat->GridLines = true;
@@ -275,54 +288,54 @@ namespace UI {
 			this->listOutputFloat->UseCompatibleStateImageBehavior = false;
 			this->listOutputFloat->View = System::Windows::Forms::View::Details;
 			// 
-			// IndexHeaderF
+			// indexHeaderF
 			// 
-			this->IndexHeaderF->Text = L"Index";
-			this->IndexHeaderF->TextAlign = System::Windows::Forms::HorizontalAlignment::Center;
-			this->IndexHeaderF->Width = 43;
+			this->indexHeaderF->Text = L"Index";
+			this->indexHeaderF->TextAlign = System::Windows::Forms::HorizontalAlignment::Center;
+			this->indexHeaderF->Width = 43;
 			// 
-			// StatusHeaderF
+			// statusHeaderF
 			// 
-			this->StatusHeaderF->Text = L"Status";
-			this->StatusHeaderF->TextAlign = System::Windows::Forms::HorizontalAlignment::Center;
-			this->StatusHeaderF->Width = 78;
+			this->statusHeaderF->Text = L"Status";
+			this->statusHeaderF->TextAlign = System::Windows::Forms::HorizontalAlignment::Center;
+			this->statusHeaderF->Width = 78;
 			// 
-			// TypeHeaderF
+			// typeHeaderF
 			// 
-			this->TypeHeaderF->Text = L"Type";
-			this->TypeHeaderF->TextAlign = System::Windows::Forms::HorizontalAlignment::Center;
-			this->TypeHeaderF->Width = 73;
+			this->typeHeaderF->Text = L"Type";
+			this->typeHeaderF->TextAlign = System::Windows::Forms::HorizontalAlignment::Center;
+			this->typeHeaderF->Width = 73;
 			// 
-			// TaskHeaderF
+			// taskHeaderF
 			// 
-			this->TaskHeaderF->Text = L"Task";
-			this->TaskHeaderF->TextAlign = System::Windows::Forms::HorizontalAlignment::Center;
-			this->TaskHeaderF->Width = 180;
+			this->taskHeaderF->Text = L"Task";
+			this->taskHeaderF->TextAlign = System::Windows::Forms::HorizontalAlignment::Center;
+			this->taskHeaderF->Width = 180;
 			// 
-			// FloatTaskLabel
+			// floatTaskLabel
 			// 
-			this->FloatTaskLabel->AutoSize = true;
-			this->FloatTaskLabel->Font = (gcnew System::Drawing::Font(L"Arial", 9.25F, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point, 
+			this->floatTaskLabel->AutoSize = true;
+			this->floatTaskLabel->Font = (gcnew System::Drawing::Font(L"Arial", 9.25F, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point, 
 				static_cast<System::Byte>(0)));
-			this->FloatTaskLabel->ForeColor = System::Drawing::SystemColors::HotTrack;
-			this->FloatTaskLabel->Location = System::Drawing::Point(3, 302);
-			this->FloatTaskLabel->Name = L"FloatTaskLabel";
-			this->FloatTaskLabel->Size = System::Drawing::Size(92, 16);
-			this->FloatTaskLabel->TabIndex = 9;
-			this->FloatTaskLabel->Text = L"Floating Tasks";
+			this->floatTaskLabel->ForeColor = System::Drawing::SystemColors::HotTrack;
+			this->floatTaskLabel->Location = System::Drawing::Point(3, 302);
+			this->floatTaskLabel->Name = L"floatTaskLabel";
+			this->floatTaskLabel->Size = System::Drawing::Size(92, 16);
+			this->floatTaskLabel->TabIndex = 9;
+			this->floatTaskLabel->Text = L"Floating Tasks";
 			// 
-			// TimedTaskLabel
+			// timedTaskLabel
 			// 
-			this->TimedTaskLabel->AutoSize = true;
-			this->TimedTaskLabel->Font = (gcnew System::Drawing::Font(L"Arial", 9.25F, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point, 
+			this->timedTaskLabel->AutoSize = true;
+			this->timedTaskLabel->Font = (gcnew System::Drawing::Font(L"Arial", 9.25F, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point, 
 				static_cast<System::Byte>(0)));
-			this->TimedTaskLabel->ForeColor = System::Drawing::SystemColors::HotTrack;
-			this->TimedTaskLabel->Location = System::Drawing::Point(3, 9);
-			this->TimedTaskLabel->Name = L"TimedTaskLabel";
-			this->TimedTaskLabel->Size = System::Drawing::Size(89, 16);
-			this->TimedTaskLabel->TabIndex = 11;
-			this->TimedTaskLabel->Text = L"Tasks by date";
-			this->TimedTaskLabel->TextAlign = System::Drawing::ContentAlignment::MiddleCenter;
+			this->timedTaskLabel->ForeColor = System::Drawing::SystemColors::HotTrack;
+			this->timedTaskLabel->Location = System::Drawing::Point(3, 9);
+			this->timedTaskLabel->Name = L"timedTaskLabel";
+			this->timedTaskLabel->Size = System::Drawing::Size(89, 16);
+			this->timedTaskLabel->TabIndex = 11;
+			this->timedTaskLabel->Text = L"Tasks by date";
+			this->timedTaskLabel->TextAlign = System::Drawing::ContentAlignment::MiddleCenter;
 			// 
 			// EasyScheduleGUI
 			// 
@@ -331,8 +344,8 @@ namespace UI {
 			this->AutoSize = true;
 			this->BackColor = System::Drawing::SystemColors::GradientActiveCaption;
 			this->ClientSize = System::Drawing::Size(680, 490);
-			this->Controls->Add(this->TimedTaskLabel);
-			this->Controls->Add(this->FloatTaskLabel);
+			this->Controls->Add(this->timedTaskLabel);
+			this->Controls->Add(this->floatTaskLabel);
 			this->Controls->Add(this->listOutputFloat);
 			this->Controls->Add(this->previousCommandLabel);
 			this->Controls->Add(this->previousCommandBox);
