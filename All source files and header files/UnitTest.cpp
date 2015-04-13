@@ -249,7 +249,7 @@ namespace UnitTest
 			}
 		}
 
-		
+		//@author A0114255N
 		TEST_METHOD(parsingCommandTest){
 			string userInput = "add 2015/3/25/14/30/submit CS Homework";
 			EasyScheduleLogic es;
