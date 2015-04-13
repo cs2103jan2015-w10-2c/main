@@ -626,7 +626,7 @@ void Storage::addToTracker() {
 }
 
 
-//@author A0115131B    
+//@author A0115131B
 //record edited task item for undo function
 void Storage::storePreviousTask(string commandType) {
 	//creat a list storing tasks being editted

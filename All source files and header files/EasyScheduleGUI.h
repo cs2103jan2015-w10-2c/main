@@ -7,7 +7,7 @@
 
 //add exception: because it is user's fault.
 
-//@author A0116707H Dong Peisen
+//@author A0116707H
 namespace UI {
 
 	using namespace System;
