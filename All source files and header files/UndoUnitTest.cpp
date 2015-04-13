@@ -32,7 +32,7 @@ namespace UndoUnitTest {
 
 			EasyScheduleLogic logic;
 
-			string addFloatTaskCommand = "add lunch with friends";
+			string addFloatTaskCommand = "add meeting group mates";
 			logic.executeLogic(addFloatTaskCommand);
 			string undoTaskCommand = "undo";
 			logic.executeLogic(undoTaskCommand);
@@ -40,14 +40,14 @@ namespace UndoUnitTest {
 			string expectedMessage = "Undo successfully.";
 			Assert::AreEqual(expectedMessage, actualMessage);
 
-			string addTimedTaskCommand = "add 2015/4/5/7/30/9/30/watch musical show.";
+			string addTimedTaskCommand = "add 2015/4/5/7/30/9/30/watch dance performance";
 			logic.executeLogic(addTimedTaskCommand);
 			logic.executeLogic(undoTaskCommand);
 			actualMessage = logic.undoingTask();
 			expectedMessage = "Undo successfully.";
 			Assert::AreEqual(expectedMessage, actualMessage);
 
-			string addDeadlineTaskCommand = "add 2015/4/13/23/59/CS submission";
+			string addDeadlineTaskCommand = "add 2015/4/13/23/59/HFE deadline";
 			logic.executeLogic(addDeadlineTaskCommand);
 			logic.executeLogic(undoTaskCommand);
 			actualMessage = logic.undoingTask();
@@ -65,8 +65,8 @@ namespace UndoUnitTest {
 
 			EasyScheduleLogic logic;
 
-			string addFloatTaskCommand = "add lunch with friends";
-			string addDeadlineTaskCommand = "add 2015/4/13/23/59/CS submission";
+			string addFloatTaskCommand = "add keep calm";
+			string addDeadlineTaskCommand = "add 2015/4/13/23/59/back from the zoo";
 			logic.executeLogic(addFloatTaskCommand);
 			logic.executeLogic(addDeadlineTaskCommand);
 			string deleteCommand = "delete 2";
@@ -89,7 +89,7 @@ namespace UndoUnitTest {
 
 			EasyScheduleLogic logic;
 
-			string addFloatTaskCommand = "add lunch with friends";
+			string addFloatTaskCommand = "add keep an eye on him";
 			logic.executeLogic(addFloatTaskCommand);
 			
 			string doneCommand = "done 1";
@@ -119,9 +119,9 @@ namespace UndoUnitTest {
 
 			EasyScheduleLogic logic;
 
-			string addTaskCommand = "add lunch with friends";
+			string addTaskCommand = "add get enough sleep";
 			logic.executeLogic(addTaskCommand);
-			string editCommand = "edit 1 name dinner with friends";
+			string editCommand = "edit 1 name get much sleep";
 			logic.executeLogic(editCommand);
 			string undoTaskCommand = "undo";
 			logic.executeLogic(undoTaskCommand);

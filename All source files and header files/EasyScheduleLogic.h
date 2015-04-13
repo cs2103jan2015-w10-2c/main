@@ -98,7 +98,6 @@ public:
 	static void executeLogic(string userInput);
 	static void commandFilePath();
 	static void commandFileName();
-	static void commandAdd();
 	static void commandView();
 	static void viewDeadline();
 	static void viewFloating();
@@ -106,6 +105,9 @@ public:
 	static void viewToday();
 	static void viewTomorrow();
 	static void viewYesterday();
+	
+	//@author A0116707H
+	static void commandAdd();
 	static void commandDelete();
 	static void commandDisplay();
 	static void commandSearch();
@@ -128,7 +130,7 @@ public:
 	static string displayAllDeadline(); 
 	static string displayAllFloating();
 	static string displayAllTimed();
-	static string displayAllToday(); ///
+	static string displayAllToday();
 	static string displayAllTomorrow();
 	static string displayAllYesterday();
 	static string markDone();
@@ -146,8 +148,9 @@ public:
 	static bool undoingDone(Record recordToUndo);
 	static bool undoingNotDone(Record recordToUndo);
 	static bool undoingEdit(Record recordToUndo);
-	static string tellUI();
 	static string sortingTask();
+
+	//@author A0116707H
 	static string tellUIReturnMessage();
 	static string tellUIDisplay();
 	static int tellUIReturnIndex();
