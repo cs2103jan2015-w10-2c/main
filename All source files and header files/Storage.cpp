@@ -873,7 +873,7 @@ string Storage::toStringTaskDetail() {
 			
 			if (iter->getTaskType() == "FloatingTask") {
 				taskString << "Float]" << iter->getName() << "]N.A.]N.A.]N.A.]"; //date and time Not Applicable
-			} else {	from here onwards: for non-floating tasks
+			} else {	//from here onwards: for non-floating tasks
 				/****Task Type****/
 				if (iter->getTaskType() == "TimedTask") {
 					taskString << "Timed]";

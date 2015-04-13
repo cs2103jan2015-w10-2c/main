@@ -614,7 +614,7 @@ namespace UI {
 
 	private: void displayMultilineTaskString(ListView^  listOutput, string remainingPieces, int feedbackIndex, bool isDone) {
 
-				int lineLength = TaskHeaderT->Width / widthToCharacterDisplayRatio;
+				int lineLength = taskHeaderT->Width / widthToCharacterDisplayRatio;
 				int numberOfExtraLines = remainingPieces.size() / lineLength + 1;
 				string eachLine;
 				 
@@ -632,14 +632,14 @@ namespace UI {
 
 	private: bool determineMultilineNeeded(string taskInfo) {
 				String^ stringTaskInfo = gcnew String(taskInfo.c_str());
-				if( stringTaskInfo->Length > TaskHeaderT->Width / widthToCharacterDisplayRatio ) {
+				if( stringTaskInfo->Length > taskHeaderT->Width / widthToCharacterDisplayRatio ) {
 					return true;
 				}
 				return false;
 		}
 
 	private: void separateFirstPiece(string& remainingLongTask, string componentInfo, string& firstPiece) {
-				int remainingStartingPos = (TaskHeaderT->Width / widthToCharacterDisplayRatio);
+				int remainingStartingPos = (taskHeaderT->Width / widthToCharacterDisplayRatio);
 				firstPiece = componentInfo.substr(0, remainingStartingPos);
 				remainingLongTask = componentInfo.substr(remainingStartingPos);
 		}
