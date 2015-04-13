@@ -92,10 +92,14 @@ private:
 	static int endTimeMin;
 
 public:
+	//@author A0111446R
 	static void writeFile();
+	//@author A0115131B
 	static void executeLogic(string userInput);
+	//@author A0111446R
 	static void commandFilePath();
 	static void commandFileName();
+	//@author A0115131B
 	static void commandView();
 	static void viewDeadline();
 	static void viewFloating();
@@ -116,13 +120,17 @@ public:
 	static void commandUndo();
 	static void commandExit();
 	static void commandInvalid();
-
+	//@author A0114255N
 	static void parsingCommand(string userInput);
 	static void creatingTask();
+	//@author A0111446R
 	static void storingTask();
+	//@author A0114255N
 	static string addingTask();
+	//@author A0111446R
 	static string deletingTask();
 	static string searchingTask();
+	//@author A0115131B
 	static string displayingTask();
 	static string autoDisplay();
 	static string displayAllDeadline(); 
@@ -131,9 +139,12 @@ public:
 	static string displayAllToday();
 	static string displayAllTomorrow();
 	static string displayAllYesterday();
+	//@author A0111446R
 	static string markDone();
 	static string markNotDone();
+	//@author A0114255N
 	static string editingTask();
+	//@author A0115131B
 	static string undoingTask();
 	static Record getLastRecord();
 	static string callUndoingAdd(Record recordToUndo);
@@ -154,6 +165,7 @@ public:
 	static int tellUIReturnIndex();
 	static bool isDuplicate();
 
+	//@author A0114255N
 	static Task getTask();
 	static string getCommandType();
 	static string getTaskType();

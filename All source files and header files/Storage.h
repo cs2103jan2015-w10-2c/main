@@ -1,3 +1,4 @@
+//@author A0111446R
 #pragma once
 #ifndef STORAGE_H_
 #define STORAGE_H_
@@ -88,6 +89,7 @@ public:
 	static string toStringTaskDetail(list <Task> &listToFormat); //for selected tasks display
 	static string toStringTaskDetail(); //for all tasks display
 	
+	//@author A0115131B
 	static list<Task> getPreviousTaskList();
 	static list<Task> autoInitialDisplay();
 	static list<Task> allDeadline();
@@ -97,28 +99,34 @@ public:
 	static list<Task> allTomorrow();
 	static list<Task> allYesterday();
 	
-
+	//@author A0115131B
 	//Supporting functions
 	static void searchTodayTask(int day, int month, int year);
 	static void searchUpcomingDeadline(int day, int month, int year);
+	//@author A0111446R
 	static void getTaskItFromIndex(int i, list<Task> &taskList);
 	static void getTaskItFromIndex(int i);
 	static void getTaskIt(Task task);
 	static void findTaskInList(string searchKeyWord);
+	//@author A0115131B
 	static void sortList();
+	//@author A0111446R
 	static int getIndex();
 	static int getDeviderNum(string input);
 	static string toLower(string text);
 	static bool compareTask(Task task);
 	static bool isExistingTask(Task &task);
+	//@author A0114255N
 	static bool isValidDate(Task task);
 	static bool isValidTime(Task task);
+	//@author A0111446R
 	static bool isValidDate(int month, int day);
 	static bool isValidTime(int sth, int stm, int eth, int etm);
 	static bool isValidDirectory();
 	static bool isValidIndex(int i, list<Task> &taskList);
 	static bool isValidTaskInput(Task task);
 
+	//@author A0115131B
 	//Undo functions
 	static void creatRecordAdd(Task task);
 	static void addToTracker();
