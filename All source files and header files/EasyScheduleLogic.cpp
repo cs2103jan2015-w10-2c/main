@@ -562,36 +562,52 @@ string EasyScheduleLogic::editingTask(){
 		s = storage.editTaskName(taskNumber, parser.name);
 	} else if (parser.attribute == DATE){
 		if(parser.taskType == FLOATING_TASK){
+			if(storage.isValidDate(parser.month, parser.day)){
+				if(storage.isValidTime(parser.startTimeHour, parser.startTimeMin, parser.endTimeHour,parser.endTimeMin)){
 			s = storage.editTaskDateTime(taskNumber, parser.year, parser.month, parser.day,parser.startTimeHour, parser.startTimeMin, parser.endTimeHour, parser.endTimeMin);
-		} else {
-			s = storage.editTaskDate(taskNumber, parser.year, parser.month, parser.day);
+				}
+			}else{
+				returnMessage = MESSAGE_INVALID_DATE;
+				s = "";
+			}
+		}else {
+				if(storage.isValidDate(parser.month, parser.day)){
+					s = storage.editTaskDate(taskNumber, parser.year, parser.month, parser.day);
+				}else{
+					returnMessage = MESSAGE_INVALID_DATE;
+					s = "";
+				}
 		}
 
-		if(s ==""){
-			returnMessage = MESSAGE_INVALID_DATE;
-		}
 	} else if (parser.attribute == TIME){
 		if(parser.taskType == FLOATING_TASK){
+			if(storage.isValidDate(parser.month, parser.day)){
+				if(storage.isValidTime(parser.startTimeHour, parser.startTimeMin, parser.endTimeHour,parser.endTimeMin)){
 			s = storage.editTaskDateTime(taskNumber, parser.year, parser.month, parser.day,parser.startTimeHour, parser.startTimeMin, parser.endTimeHour, parser.endTimeMin);
+				}
+			}else{
+				returnMessage = MESSAGE_INVALID_DATE;
+				s = "";
+			}
 		} else {
-			s = storage.editTaskTime(taskNumber,parser.startTimeHour, parser.startTimeMin, parser.endTimeHour, parser.endTimeMin);
+			if(storage.isValidTime(parser.startTimeHour, parser.startTimeMin, parser.endTimeHour,parser.endTimeMin)){
+				s = storage.editTaskTime(taskNumber,parser.startTimeHour, parser.startTimeMin, parser.endTimeHour, parser.endTimeMin);
+			}else{
+				returnMessage = MESSAGE_INVALID_DATE;
+				s = "";
+			}
 		} 
 
 		if(s ==""){
-			returnMessage = MESSAGE_INVALID_DATE;
-		}
-	} else{
         returnMessage = MESSAGE_EDIT_INPUT_ERROR;
-        return (s = "");
+		}
 	}
 /*
 	if (!storage.isDateValid){
 			returnMessage = MESSAGE_INVALID_DATE;
 		} else if(!storage.isTimeValid){
 			returnMessage = MESSAGE_INVALID_TIME;
-		} else*/ if (!storage.isSuccess){
-			returnMessage = MESSAGE_EDIT_FAIL;
-		} else {
+		} else*/ if (storage.isSuccess){
 			returnMessage = MESSAGE_EDIT;
 		}
 	return s;
