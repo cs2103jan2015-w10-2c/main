@@ -572,7 +572,7 @@ string Storage::editTaskDate(int i, int year, int month, int day) {
 	string commandType = "edit";
 	isSuccess = false;
 	if (isSearched) {
-		if(isValidTime(sth, stm, eth, etm)){
+		if(isValidDate(month, day)){
 		if (isValidIndex(i, _searchResultList)) {
 			getTaskItFromIndex(i, _searchResultList);
 			if (isExistingTask(*_taskIt) && _taskIt->getTaskType()!=FLOATING_TASK) {
@@ -586,7 +586,7 @@ string Storage::editTaskDate(int i, int year, int month, int day) {
 			return "";
 		}
 	} else {
-		if(isValidTime(sth, stm, eth, etm)){
+		if(isValidDate(month, day)){
 		if (isValidIndex(i, _taskList)) {
 			getTaskItFromIndex(i, _taskList);
 			if (_taskIt->getTaskType()!=FLOATING_TASK) {
