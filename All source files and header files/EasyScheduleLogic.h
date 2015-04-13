@@ -92,8 +92,6 @@ private:
 	static int endTimeMin;
 
 public:
-	
-	static void main();
 	static void writeFile();
 	static void executeLogic(string userInput);
 	static void commandFilePath();
